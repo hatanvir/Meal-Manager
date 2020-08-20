@@ -1,10 +1,6 @@
 package com.trinoq.mealmanager.features.view.fragments;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ProgressDialog;
-import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,14 +10,15 @@ import android.widget.Toast;
 
 import com.chaos.view.PinView;
 import com.google.android.material.snackbar.Snackbar;
+import com.kaopiz.kprogresshud.KProgressHUD;
 import com.trinoq.mealmanager.R;
 import com.trinoq.mealmanager.features.model.PhoneAuthModel;
 import com.trinoq.mealmanager.features.model.PhoneAuthModelImplementation;
-import com.trinoq.mealmanager.features.view.MainActivity;
 import com.trinoq.mealmanager.features.viewmodel.PhoneAuthViewModel;
 
-import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import butterknife.BindView;
@@ -37,6 +34,8 @@ public class VerifyPhoneNumberFragment extends Fragment {
 
     String phoneNumber;
     Dialog loadingDialog;
+
+    private KProgressHUD progressHUD;
 
     public VerifyPhoneNumberFragment() {
         // Required empty public constructor
@@ -60,6 +59,13 @@ public class VerifyPhoneNumberFragment extends Fragment {
         model = new PhoneAuthModelImplementation(getActivity());
         // initialize ViewModel
         viewModel = (PhoneAuthViewModel) ViewModelProviders.of(this).get(PhoneAuthViewModel.class);
+
+        progressHUD =  KProgressHUD.create(getActivity())
+                .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
+                .setCancellable(false)
+                .setAnimationSpeed(2)
+                .setDimAmount(0.5f);
+
         phoneAuth();
 
         nextImage.setOnClickListener(new View.OnClickListener() {
@@ -77,9 +83,9 @@ public class VerifyPhoneNumberFragment extends Fragment {
             @Override
             public void onChanged(Object o) {
                 if (((Boolean)o)){
-                    loadingDialog.show();
+                    progressHUD.setLabel("Sending...").show();
                 }else {
-                    loadingDialog.dismiss();
+                    progressHUD.dismiss();
                 }
             }
         });
@@ -108,11 +114,18 @@ public class VerifyPhoneNumberFragment extends Fragment {
             @Override
             public void onChanged(Object o) {
                 Toast.makeText(getActivity(), "Verification Success", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(getActivity(), MainActivity.class));
-                getActivity().finish();
+                FragmentManager fm = getFragmentManager();
+                int count = fm.getBackStackEntryCount();
+
+                for(int i = 0; i < count; ++i) {
+                    fm.popBackStack();
+                }
+
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.authenticationContainer, new WelcomeFragment())
+                        .addToBackStack("welcomeFrag").commit();
             }
-        });
-        viewModel.verificationfailed.observe(this, new Observer() {
+        });        viewModel.verificationfailed.observe(this, new Observer() {
             @Override
             public void onChanged(Object o) {
                 snackbar(((String)o));
@@ -123,9 +136,9 @@ public class VerifyPhoneNumberFragment extends Fragment {
             @Override
             public void onChanged(Object o) {
                 if (((Boolean)o)){
-                    loadingDialog.show();
+                    progressHUD.setLabel("Sending...").show();
                 }else {
-                    loadingDialog.dismiss();
+                    progressHUD.dismiss();
                 }
             }
         });

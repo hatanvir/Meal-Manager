@@ -11,6 +11,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary = true//to support vector drawables and animated vector drawables
     }
     buildTypes {
         release {
@@ -53,4 +54,7 @@ dependencies {
     implementation 'com.mobsandgeeks:android-saripaar:2.0.3'
     //viewmodel and livedata
     implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
+
+    //progresshud
+    implementation 'com.kaopiz:kprogresshud:1.2.0'
 }
