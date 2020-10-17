@@ -4,19 +4,19 @@ import android.content.Context;
 
 import com.trinoq.mealmanager.common.AutoAuthRequestCompleteListener;
 import com.trinoq.mealmanager.common.ManualAuthCompleteListener;
-import com.trinoq.mealmanager.features.model.PhoneAuthModel;
+import com.trinoq.mealmanager.features.model.phoneAuth.PhoneAuthModel;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 public class PhoneAuthViewModel extends ViewModel {
-    public MutableLiveData codeSentSuccess = new MutableLiveData<String>();
-    public MutableLiveData codeSentfailed = new MutableLiveData<String>();
+    public MutableLiveData<String> codeSentSuccess = new MutableLiveData<String>();
+    public MutableLiveData<String> codeSentfailed = new MutableLiveData<String>();
 
-    public MutableLiveData verificationSuccess = new MutableLiveData<String>();
-    public MutableLiveData verificationfailed = new MutableLiveData<String>();
+    public MutableLiveData<String> verificationSuccess = new MutableLiveData<String>();
+    public MutableLiveData<String> verificationfailed = new MutableLiveData<String>();
 
-    public MutableLiveData progressbarLoading = new MutableLiveData<Boolean>();
+    public MutableLiveData<Boolean> progressbarLoading = new MutableLiveData<Boolean>();
     //MutableLiveData progressBarLiveData = MutableLiveData<Boolean>()
 
    public void authInfo(String phoneNum,Context context,PhoneAuthModel phoneAuthModel){

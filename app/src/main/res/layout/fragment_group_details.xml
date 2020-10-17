@@ -20,6 +20,16 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:src="@drawable/back"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
             android:id="@+id/imageView2"
             android:layout_width="103dp"
             android:layout_height="71dp"
@@ -125,7 +135,8 @@
                     android:paddingLeft="15dp"
                     android:paddingTop="8dp"
                     android:paddingBottom="8dp"
-                    android:textColorHint="#50D890" />
+                    android:textColorHint="#50D890"
+                    android:paddingStart="15dp" />
 
             </LinearLayout>
 
@@ -138,10 +149,8 @@
                 android:layout_marginRight="45dp"
                 android:background="@drawable/border">
 
-                <Spinner
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:autofillHints="select" />
+
+
             </LinearLayout>
 
             <LinearLayout
@@ -185,6 +194,7 @@
                         app:layout_constraintTop_toBottomOf="@+id/mealTypeTxt">
 
                         <CheckBox
+                            android:id="@+id/breakfastCb"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:padding="5dp"
@@ -192,6 +202,7 @@
                             android:textColor="#50D890" />
 
                         <CheckBox
+                            android:id="@+id/launchCb"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:padding="5dp"
@@ -199,6 +210,7 @@
                             android:textColor="#50D890" />
 
                         <CheckBox
+                            android:id="@+id/dinnerCb"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:padding="5dp"
@@ -223,15 +235,15 @@
             app:layout_constraintTop_toBottomOf="@+id/linearLayout"
             app:layout_constraintVertical_bias="0.31" />
 
-        <TextView
+        <ImageView
             android:id="@+id/haveAccountTv"
-            android:layout_width="wrap_content"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
+            android:layout_marginBottom="30dp"
             android:fontFamily="@font/montserrat"
-            android:foreground="?android:attr/selectableItemBackground"
-            android:text="Create an account"
             android:textColor="#FFFFFF"
+            android:src="@drawable/step_1"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"

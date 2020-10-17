@@ -15,11 +15,18 @@ import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.Length;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.trinoq.mealmanager.R;
+import com.trinoq.mealmanager.features.model.register.RegisterModel;
+import com.trinoq.mealmanager.features.model.register.RegisterModelImplementation;
+import com.trinoq.mealmanager.features.viewmodel.RegisterViewModel;
 
 import java.util.List;
+import java.util.Objects;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -42,6 +49,9 @@ public class SignUpFragment extends Fragment implements Validator.ValidationList
     TextView dialogMessageTv;
     Button yesBt;
     Button noBt;
+
+    private RegisterModel model;
+    private RegisterViewModel viewModel;
 
     public SignUpFragment() {
         // Required empty public constructor
@@ -79,13 +89,13 @@ public class SignUpFragment extends Fragment implements Validator.ValidationList
 
     private void setfargment(Fragment fragment, String tag) {
         Bundle bundle = new Bundle();
-
+        bundle.putString("name",fullNameEt.getText().toString());
         if (tag.equals("verifyPhoneNumFrag")) {
             bundle.putString("phoneNumber", optimizedPhoneNumber());
             fragment.setArguments(bundle);
         }
 
-        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        FragmentTransaction transaction = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.authenticationContainer, fragment)
                 .addToBackStack(tag).commit();
     }
@@ -126,7 +136,6 @@ public class SignUpFragment extends Fragment implements Validator.ValidationList
             }
         });
         confirmPhoneNumberDialog.show();
-        //Toast.makeText(getActivity(), "allright", Toast.LENGTH_SHORT).show();
     }
 
     @Override

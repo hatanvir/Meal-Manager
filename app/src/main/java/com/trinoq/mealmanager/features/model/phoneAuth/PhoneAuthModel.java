@@ -1,4 +1,4 @@
-package com.trinoq.mealmanager.features.model;
+package com.trinoq.mealmanager.features.model.phoneAuth;
 
 import android.content.Context;
 
