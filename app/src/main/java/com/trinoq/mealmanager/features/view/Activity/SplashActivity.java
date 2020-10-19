@@ -20,7 +20,7 @@ public class SplashActivity extends AppCompatActivity {
             public void run() {
                 try {
                     Thread.sleep(2000);
-                    startActivity(new Intent(SplashActivity.this, AuthenticationActivity.class)
+                    startActivity(new Intent(SplashActivity.this, GroupCreateActivity.class)
                             .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                     finish();
                 } catch (InterruptedException e) {

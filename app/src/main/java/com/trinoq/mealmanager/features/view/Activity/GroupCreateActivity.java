@@ -5,12 +5,19 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
+import android.widget.EditText;
+import android.widget.FrameLayout;
 
 import com.trinoq.mealmanager.R;
 import com.trinoq.mealmanager.features.view.fragments.SignUpFragment;
 import com.trinoq.mealmanager.features.view.fragments.groupCreation.GroupDetailsFragment;
 
+import butterknife.BindView;
+
 public class GroupCreateActivity extends AppCompatActivity {
+
+    @BindView(R.id.groupInfoContainer)
+    FrameLayout groupInfoContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,7 +28,7 @@ public class GroupCreateActivity extends AppCompatActivity {
 
     private void setfragment(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.groupCreateViewContainer, fragment)
+        transaction.replace(R.id.groupInfoContainer, fragment)
                 .commit();
     }
 }

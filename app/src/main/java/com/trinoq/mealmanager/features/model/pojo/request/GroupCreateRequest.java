@@ -2,7 +2,7 @@ package com.trinoq.mealmanager.features.model.pojo.request;
 
 import com.google.gson.annotations.SerializedName;
 
-public class GroupDetailsRequest{
+public class GroupCreateRequest {
     @SerializedName("group_name")
     String group_name;
     @SerializedName("address")
@@ -16,9 +16,9 @@ public class GroupDetailsRequest{
     @SerializedName("is_admin")
     String is_admin;
 
-    public GroupDetailsRequest(String group_name,
-                               String address, String cooks_name,
-                               String shopping_type, String meal_type, String is_admin) {
+    public GroupCreateRequest(String group_name,
+                              String address, String cooks_name,
+                              String shopping_type, String meal_type, String is_admin) {
         this.group_name = group_name;
         this.address = address;
         this.cooks_name = cooks_name;
