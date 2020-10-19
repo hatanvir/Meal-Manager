@@ -11,7 +11,10 @@ import retrofit2.http.POST;
 public interface Api {
     @POST("register")
     Call<ResponseBody> register(@Body RegisterRequest registerRequest);
+
     @POST("groupCreate")
     Call<ResponseBody> groupCreate(@Body GroupCreateRequest groupCreateRequest);
+   /* @POST("preeMonthsCreate")
+    Call<ResponseBody> addPreeMonth()*/
 
 }

@@ -63,7 +63,7 @@
                 app:layout_constraintHorizontal_bias="0.498"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/imageView2"
-                app:layout_constraintVertical_bias="0.100000024" />
+                app:layout_constraintVertical_bias="0.15" />
 
             <LinearLayout
                 android:id="@+id/linearLayout"
@@ -76,7 +76,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView">
 
                 <LinearLayout
-                    android:id="@+id/mealPricingSp"
+                    android:id="@+id/mealPricingSpLay"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
                     android:layout_marginLeft="45dp"
@@ -85,13 +85,14 @@
                     android:background="@drawable/border">
 
                     <Spinner
+                        android:id="@+id/mealPricingSp"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:autofillHints="select" />
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/postMonthFirstSp"
+                    android:id="@+id/postMonthFirstSpLay"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
                     android:layout_marginLeft="45dp"
@@ -101,13 +102,14 @@
                     android:visibility="gone">
 
                     <Spinner
+                        android:id="@+id/postMonthFirstSp"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:autofillHints="select" />
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/postMonthSecondSp"
+                    android:id="@+id/postMonthSecondSpLay"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
                     android:layout_marginLeft="45dp"
@@ -117,13 +119,14 @@
                     android:visibility="gone">
 
                     <Spinner
+                        android:id="@+id/postMonthSecondSp"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:autofillHints="select" />
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/postMonthThirdSp"
+                    android:id="@+id/postMonthThirdSpLay"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
                     android:layout_marginLeft="45dp"
@@ -133,13 +136,14 @@
                     android:visibility="gone">
 
                     <Spinner
+                        android:id="@+id/postMonthThirdSp"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:autofillHints="select" />
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/specificPricingSp"
+                    android:id="@+id/specificPricingSpLay"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
                     android:layout_marginLeft="45dp"
@@ -149,6 +153,7 @@
                     android:visibility="gone">
 
                     <Spinner
+                        android:id="@+id/specificPricingSp"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:autofillHints="select" />
@@ -255,6 +260,7 @@
             android:background="@android:color/transparent"
             android:foreground="?android:attr/selectableItemBackground"
             android:src="@drawable/next"
+            android:layout_marginTop="15dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -265,8 +271,8 @@
             android:id="@+id/haveAccountTv"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:layout_marginBottom="30dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
             android:fontFamily="@font/montserrat"
             android:src="@drawable/step_1"
             android:textColor="#FFFFFF"
