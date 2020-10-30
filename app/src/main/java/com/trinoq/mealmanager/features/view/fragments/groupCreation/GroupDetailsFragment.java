@@ -65,6 +65,7 @@ public class GroupDetailsFragment extends Fragment implements Validator.Validati
     private GroupDetailsViewmodel viewmodel;
 
     private KProgressHUD progressHUD;
+    String breakFast="0",lunch="0",dinner="0";
 
     private String[] mealTypeArr = {"Shopping type", "Post-month pricing", "Post-month pricing"};
 
@@ -83,7 +84,6 @@ public class GroupDetailsFragment extends Fragment implements Validator.Validati
         validator.setValidationListener(this);
 
         model = new GroupCreateImplimentation(getActivity());
-        viewmodel = new ViewModelProvider(this).get(GroupDetailsViewmodel.class);
 
         progressHUD =  KProgressHUD.create(getActivity())
                 .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
@@ -107,18 +107,18 @@ public class GroupDetailsFragment extends Fragment implements Validator.Validati
 
     @Override
     public void onValidationSucceeded() {
+        viewmodel = new ViewModelProvider(this).get(GroupDetailsViewmodel.class);
         progressHUD.setLabel("Saving...").show();
         String groupName = groupNameEt.getText().toString();
         String address = addressEt.getText().toString();
         String cooksName = cooksNameEt.getText().toString();
 
-        String breakFast="",lunch="",dinner="";
+        if(breakfastCb.isChecked()) {breakFast = "1";}else {breakFast = "0";}
+        if(launchCb.isChecked()) {lunch = "1";}else {lunch = "0";}
+        if (dinnerCb.isChecked()) {dinner = "1";}else {dinner = "0";}
 
-        if(breakfastCb.isChecked()) breakFast = "1";
-        if(launchCb.isChecked()) lunch = "1";
-        if (dinnerCb.isChecked()) dinner = "1";
+      /*  viewmodel.groupDetailsRequest(new GroupCreateRequest(groupName,address,cooksName,"null",breakFast+"/"+lunch+"/"+dinner,"1"),model);
 
-        viewmodel.groupDetailsRequest(new GroupCreateRequest(groupName,address,cooksName,"null",breakFast+"/"+lunch+"/"+dinner,"1"),model);
         viewmodel.groupDetailsRequestSuccess.observe(this, new Observer<ResponseBody>() {
             @Override
             public void onChanged(ResponseBody responseBody) {
@@ -132,15 +132,17 @@ public class GroupDetailsFragment extends Fragment implements Validator.Validati
                 Toast.makeText(getActivity(), "Failed to save data.Try Again"+s, Toast.LENGTH_SHORT).show();
                 progressHUD.dismiss();
             }
-        });
+        });*/
+        setfargment(new MealPricingFragment());
+        progressHUD.dismiss();
     }
     private void setfargment(Fragment fragment) {
-       /* Bundle bundle = new Bundle();
-        bundle.putString("name","null");
-        if (tag.equals("verifyPhoneNumFrag")) {
-            bundle.putString("phoneNumber", optimizedPhoneNumber());
-            fragment.setArguments(bundle);
-        }*/
+
+        Bundle bundle = new Bundle();
+        bundle.putString("breakFast",breakFast);
+        bundle.putString("lunch",lunch);
+        bundle.putString("dinner",dinner);
+        fragment.setArguments(bundle);
 
         FragmentTransaction transaction = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.groupInfoContainer, fragment)

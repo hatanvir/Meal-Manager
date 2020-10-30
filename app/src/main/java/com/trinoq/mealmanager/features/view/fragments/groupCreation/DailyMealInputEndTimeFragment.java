@@ -7,12 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.TimePicker;
 
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.trinoq.mealmanager.R;
 
@@ -33,6 +31,8 @@ public class DailyMealInputEndTimeFragment extends Fragment {
     ImageView nextImage;
     @BindView(R.id.stepIm)
     ImageView stepIm;
+    @BindView(R.id.backBt)
+    ImageView backBt;
 
 
     @Override
@@ -40,8 +40,14 @@ public class DailyMealInputEndTimeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_daily_meal_input_end_time, container, false);
-        ButterKnife.bind(this,v);
+        ButterKnife.bind(this, v);
 
+        backBt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+              getActivity().getSupportFragmentManager().popBackStack();
+            }
+        });
         setUi();
         return v;
     }
@@ -50,24 +56,24 @@ public class DailyMealInputEndTimeFragment extends Fragment {
         breakfastEt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                timePicker();
+                timePicker("1");
             }
         });
         lunchEt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                timePicker();
+                timePicker("2");
             }
         });
         dinnerEt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                timePicker();
+                timePicker("3");
             }
         });
     }
 
-    private void timePicker() {
+    private void timePicker(String tag) {
         Calendar calendar = Calendar.getInstance();
 
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
@@ -76,8 +82,19 @@ public class DailyMealInputEndTimeFragment extends Fragment {
         new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                breakfastEt.setText(hourOfDay+" "+minute);
+                switch (tag) {
+                    case "1":
+                        breakfastEt.setText(hourOfDay + " : " + minute);
+                        break;
+                    case "2":
+                        lunchEt.setText(hourOfDay + " : " + minute);
+                        break;
+                    case "3":
+                        dinnerEt.setText(hourOfDay + " : " + minute);
+                        break;
+
+                }
             }
-        },hour,minutes,false).show();
+        }, hour, minutes, false).show();
     }
 }

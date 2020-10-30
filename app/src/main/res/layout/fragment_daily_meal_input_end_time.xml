@@ -15,19 +15,21 @@
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
         app:layout_constraintEnd_toEndOf="parent"
+        android:fillViewport="true"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
+                android:id="@+id/backBt"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginStart="16dp"
@@ -67,12 +69,12 @@
                 android:id="@+id/linearLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
                 android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView">
+                app:layout_constraintTop_toBottomOf="@+id/textView"
+                app:layout_constraintVertical_bias="0.26">
 
 
                 <LinearLayout
@@ -90,14 +92,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@android:color/transparent"
+                        android:clickable="false"
+                        android:cursorVisible="false"
                         android:drawableRight="@drawable/alerm_icon"
+                        android:focusable="false"
                         android:fontFamily="@font/montserrat"
                         android:hint="@string/breakfast"
                         android:maxLength="15"
                         android:paddingLeft="15dp"
-                        android:focusable="false"
-                        android:clickable="false"
-                        android:cursorVisible="false"
                         android:paddingTop="8dp"
                         android:paddingRight="10dp"
                         android:paddingBottom="8dp"
@@ -120,21 +122,21 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@android:color/transparent"
+                        android:clickable="false"
+                        android:cursorVisible="false"
+                        android:drawableEnd="@drawable/alerm_icon"
                         android:drawableRight="@drawable/alerm_icon"
+                        android:focusable="false"
                         android:fontFamily="@font/montserrat"
                         android:hint="@string/lunch"
                         android:maxLength="15"
+                        android:paddingStart="15dp"
                         android:paddingLeft="15dp"
                         android:paddingTop="8dp"
-                        android:clickable="false"
-                        android:focusable="false"
-                        android:cursorVisible="false"
+                        android:paddingEnd="10dp"
                         android:paddingRight="10dp"
                         android:paddingBottom="8dp"
-                        android:textColorHint="#50D890"
-                        android:paddingEnd="10dp"
-                        android:paddingStart="15dp"
-                        android:drawableEnd="@drawable/alerm_icon" />
+                        android:textColorHint="#50D890" />
 
                 </LinearLayout>
 
@@ -153,24 +155,39 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@android:color/transparent"
+                        android:clickable="false"
+                        android:cursorVisible="false"
+                        android:drawableEnd="@drawable/alerm_icon"
                         android:drawableRight="@drawable/alerm_icon"
+                        android:focusable="false"
                         android:fontFamily="@font/montserrat"
                         android:hint="@string/dinner"
                         android:maxLength="15"
-                        android:paddingLeft="15dp"
-                        android:clickable="false"
-                        android:cursorVisible="false"
-                        android:paddingTop="8dp"
-                        android:paddingRight="10dp"
-                        android:focusable="false"
-                        android:paddingBottom="8dp"
-                        android:textColorHint="#50D890"
-                        android:paddingEnd="10dp"
                         android:paddingStart="15dp"
-                        android:drawableEnd="@drawable/alerm_icon" />
+                        android:paddingLeft="15dp"
+                        android:paddingTop="8dp"
+                        android:paddingEnd="10dp"
+                        android:paddingRight="10dp"
+                        android:paddingBottom="8dp"
+                        android:textColorHint="#50D890" />
 
                 </LinearLayout>
             </LinearLayout>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Members have to response in these time to not miss any."
+                android:layout_marginBottom="20dp"
+                android:textSize="16sp"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:textAlignment="center"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
     <LinearLayout

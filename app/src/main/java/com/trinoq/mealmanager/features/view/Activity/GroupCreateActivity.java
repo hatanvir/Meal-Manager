@@ -13,6 +13,7 @@ import com.trinoq.mealmanager.features.view.fragments.SignUpFragment;
 import com.trinoq.mealmanager.features.view.fragments.groupCreation.DailyMealInputEndTimeFragment;
 import com.trinoq.mealmanager.features.view.fragments.groupCreation.GroupDetailsFragment;
 import com.trinoq.mealmanager.features.view.fragments.groupCreation.MealPricingFragment;
+import com.trinoq.mealmanager.features.view.fragments.groupCreation.PayablesFragment;
 
 import butterknife.BindView;
 
@@ -25,9 +26,11 @@ public class GroupCreateActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_creat);
-        /*setfragment(new GroupDetailsFragment());*/
+        setfragment(new GroupDetailsFragment());
         /*setfragment(new MealPricingFragment());*/
-        setfragment(new DailyMealInputEndTimeFragment());
+        /*setfragment(new DailyMealInputEndTimeFragment());*/
+        /*setfragment(new PayablesFragment());*/
+        /*setfragment(new MealPricingFragment());*/
     }
 
     private void setfragment(Fragment fragment) {

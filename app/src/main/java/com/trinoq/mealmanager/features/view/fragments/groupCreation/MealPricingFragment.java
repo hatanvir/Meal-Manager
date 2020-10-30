@@ -1,6 +1,7 @@
 package com.trinoq.mealmanager.features.view.fragments.groupCreation;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +11,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
@@ -68,8 +68,14 @@ public class MealPricingFragment extends Fragment {
     @BindView(R.id.haveAccountTv)
     ImageView haveAccountTv;
 
+    String breakFast = "0", lunch = "0", dinner = "0";
+    @BindView(R.id.backBt)
+    ImageView backBt;
+    @BindView(R.id.linearLayout2)
+    LinearLayout linearLayout2;
+
     private String[] mealPricingType = {"Pree month pricing", "Post month pricing "};
-    private String[] mealType = {"Full","Half"};
+    private String[] mealType = {"Full", "Half"};
 
     public MealPricingFragment() {
         // Required empty public constructor
@@ -82,11 +88,45 @@ public class MealPricingFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_meal_pricing, container, false);
         ButterKnife.bind(this, v);
 
+        breakFast = getArguments().getString("breakFast");
+        lunch = getArguments().getString("lunch");
+        dinner = getArguments().getString("dinner");
+
+        backBt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().getSupportFragmentManager().popBackStack();
+            }
+        });
+
         setUi();
         return v;
     }
 
     private void setUi() {
+
+        if (breakFast.equals("1")) {
+            postMonthFirstSpLay.setVisibility(View.VISIBLE);
+            breakfastLay.setVisibility(View.VISIBLE);
+        } else {
+            postMonthFirstSpLay.setVisibility(View.GONE);
+            breakfastLay.setVisibility(View.GONE);
+        }
+        if (lunch.equals("1")) {
+            postMonthSecondSpLay.setVisibility(View.VISIBLE);
+            lunchLay.setVisibility(View.VISIBLE);
+        } else {
+            postMonthSecondSpLay.setVisibility(View.GONE);
+            lunchLay.setVisibility(View.GONE);
+        }
+        if (dinner.equals("1")) {
+            postMonthThirdSpLay.setVisibility(View.VISIBLE);
+            dinnerLay.setVisibility(View.VISIBLE);
+        } else {
+            postMonthThirdSpLay.setVisibility(View.GONE);
+            dinnerLay.setVisibility(View.GONE);
+        }
+
         ArrayAdapter mealPricingSpAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_dropdown_item_1line, mealPricingType);
         mealPricingSp.setAdapter(mealPricingSpAdapter);
 
@@ -98,22 +138,51 @@ public class MealPricingFragment extends Fragment {
         mealPricingSp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if(position == 0){
-                    postMonthFirstSpLay.setVisibility(View.GONE);
-                    postMonthSecondSpLay.setVisibility(View.GONE);
-                    postMonthThirdSpLay.setVisibility(View.GONE);
+                if (position == 0) {
+                    if (breakFast == "1") {
+                        postMonthFirstSpLay.setVisibility(View.GONE);
+                        breakfastLay.setVisibility(View.VISIBLE);
+                    } else {
+                        postMonthFirstSpLay.setVisibility(View.GONE);
+                        breakfastLay.setVisibility(View.GONE);
+                    }
+                    if (lunch == "1") {
+                        postMonthSecondSpLay.setVisibility(View.GONE);
+                        lunchLay.setVisibility(View.VISIBLE);
+                    } else {
+                        postMonthSecondSpLay.setVisibility(View.GONE);
+                        lunchLay.setVisibility(View.GONE);
+                    }
+                    if (dinner == "1") {
+                        postMonthThirdSpLay.setVisibility(View.GONE);
+                        dinnerLay.setVisibility(View.VISIBLE);
+                    } else {
+                        postMonthThirdSpLay.setVisibility(View.GONE);
+                        dinnerLay.setVisibility(View.GONE);
+                    }
 
-                    breakfastLay.setVisibility(View.VISIBLE);
-                    lunchLay.setVisibility(View.VISIBLE);
-                    dinnerLay.setVisibility(View.VISIBLE);
-                }else {
-                    postMonthFirstSpLay.setVisibility(View.VISIBLE);
-                    postMonthSecondSpLay.setVisibility(View.VISIBLE);
-                    postMonthThirdSpLay.setVisibility(View.VISIBLE);
+                } else {
 
-                    breakfastLay.setVisibility(View.GONE);
+                    if (breakFast == "1") {
+                        postMonthFirstSpLay.setVisibility(View.VISIBLE);
+                    } else {
+                        postMonthFirstSpLay.setVisibility(View.GONE);
+                    }
+
+                    if (lunch == "1") {
+                        postMonthSecondSpLay.setVisibility(View.VISIBLE);
+                    } else {
+                        postMonthSecondSpLay.setVisibility(View.GONE);
+                    }
+                    if (dinner == "1") {
+                        postMonthThirdSpLay.setVisibility(View.VISIBLE);
+                    } else {
+                        postMonthThirdSpLay.setVisibility(View.GONE);
+                    }
                     lunchLay.setVisibility(View.GONE);
+                    breakfastLay.setVisibility(View.GONE);
                     dinnerLay.setVisibility(View.GONE);
+
                 }
             }
 
