@@ -17,4 +17,10 @@
     <string name="create_an_account">Create an account</string>
     <string name="phone_number">Phone Number</string>
     <string name="login">Login</string>
+    <string name="daily_meal_input_end_time">Daily meal input end time</string>
+    <string name="electricity_gas_and_water">Electricity, Gas and Water</string>
+    <string name="others">Others</string>
+    <string name="meal_advance">Meal Advance</string>
+    <string name="house_rent">House Rent</string>
+    <string name="payables">Payables</string>
 </resources>
