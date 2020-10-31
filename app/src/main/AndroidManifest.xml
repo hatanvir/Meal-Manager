@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.trinoq.mealmanager">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.AppCompat.NoActionBar"
+        android:usesCleartextTraffic="true">
+        <activity android:name=".features.view.Activity.TestActivity"></activity>
+        <activity android:name=".features.view.Activity.AboutActivity" />
+        <activity android:name=".features.view.Activity.NotificationActivity" />
+        <activity android:name=".features.view.Activity.AccountActivity" />
+        <activity android:name=".features.view.Activity.GeneralActivity" />
+        <activity android:name=".features.view.Activity.SettingsActivity" />
+        <activity android:name=".features.view.Activity.GroupMemberSearchActivity" />
+        <activity android:name=".features.view.Activity.GroupDetailsActivity" />
+        <activity android:name=".features.view.Activity.GroupCreateActivity" />
+        <activity android:name=".features.view.Activity.GroupSearchActivity" />
+        <activity android:name=".features.view.Activity.AuthenticationActivity" />
+        <activity android:name=".features.view.Activity.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".features.view.Activity.MainActivity" />
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
+    </application>
+
+</manifest>

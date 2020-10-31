@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "261348276921",
+    "firebase_url": "https://meal-manager-e9b18.firebaseio.com",
+    "project_id": "meal-manager-e9b18",
+    "storage_bucket": "meal-manager-e9b18.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:261348276921:android:300ff7ae41a146165a3968",
+        "android_client_info": {
+          "package_name": "com.trinoq.mealmanager"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "261348276921-4oevmc7nkct1l2o0croin0qi400lg1je.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB8PZ4JuqywMLRJKwk-7vOgEvscsThuDrY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "261348276921-4oevmc7nkct1l2o0croin0qi400lg1je.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
