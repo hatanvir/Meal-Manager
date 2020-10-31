@@ -54,19 +54,9 @@ public class PayablesFragment extends Fragment {
         model = new PayablesModelImplementation(getActivity());
         viewModel = new ViewModelProvider(getActivity()).get(PayablesViewModel.class);
 
-        nextImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                postPayablesOperation();
-            }
-        });
+        nextImage.setOnClickListener(v12 -> postPayablesOperation());
 
-        backBt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().getSupportFragmentManager().popBackStack();
-            }
-        });
+        backBt.setOnClickListener(v1 -> getActivity().getSupportFragmentManager().popBackStack());
         return v;
     }
 
