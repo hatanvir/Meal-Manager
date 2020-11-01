@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name="androidx.multidex.MultiDexApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -12,6 +13,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar"
         android:usesCleartextTraffic="true">
+        <activity android:name=".features.view.Activity.TestActivity"></activity>
+        <activity android:name=".features.view.Activity.AboutActivity" />
+        <activity android:name=".features.view.Activity.NotificationActivity" />
+        <activity android:name=".features.view.Activity.AccountActivity" />
+        <activity android:name=".features.view.Activity.GeneralActivity" />
+        <activity android:name=".features.view.Activity.SettingsActivity" />
+        <activity android:name=".features.view.Activity.GroupMemberSearchActivity" />
+        <activity android:name=".features.view.Activity.GroupDetailsActivity" />
         <activity android:name=".features.view.Activity.GroupCreateActivity" />
         <activity android:name=".features.view.Activity.GroupSearchActivity" />
         <activity android:name=".features.view.Activity.AuthenticationActivity" />

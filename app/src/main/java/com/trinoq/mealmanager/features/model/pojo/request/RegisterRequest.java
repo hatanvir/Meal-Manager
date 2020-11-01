@@ -1,3 +1,4 @@
+
 package com.trinoq.mealmanager.features.model.pojo.request;
 
 import com.google.gson.annotations.SerializedName;

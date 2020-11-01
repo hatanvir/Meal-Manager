@@ -81,5 +81,4 @@
                 app:layout_constraintVertical_bias="0.13" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </RelativeLayout>
-
 </androidx.cardview.widget.CardView>

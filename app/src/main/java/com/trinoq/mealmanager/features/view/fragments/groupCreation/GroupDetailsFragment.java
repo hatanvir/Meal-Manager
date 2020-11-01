@@ -145,7 +145,7 @@ public class GroupDetailsFragment extends Fragment implements Validator.Validati
         fragment.setArguments(bundle);
 
         FragmentTransaction transaction = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.groupInfoContainer, fragment)
+        transaction.replace(R.id.groupCreateViewContainer, fragment)
                 .addToBackStack("GRP_DETAILES").commit();
     }
 

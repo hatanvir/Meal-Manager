@@ -1,3 +1,4 @@
+
 package com.trinoq.mealmanager.common;
 
 public interface ManualAuthCompleteListener {

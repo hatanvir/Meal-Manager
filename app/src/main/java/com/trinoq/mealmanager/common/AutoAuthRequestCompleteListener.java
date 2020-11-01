@@ -6,3 +6,4 @@ public interface AutoAuthRequestCompleteListener {
     void OnVerificationSuccessListener(String s);
     void OnVerificationFailedListener(String error);
 }
+

@@ -158,9 +158,6 @@
                     android:layout_marginTop="15dp"
                     android:layout_marginRight="45dp"
                     android:background="@drawable/border">
-
-
-
                 </LinearLayout>-->
 
                 <LinearLayout

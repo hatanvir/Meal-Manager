@@ -12,6 +12,7 @@ android {
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true//to support vector drawables and animated vector drawables
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -62,4 +63,12 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'//json converter
 
+    // circleimage
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
+    implementation 'com.github.siyamed:android-shape-imageview:0.9.+@aar'
+
+    implementation 'com.github.bumptech.glide:glide:4.9.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
+
+    implementation 'androidx.multidex:multidex:2.0.1'
 }

@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#50D890">
+
+    <!--EditText
+        android:id="@+id/electricityEt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/edittext_border"
+        android:hint="Electricity,Gas &amp; water"
+        android:padding="10dp"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.098"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.036" />
+
+    <EditText
+        android:id="@+id/otherEt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/edittext_border"
+        android:hint="Enter Others"
+        android:padding="10dp"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.071"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/electricityEt"
+        app:layout_constraintVertical_bias="0.025" />
+
+    <EditText
+        android:id="@+id/mealEt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/edittext_border"
+        android:hint="Enter Meal"
+        android:padding="10dp"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.068"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/otherEt"
+        app:layout_constraintVertical_bias="0.035" />
+
+    <EditText
+        android:id="@+id/houseRentEt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/edittext_border"
+        android:hint="Enter House rent"
+        android:padding="10dp"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.081"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mealEt"
+        app:layout_constraintVertical_bias="0.041" />
+
+    <Button
+        android:id="@+id/updateBt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/edittext_border"
+        android:text="Done"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.95"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/houseRentEt"
+        app:layout_constraintVertical_bias="0.025" />-->
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        tools:layout_editor_absoluteX="59dp">
+
+        <LinearLayout
+            android:id="@+id/electricityLay"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginLeft="45dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="45dp"
+            android:background="@drawable/border"
+            android:visibility="visible">
+
+
+            <EditText
+                android:id="@+id/electricityEt"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:fontFamily="@font/montserrat"
+                android:hint="electricity_gas_and_water"
+                android:inputType="number"
+                android:maxLength="15"
+                android:paddingLeft="15dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:textColorHint="#50D890" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/othersLay"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginLeft="45dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="45dp"
+            android:background="@drawable/border"
+            android:visibility="visible">
+
+
+            <EditText
+                android:id="@+id/othersEt"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:fontFamily="@font/montserrat"
+                android:hint="others"
+                android:inputType="number"
+                android:maxLength="15"
+                android:paddingLeft="15dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:textColorHint="#50D890" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/mealAdvanceLay"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginLeft="45dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="45dp"
+            android:background="@drawable/border"
+            android:visibility="visible">
+
+
+            <EditText
+                android:id="@+id/mealAdvanceEt"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:fontFamily="@font/montserrat"
+                android:hint="meal_advance"
+                android:inputType="number"
+                android:maxLength="15"
+                android:paddingLeft="15dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:textColorHint="#50D890" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/houseRentLay"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginLeft="45dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="45dp"
+            android:background="@drawable/border"
+            android:visibility="visible">
+
+
+            <EditText
+                android:id="@+id/houseRentEt"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:fontFamily="@font/montserrat"
+                android:hint="house_rent"
+                android:inputType="number"
+                android:maxLength="15"
+                android:paddingLeft="15dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:textColorHint="#50D890" />
+
+        </LinearLayout>
+        <Button
+            android:id="@+id/updateBt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Done"
+            android:textColor="@color/black"
+            android:textAllCaps="false"
+            android:layout_gravity="end|bottom"
+            android:background="@drawable/bottom_border"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="20dp"/>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

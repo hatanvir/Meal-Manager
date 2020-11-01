@@ -9,3 +9,4 @@ public interface PhoneAuthModel {
     void getAutoVerification(String phoneNum, Context context, AutoAuthRequestCompleteListener phoneAuthRequestCompleteListener);
     void getManualVerification(String code, ManualAuthCompleteListener manualAuthCompleteListener);
 }
+
