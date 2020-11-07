@@ -4,7 +4,7 @@ package com.trinoq.mealmanager.features.model.pojo.request;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class GroupMember {
+public class Groupsearch {
 
     @SerializedName("id")
     @Expose
@@ -33,12 +33,9 @@ public class GroupMember {
     @SerializedName("updated_at")
     @Expose
     private String updatedAt;
-    @SerializedName("group_id")
+    @SerializedName("groupmember_count")
     @Expose
-    private Integer groupId;
-    @SerializedName("phone_number")
-    @Expose
-    private String phoneNumber;
+    private Integer groupmemberCount;
 
     public Integer getId() {
         return id;
@@ -112,20 +109,12 @@ public class GroupMember {
         this.updatedAt = updatedAt;
     }
 
-    public Integer getGroupId() {
-        return groupId;
+    public Integer getGroupmemberCount() {
+        return groupmemberCount;
     }
 
-    public void setGroupId(Integer groupId) {
-        this.groupId = groupId;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setGroupmemberCount(Integer groupmemberCount) {
+        this.groupmemberCount = groupmemberCount;
     }
 
 }

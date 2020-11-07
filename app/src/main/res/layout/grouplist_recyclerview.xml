@@ -9,8 +9,8 @@
 
     <ImageView
         android:id="@+id/imageView4"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"
         android:src="@drawable/icon_material_group"
@@ -28,7 +28,7 @@
         android:layout_marginTop="4dp"
         android:text="Group One"
         android:textColor="#FFFFFF"
-        android:textSize="20dp"
+        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.092"
@@ -44,7 +44,7 @@
         android:layout_marginBottom="10dp"
         android:text="1234567890"
         android:textColor="#FFFFFF"
-        android:textSize="17dp"
+        android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.097"

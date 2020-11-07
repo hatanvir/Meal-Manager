@@ -3,7 +3,6 @@ package com.trinoq.mealmanager.features.model.pojo.response;
 import com.google.gson.annotations.SerializedName;
 import java.util.List;
 import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
 import com.trinoq.mealmanager.features.model.pojo.request.Payable;
 
 public class PayablesResponse {

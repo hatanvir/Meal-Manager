@@ -4,6 +4,7 @@ package com.trinoq.mealmanager.features.view.Activity;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.trinoq.mealmanager.R;
@@ -17,12 +18,14 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
+        SharedPreferences sharedPreferences=getSharedPreferences("MyPreferences",MODE_PRIVATE);
+
         final Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
                     Thread.sleep(2000);
-                    startActivity(new Intent(SplashActivity.this, TestActivity.class)
+                    startActivity(new Intent(SplashActivity.this, TestActivity .class)
                             .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                     finish();
                 } catch (InterruptedException e) {
