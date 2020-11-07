@@ -89,43 +89,72 @@
 
                 </FrameLayout>
 
-                <EditText
-                    android:id="@+id/nameEt"
+
+                <LinearLayout
                     android:layout_width="280dp"
                     android:layout_height="45dp"
                     android:layout_marginTop="40dp"
                     android:background="@drawable/edittext_border"
-                    android:ems="10"
-                    android:fontFamily="@font/montserrat"
-                    android:hint="Nazmus Sakib"
-                    android:imeOptions="actionSearch"
-                    android:inputType="text"
-                    android:keyboardNavigationCluster="true"
-                    android:paddingLeft="15dp"
-                    android:textColorHint="#FFFFFF"
-                    />
+                    android:visibility="visible">
 
-                <EditText
-                    android:id="@+id/phoneNumberEt"
+
+                    <EditText
+                        android:id="@+id/nameEt"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/montserrat"
+                        android:text="Nazmus Sakib"
+                        android:inputType="text"
+                        android:paddingLeft="15dp"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
+                        android:textColor="#FFFFFF"
+                        />
+
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="280dp"
                     android:layout_height="45dp"
                     android:layout_marginTop="20dp"
                     android:background="@drawable/edittext_border"
-                    android:paddingLeft="15dp"
-                    android:text="+881234567890"
-                    android:textColor="#FFFFFF" />
+                    android:visibility="visible">
+
+
+                    <EditText
+                        android:id="@+id/phoneNumberEt"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/montserrat"
+                        android:text="+881234567890"
+                        android:inputType="text"
+                        android:paddingLeft="15dp"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
+                        android:textColor="#FFFFFF"
+                        />
+
+                </LinearLayout>
+            <LinearLayout
+                android:layout_width="280dp"
+                android:layout_height="45dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="100dp"
+                android:background="@drawable/edittext_border"
+                android:visibility="visible">
 
                 <EditText
                     android:id="@+id/emailEt"
-                    android:layout_width="280dp"
-                    android:layout_height="45dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginBottom="100dp"
-                    android:background="@drawable/edittext_border"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:inputType="text"
                     android:paddingLeft="15dp"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
                     android:text="gdfshskue@gmail.com"
-                    android:textColor="#FFFFFF" />
+                    android:textColor="#FFFFFF"
+                    android:fontFamily="@font/montserrat"/>
+            </LinearLayout>
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/editFab"

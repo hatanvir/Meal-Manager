@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -20,8 +21,8 @@ import android.widget.Toast;
 import com.trinoq.mealmanager.R;
 import com.trinoq.mealmanager.features.adapters.GroupListRecyclerViewAdapter;
 import com.trinoq.mealmanager.features.model.models.GroupInformation;
-import com.trinoq.mealmanager.features.model.pojo.request.GroupMember;
-import com.trinoq.mealmanager.features.model.pojo.request.SearchGroupRequest;
+import com.trinoq.mealmanager.features.model.pojo.request.GroupSearchRequest;
+import com.trinoq.mealmanager.features.model.pojo.request.Groupsearch;
 import com.trinoq.mealmanager.network.Api;
 import com.trinoq.mealmanager.network.RetrofitClient;
 import com.trinoq.mealmanager.utils.Utils;
@@ -51,6 +52,13 @@ public class GroupSearchActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SharedPreferences myPreferences=getSharedPreferences("MyPreferences",MODE_PRIVATE);
+        if (myPreferences.getString("theme","").equals("true")){
+            setTheme(R.style.LightTheme);
+        }
+        else {
+            setTheme(R.style.AppTheme);
+        }
         setContentView(R.layout.activity_group_search);
 
         grouplistRCV=findViewById(R.id.groupList);
@@ -83,86 +91,51 @@ public class GroupSearchActivity extends AppCompatActivity {
             public void onClick(View view) {
                 groupnameEt.setText(null);
 
-                /*groupname.clear();
-                phonenumber.clear();
-                Call<SearchGroupRequest> groupMemberCall=api.Group_search(groupnameEt.getText().toString().trim());
-                groupMemberCall.enqueue(new Callback<SearchGroupRequest>() {
-                    @Override
-                    public void onResponse(Call<SearchGroupRequest> call, Response<SearchGroupRequest> response) {
-                        if (response.code()==200){
-                            //Log.d("OOO",response.body().getGroupMembe);
-                            SearchGroupRequest groupRequest=response.body();
-                            if (groupRequest.getGroupMembers().size()>0){
-                                for (GroupMember groupMember:groupRequest.getGroupMembers())
-                                {
-                                    try {
-                                        Log.d("OOO",groupMember.getGroupName());
-                                        groupname.add(groupMember.getGroupName());
-                                        phonenumber.add(groupMember.getPhoneNumber());
-
-                                    }
-                                    catch (Exception e){
-
-                                    }
-                                }
-
-
-                            }
-                            mAdapter=new GroupListRecyclerViewAdapter(view.getContext(),groupname,phonenumber);
-                            grouplistRCV.setAdapter(mAdapter);
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<SearchGroupRequest> call, Throwable t) {
-
-                    }
-                });*/
-
             }
 
         });
         groupnameEt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                Toast.makeText(textView.getContext(), "Call", Toast.LENGTH_SHORT).show();
+
                 if (i == EditorInfo.IME_ACTION_GO || i == EditorInfo.IME_ACTION_DONE||i==EditorInfo.IME_ACTION_SEARCH) {
                     //your functionality
                     groupname.clear();
                     phonenumber.clear();
                     mealtype.clear();
-                    Call<SearchGroupRequest> groupMemberCall=api.Group_search(groupnameEt.getText().toString().trim());
-                    groupMemberCall.enqueue(new Callback<SearchGroupRequest>() {
+                    Call<GroupSearchRequest> groupMemberCall=api.Group_search(groupnameEt.getText().toString().trim());
+                    groupMemberCall.enqueue(new Callback<GroupSearchRequest>() {
                         @Override
-                        public void onResponse(Call<SearchGroupRequest> call, Response<SearchGroupRequest> response) {
+                        public void onResponse(Call<GroupSearchRequest> call, Response<GroupSearchRequest> response) {
                             if (response.code()==200){
                                 //Log.d("OOO",response.body().getGroupMembe);
-                                SearchGroupRequest groupRequest=response.body();
-                                if (groupRequest.getGroupMembers().size()>0){
-                                    for (GroupMember groupMember:groupRequest.getGroupMembers())
+                                GroupSearchRequest groupRequest=response.body();
+                                if (groupRequest.getGroupsearch().size()>0){
+                                    for (Groupsearch groupsearch:groupRequest.getGroupsearch())
                                     {
-                                        try {
+                                        //try {
+                                            Toast.makeText(textView.getContext(), "Call", Toast.LENGTH_SHORT).show();
 
-                                           /* groupname.add(groupMember.getGroupName());
-                                            phonenumber.add(groupMember.getPhoneNumber());
-                                            mealtype.add(groupMember.getMealType());
-                                            adminName.add(groupMember.getIsAdmin().toString());
-                                            cookingtype.add(groupMember.getCooksName().toString());
-                                            shoppingtype.add(groupMember.getShoppingType());
-                                            groupcreated.add(groupMember.getCreatedAt());*/
-
-                                            GroupInformation groupInformation=new GroupInformation(groupMember.getGroupName(),
-                                                    groupMember.getPhoneNumber(),groupMember.getIsAdmin().toString(), "0",
-                                                    "null",groupMember.getMealType(),groupMember.getCooksName().toString(),
-                                                    groupMember.getShoppingType(),groupMember.getCreatedAt());
+                                            Log.d("FFF",String.valueOf(groupRequest.getGroupsearch().size())+"  "+groupRequest.getMessage());
+                                            Log.d("OOO",groupsearch.getGroupName());
+                                            /*GroupInformation groupInformation=new GroupInformation(groupsearch.getId().toString(),
+                                                    groupsearch.getGroupName(),groupsearch.getCooksName().toString(),
+                                                    groupsearch.getShoppingType(),groupsearch.getMealType(),
+                                                    groupsearch.getIsAdmin().toString(),groupsearch.getCreatedAt(),
+                                                    groupsearch.getUpdatedAt(),groupsearch.getGroupmemberCount().toString());*/
+                                        GroupInformation groupInformation=new GroupInformation(groupsearch.getId().toString(),
+                                                groupsearch.getGroupName(),"null",
+                                                groupsearch.getShoppingType(),groupsearch.getMealType(),
+                                                "null",groupsearch.getCreatedAt(),
+                                                groupsearch.getUpdatedAt(),groupsearch.getGroupmemberCount().toString());
                                             Utils.groupInformations.add(groupInformation);
-                                            Log.d("OOO",Utils.groupInformations.toString());
 
 
-                                        }
+
+                                      /*  }
                                         catch (Exception e){
 
-                                        }
+                                        }*/
                                     }
 
 
@@ -175,7 +148,7 @@ public class GroupSearchActivity extends AppCompatActivity {
                         }
 
                         @Override
-                        public void onFailure(Call<SearchGroupRequest> call, Throwable t) {
+                        public void onFailure(Call<GroupSearchRequest> call, Throwable t) {
 
                         }
                     });

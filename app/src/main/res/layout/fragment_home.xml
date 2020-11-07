@@ -12,14 +12,14 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout2"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
+        android:layout_height="40dp"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:background="@drawable/dasho_border"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.023"
+        app:layout_constraintVertical_bias="0.02"
         tools:layout_editor_absoluteX="-16dp">
 
         <ImageView
@@ -66,10 +66,10 @@
     <FrameLayout
         android:id="@+id/frameLayout2"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="150dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout2"
-        app:layout_constraintVertical_bias="0.04"
+        app:layout_constraintVertical_bias="0.02"
         tools:layout_editor_absoluteX="0dp">
 
         <androidx.cardview.widget.CardView
@@ -79,8 +79,7 @@
             android:layout_marginRight="15dp"
             app:cardBackgroundColor="#7FE3AE"
             app:cardCornerRadius="10dp"
-            app:cardElevation="0dp"
-            >
+            app:cardElevation="0dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -159,18 +158,19 @@
                     app:srcCompat="@drawable/ic_add_black_24dp" />
 
                 <Button
+                    android:id="@+id/addMealBt"
                     android:layout_width="280dp"
                     android:layout_height="40dp"
+                    android:layout_marginTop="10dp"
                     android:background="@drawable/bottom_border"
                     android:text="Done"
                     android:textAllCaps="false"
                     android:textColor="#50D890"
-                    android:layout_marginTop="20dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/mealNumberTv"
-                    app:layout_constraintVertical_bias="0.01999998" />
+                    app:layout_constraintVertical_bias="0.0" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -225,13 +225,12 @@
         android:layout_marginRight="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view3"
-        app:layout_constraintVertical_bias="0.060000002"
+        app:layout_constraintVertical_bias="0.04000002"
         tools:layout_editor_absoluteX="0dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            >
+            android:layout_height="match_parent">
 
             <TextView
                 android:id="@+id/textView8"
@@ -411,11 +410,11 @@
         app:cardBackgroundColor="#EFFFFB"
         app:cardCornerRadius="10dp"
         app:cardElevation="0dp"
-        android:layout_marginRight="15dp"
         android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cardView3"
-        app:layout_constraintVertical_bias="0.15"
+        app:layout_constraintVertical_bias="0.110000014"
         tools:layout_editor_absoluteX="15dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -442,13 +441,13 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:background="@color/white"
-                app:srcCompat="@drawable/ic_mode_edit_black_24dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.94"
                 app:layout_constraintStart_toEndOf="@+id/textView13"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.01999998" />
+                app:layout_constraintVertical_bias="0.01999998"
+                app:srcCompat="@drawable/ic_mode_edit_black_24dp" />
 
             <TextView
                 android:id="@+id/textView14"

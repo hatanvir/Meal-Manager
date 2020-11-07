@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -17,9 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.trinoq.mealmanager.R;
-import com.trinoq.mealmanager.features.adapters.GroupListRecyclerViewAdapter;
 import com.trinoq.mealmanager.features.adapters.GroupMembersListRecyclerViewAdapter;
-import com.trinoq.mealmanager.features.model.pojo.request.SearchGroupRequest;
 import com.trinoq.mealmanager.features.model.pojo.request1.GroupMember;
 import com.trinoq.mealmanager.features.model.pojo.request1.GroupMemberSearchRequest;
 import com.trinoq.mealmanager.network.Api;
@@ -50,6 +49,14 @@ public class GroupMemberSearchActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SharedPreferences myPreferences=getSharedPreferences("MyPreferences",MODE_PRIVATE);
+        if (myPreferences.getString("theme","").equals("true")){
+            setTheme(R.style.LightTheme);
+        }
+        else {
+            setTheme(R.style.AppTheme);
+        }
+
         setContentView(R.layout.activity_group_member_search);
         ButterKnife.bind(GroupMemberSearchActivity.this);
 

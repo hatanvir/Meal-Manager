@@ -32,21 +32,24 @@
                 />
             <ImageButton
                 android:id="@+id/cameraDialogImageBt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/camera"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="5dp"
+                android:src="@drawable/camera1"
                 android:layout_gravity="center"
                 />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Camera"
+                android:layout_marginTop="5dp"
                 android:textColor="#000"
                 android:textSize="15sp"/>
             <ImageButton
                 android:id="@+id/gallaryDialogImageBt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="5dp"
                 android:src="@drawable/gallary"
                 android:layout_gravity="center"
                 />
@@ -54,6 +57,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Gallary"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
                 android:textColor="#000"
                 android:textSize="15sp"/>
         </LinearLayout>

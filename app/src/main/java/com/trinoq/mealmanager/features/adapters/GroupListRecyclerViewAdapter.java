@@ -56,7 +56,7 @@ public class GroupListRecyclerViewAdapter extends RecyclerView.Adapter<GroupList
     @Override
     public void onBindViewHolder(@NonNull GroupListRecyclerViewAdapter.ViewHolder holder, int position) {
         holder.groupName.setText(Utils.groupInformations.get(position).getGroupName());
-        holder.phoneNumber.setText(Utils.groupInformations.get(position).getPhoneNumber());
+        //holder.phoneNumber.setText(Utils.groupInformations.get(position).getPhoneNumber());
         //Log.d("FFFF",mealtype.get(position));
 
         holder.groupList.setOnClickListener(new View.OnClickListener() {

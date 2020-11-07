@@ -1,29 +1,29 @@
 package com.trinoq.mealmanager.features.model.models;
 
 public class GroupInformation {
-    private String groupName,phoneNumber,adminName,totalmembers,mealpricing,mealtype,cookingtype,shoppingtype,groupcreateddate;
+    //private String groupName,phoneNumber,adminName,totalmembers,mealpricing,mealtype,cookingtype,shoppingtype,groupcreateddate;
 
-    public GroupInformation(String groupName, String phoneNumber, String adminName, String totalmembers, String mealpricing, String mealtype, String cookingtype, String shoppingtype, String groupcreateddate) {
+    private String gorupId,groupName,cooksName,shoppingType,mealType,adminName,groupCreatedDate,upDate_at,totalMembers;
+
+    public GroupInformation(String gorupId, String groupName, String cooksName, String shoppingType, String mealType, String adminName, String groupCreatedDate, String upDate_at, String totalMembers) {
+        this.gorupId = gorupId;
         this.groupName = groupName;
-        this.phoneNumber = phoneNumber;
+        this.cooksName = cooksName;
+        this.shoppingType = shoppingType;
+        this.mealType = mealType;
         this.adminName = adminName;
-        this.totalmembers = totalmembers;
-        this.mealpricing = mealpricing;
-        this.mealtype = mealtype;
-        this.cookingtype = cookingtype;
-        this.shoppingtype = shoppingtype;
-        this.groupcreateddate = groupcreateddate;
+        this.groupCreatedDate = groupCreatedDate;
+        this.upDate_at = upDate_at;
+        this.totalMembers = totalMembers;
     }
 
-    /*public GroupInformation(String groupName, String phoneNumber, String adminName, String mealtype, String cookingtype, String shoppingtype, String groupcreateddate) {
-        this.groupName = groupName;
-        this.phoneNumber = phoneNumber;
-        this.adminName = adminName;
-        this.mealtype = mealtype;
-        this.cookingtype = cookingtype;
-        this.shoppingtype = shoppingtype;
-        this.groupcreateddate = groupcreateddate;
-    }*/
+    public String getGorupId() {
+        return gorupId;
+    }
+
+    public void setGorupId(String gorupId) {
+        this.gorupId = gorupId;
+    }
 
     public String getGroupName() {
         return groupName;
@@ -33,12 +33,28 @@ public class GroupInformation {
         this.groupName = groupName;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getCooksName() {
+        return cooksName;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setCooksName(String cooksName) {
+        this.cooksName = cooksName;
+    }
+
+    public String getShoppingType() {
+        return shoppingType;
+    }
+
+    public void setShoppingType(String shoppingType) {
+        this.shoppingType = shoppingType;
+    }
+
+    public String getMealType() {
+        return mealType;
+    }
+
+    public void setMealType(String mealType) {
+        this.mealType = mealType;
     }
 
     public String getAdminName() {
@@ -49,51 +65,27 @@ public class GroupInformation {
         this.adminName = adminName;
     }
 
-    public String getTotalmembers() {
-        return totalmembers;
+    public String getGroupCreatedDate() {
+        return groupCreatedDate;
     }
 
-    public void setTotalmembers(String totalmembers) {
-        this.totalmembers = totalmembers;
+    public void setGroupCreatedDate(String groupCreatedDate) {
+        this.groupCreatedDate = groupCreatedDate;
     }
 
-    public String getMealpricing() {
-        return mealpricing;
+    public String getUpDate_at() {
+        return upDate_at;
     }
 
-    public void setMealpricing(String mealpricing) {
-        this.mealpricing = mealpricing;
+    public void setUpDate_at(String upDate_at) {
+        this.upDate_at = upDate_at;
     }
 
-    public String getMealtype() {
-        return mealtype;
+    public String getTotalMembers() {
+        return totalMembers;
     }
 
-    public void setMealtype(String mealtype) {
-        this.mealtype = mealtype;
-    }
-
-    public String getCookingtype() {
-        return cookingtype;
-    }
-
-    public void setCookingtype(String cookingtype) {
-        this.cookingtype = cookingtype;
-    }
-
-    public String getShoppingtype() {
-        return shoppingtype;
-    }
-
-    public void setShoppingtype(String shoppingtype) {
-        this.shoppingtype = shoppingtype;
-    }
-
-    public String getGroupcreateddate() {
-        return groupcreateddate;
-    }
-
-    public void setGroupcreateddate(String groupcreateddate) {
-        this.groupcreateddate = groupcreateddate;
+    public void setTotalMembers(String totalMembers) {
+        this.totalMembers = totalMembers;
     }
 }

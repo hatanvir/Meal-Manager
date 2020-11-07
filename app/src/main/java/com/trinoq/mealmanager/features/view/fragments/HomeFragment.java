@@ -19,10 +19,10 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.trinoq.mealmanager.R;
 import com.trinoq.mealmanager.features.model.pojo.request.Payable;
 import com.trinoq.mealmanager.features.model.pojo.request.PayablesUpdateRequest;
+import com.trinoq.mealmanager.features.model.pojo.request.UserMealCreateRequest;
 import com.trinoq.mealmanager.features.model.pojo.response.PayablesResponse;
 import com.trinoq.mealmanager.network.Api;
 import com.trinoq.mealmanager.network.RetrofitClient;
@@ -61,10 +61,15 @@ public class HomeFragment extends Fragment {
     TextView totalPayableTv;
     @BindView(R.id.updatePayable)
     ImageButton updatePayable;
+    @BindView(R.id.addMealBt)
+    Button addMealBt;
 
+    String electricity,others,meal,houserent;
 
     private Runnable runnable;
     private Handler handler = new Handler();
+    Api api;
+    Retrofit retrofit;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -77,8 +82,8 @@ public class HomeFragment extends Fragment {
         View view= inflater.inflate(R.layout.fragment_home, container, false);
         ButterKnife.bind(this,view);
         countDownStart();
-        Retrofit retrofit= RetrofitClient.getClient();
-        Api api=retrofit.create(Api.class);
+        retrofit= RetrofitClient.getClient();
+        api=retrofit.create(Api.class);
 
         incrementImageBt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,54 +108,33 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                Dialog dialog=new Dialog(getContext());
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                dialog.setContentView(R.layout.dialog_update_payable);
-                dialog.getWindow().setGravity(Gravity.BOTTOM);
-                dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-                dialog.show();
-                EditText electricityEt=dialog.findViewById(R.id.electricityEt);
-                EditText otherEt=dialog.findViewById(R.id.othersEt);
-                EditText mealEt=dialog.findViewById(R.id.mealAdvanceEt);
-                EditText houserentEt=dialog.findViewById(R.id.houseRentEt);
-                Button updateBt=dialog.findViewById(R.id.updateBt);
+                updatedPayable();
+            }
+        });
 
-                electricityEt.setText(electricityTv.getText());
-                otherEt.setText(othersTv.getText());
-                mealEt.setText(mealTv.getText());
-                houserentEt.setText(houseRentTv.getText());
+        addMealBt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
-                updateBt.setOnClickListener(new View.OnClickListener() {
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                Date current_date = new Date();
+                Call<ResponseBody> call=api.setUserMeall(new UserMealCreateRequest("2","01781998168",dateFormat.format(current_date),mealnumberTv.getText().toString(),mealnumberTv.getText().toString(),mealnumberTv.getText().toString()));
+
+                call.enqueue(new Callback<ResponseBody>() {
                     @Override
-                    public void onClick(View view) {
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        Log.d("HGGG",String.valueOf(response.code()+"  "+dateFormat.format(current_date)));
+                        if (response.code()==200)
+                        {
+                            Toast.makeText(getContext(), "Success", Toast.LENGTH_SHORT).show();
+                        }
+                    }
 
-                        Call<ResponseBody> call=api.updatePayable("2",new PayablesUpdateRequest("2",electricityEt.getText().toString(),otherEt.getText().toString(),mealEt.getText().toString(),houserentEt.getText().toString()));
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
 
-                        call.enqueue(new Callback<ResponseBody>() {
-                            @Override
-                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        Toast.makeText(getContext(), "Failed", Toast.LENGTH_SHORT).show();
 
-                                Log.d("OOOO",String.valueOf(response.code()));
-
-                                if (response.code() == 200){
-
-                                    Toast.makeText(getContext(), "success", Toast.LENGTH_SHORT).show();
-                                    dialog.dismiss();
-                                }else {
-
-                                    Toast.makeText(getContext(), "Server error", Toast.LENGTH_SHORT).show();
-                                    dialog.dismiss();
-                                }
-                            }
-
-                            @Override
-                            public void onFailure(Call<ResponseBody> call, Throwable t) {
-
-                                Toast.makeText(getContext(), "Failed", Toast.LENGTH_SHORT).show();
-                                dialog.dismiss();
-
-                            }
-                        });
                     }
                 });
             }
@@ -167,10 +151,14 @@ public class HomeFragment extends Fragment {
                     if (PayablesResponse.getPayables().size()>0){
                         for (Payable payable:PayablesResponse.getPayables()){
 
-                            electricityTv.setText(payable.getElectricityGasWater().toString()+"/-");
-                            othersTv.setText(payable.getOthers().toString()+"/-");
-                            mealTv.setText(payable.getMealAdvanced().toString()+"/-");
-                            houseRentTv.setText(payable.getHouseRent().toString()+"/-");
+                            electricity=payable.getElectricityGasWater().toString();
+                            others=payable.getOthers().toString();
+                            meal=payable.getMealAdvanced().toString();
+                            houserent=payable.getHouseRent().toString();
+                            electricityTv.setText(electricity+"/-");
+                            othersTv.setText(others+"/-");
+                            mealTv.setText(meal+"/-");
+                            houseRentTv.setText(houserent+"/-");
                             totalPayableTv.setText(PayablesResponse.getTotalPayables().toString()+"/-");
 
                             Toast.makeText(getContext(), PayablesResponse.getTotalPayables().toString(), Toast.LENGTH_SHORT).show();
@@ -193,6 +181,64 @@ public class HomeFragment extends Fragment {
 
 
         return view;
+    }
+
+    private void setUserMeal() {
+
+
+    }
+
+    private void updatedPayable() {
+        Dialog dialog=new Dialog(getContext());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_update_payable);
+        dialog.getWindow().setGravity(Gravity.BOTTOM);
+        dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        dialog.show();
+        EditText electricityEt=dialog.findViewById(R.id.electricityEt);
+        EditText otherEt=dialog.findViewById(R.id.othersEt);
+        EditText mealEt=dialog.findViewById(R.id.mealAdvanceEt);
+        EditText houserentEt=dialog.findViewById(R.id.houseRentEt);
+        Button updateBt=dialog.findViewById(R.id.updateBt);
+
+        electricityEt.setText(electricity);
+        otherEt.setText(others);
+        mealEt.setText(meal);
+        houserentEt.setText(houserent);
+
+        updateBt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Call<ResponseBody> call=api.updatePayable("2",new PayablesUpdateRequest("2",electricityEt.getText().toString(),otherEt.getText().toString(),mealEt.getText().toString(),houserentEt.getText().toString()));
+
+                call.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+                        Log.d("OOOO",String.valueOf(response.code()));
+
+                        if (response.code() == 200){
+
+                            Toast.makeText(getContext(), "success", Toast.LENGTH_SHORT).show();
+                            dialog.dismiss();
+                        }else {
+
+                            Toast.makeText(getContext(), "Server error", Toast.LENGTH_SHORT).show();
+                            dialog.dismiss();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                        Toast.makeText(getContext(), "Failed", Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
+
+                    }
+                });
+            }
+        });
     }
 
     public void countDownStart() {

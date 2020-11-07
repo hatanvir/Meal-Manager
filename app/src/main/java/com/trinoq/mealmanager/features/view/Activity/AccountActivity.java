@@ -7,6 +7,7 @@ import androidx.core.content.ContextCompat;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -29,6 +30,10 @@ import android.widget.Toast;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.trinoq.mealmanager.R;
+import com.trinoq.mealmanager.features.model.models.UserInformation;
+import com.trinoq.mealmanager.network.Api;
+import com.trinoq.mealmanager.network.RetrofitClient;
+import com.trinoq.mealmanager.utils.Utils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -39,6 +44,14 @@ import java.util.Calendar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 import static com.trinoq.mealmanager.R.color.colorAccent;
 
@@ -64,19 +77,36 @@ public class AccountActivity extends AppCompatActivity {
     String check="false";
     Uri uri;
     String filePath="";
+    UserInformation userInformation;
+    Retrofit retrofit;
+    Api api;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SharedPreferences myPreferences=getSharedPreferences("MyPreferences",MODE_PRIVATE);
+        if (myPreferences.getString("theme","").equals("true")){
+            setTheme(R.style.LightTheme);
+        }
+        else {
+            setTheme(R.style.AppTheme);
+        }
+
         setContentView(R.layout.activity_account);
         ButterKnife.bind(AccountActivity.this);
 
 
         nameEt.setClickable(false);
         nameEt.setEnabled(false);
+        phoneNumberEt.setEnabled(false);
+        emailEt.setEnabled(false);
         nameEt.setFocusableInTouchMode(false);
         emailEt.setFocusableInTouchMode(false);
         phoneNumberEt.setFocusableInTouchMode(false);
+
+        nameEt.setText(Utils.userInformations.get(0).getUserName());
+        emailEt.setText(Utils.userInformations.get(0).getEmail());
+        phoneNumberEt.setText(Utils.userInformations.get(0).getPhoneNumber());
 
         backBt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,21 +124,15 @@ public class AccountActivity extends AppCompatActivity {
                     if (check.equals("false")){
                         addImage.setVisibility(View.VISIBLE);
                         addImagebackground.setVisibility(View.VISIBLE);
-
                         nameEt.setClickable(true);
                         nameEt.setEnabled(true);
                         nameEt.setFocusable(true);
+                        emailEt.setEnabled(true);
+                        phoneNumberEt.setEnabled(true);
                         nameEt.setFocusableInTouchMode(true);
                         emailEt.setFocusableInTouchMode(true);
                         phoneNumberEt.setFocusableInTouchMode(true);
-                        nameEt.setTextColor(ContextCompat.getColor(AccountActivity.this, R.color.black));
-                        nameEt.setHintTextColor(ContextCompat.getColor(AccountActivity.this,R.color.black));
-                        emailEt.setTextColor(ContextCompat.getColor(AccountActivity.this, R.color.black));
-                        emailEt.setHintTextColor(ContextCompat.getColor(AccountActivity.this,R.color.black));
-                        phoneNumberEt.setTextColor(ContextCompat.getColor(AccountActivity.this, R.color.black));
-                        phoneNumberEt.setHintTextColor(ContextCompat.getColor(AccountActivity.this,R.color.black));
 
-                        // editFab.setBackgroundResource(ContextCompat.getDrawable(AccountActivity.this,R.drawable.ic_check_black_24dp));
                         editFab.setImageDrawable(ContextCompat.getDrawable(AccountActivity.this,R.drawable.ic_check_black_24dp));
 
                         Toast.makeText(AccountActivity.this, "call", Toast.LENGTH_SHORT).show();
@@ -120,18 +144,22 @@ public class AccountActivity extends AppCompatActivity {
 
                         addImage.setVisibility(View.INVISIBLE);
                         addImagebackground.setVisibility(View.INVISIBLE);
+                        nameEt.setClickable(false);
+                        nameEt.setEnabled(false);
+                        phoneNumberEt.setEnabled(false);
+                        emailEt.setEnabled(false);
                         nameEt.setFocusableInTouchMode(false);
                         emailEt.setFocusableInTouchMode(false);
                         phoneNumberEt.setFocusableInTouchMode(false);
-                        nameEt.setTextColor(ContextCompat.getColor(AccountActivity.this, R.color.white));
-                        nameEt.setHintTextColor(ContextCompat.getColor(AccountActivity.this,R.color.white));
-                        emailEt.setTextColor(ContextCompat.getColor(AccountActivity.this, R.color.white));
-                        emailEt.setHintTextColor(ContextCompat.getColor(AccountActivity.this,R.color.white));
-                        phoneNumberEt.setTextColor(ContextCompat.getColor(AccountActivity.this, R.color.white));
-                        phoneNumberEt.setHintTextColor(ContextCompat.getColor(AccountActivity.this,R.color.white));
+
                         editFab.setImageDrawable(ContextCompat.getDrawable(AccountActivity.this,R.drawable.ic_edit_black_24dp));
                         check="false";
                         Toast.makeText(AccountActivity.this, "faile", Toast.LENGTH_SHORT).show();
+
+                        Log.d("HOOO",filePath);
+                        updateuser(filePath);
+
+
                     }
 
                 }
@@ -145,6 +173,48 @@ public class AccountActivity extends AppCompatActivity {
             });
 
     }
+
+
+    private void updateuser(String path){
+        if(path!=null){
+            File file=new File(path);
+            RequestBody fileRequsetbody=RequestBody.create(MediaType.parse("image/*"),file);
+            MultipartBody.Part part=MultipartBody.Part.createFormData("image",file.getName(),fileRequsetbody);
+
+            uplodedata(part);
+        }
+    }
+    private  void uplodedata(MultipartBody.Part part){
+
+        retrofit=RetrofitClient.getClient();
+        api=retrofit.create(Api.class);
+
+        Log.d("ttttttt",part+" "+emailEt.getText().toString());
+        Call<ResponseBody> call=api.updatedUser(3,part,ResponseBody.create(MultipartBody.FORM,emailEt.getText().toString()));
+
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+                Log.d("DDDD",String.valueOf(response.code()+" "+response.message()));
+
+                if (response.code()==200){
+
+                    Toast.makeText(AccountActivity.this, "Seccess", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                Toast.makeText(AccountActivity.this, "Faild", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+    }
+
+
     private void imagePickerTypeBottomSheet() {
         final BottomSheetDialog dialog = new BottomSheetDialog(AccountActivity.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
