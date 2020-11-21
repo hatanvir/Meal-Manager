@@ -43,7 +43,7 @@ public class GroupMembersListRecyclerViewAdapter extends RecyclerView.Adapter<Gr
     @Override
     public void onBindViewHolder(@NonNull GroupMembersListRecyclerViewAdapter.ViewHolder holder, int position) {
 
-        //holder.memberNameTv.setText(memberName.get(position));
+        holder.memberNameTv.setText(memberName.get(position));
         holder.phoneNumberTv.setText(phoneNumber.get(position));
 
     }

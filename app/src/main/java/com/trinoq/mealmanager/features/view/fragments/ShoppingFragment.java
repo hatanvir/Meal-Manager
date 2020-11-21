@@ -1,16 +1,23 @@
 package com.trinoq.mealmanager.features.view.fragments;
 
+import android.app.Dialog;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,11 +40,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class ShoppingFragment extends Fragment {
+public class ShoppingFragment extends Fragment  {
 
 
-    @BindView(R.id.bazarEt)
-    EditText bazarEt;
     @BindView(R.id.addBazarFab)
     FloatingActionButton addBazarFab;
     @BindView(R.id.bazarListRcv)
@@ -46,7 +51,7 @@ public class ShoppingFragment extends Fragment {
     BazarListInformation bazarListInformation;
     private RecyclerView.LayoutManager layoutManagergroupname;
     private RecyclerView.Adapter adapter;
-
+    String[] userId={"Selected User Id","2","3"};
     public ShoppingFragment() {
         // Required empty public constructor
     }
@@ -69,7 +74,39 @@ public class ShoppingFragment extends Fragment {
         addBazarFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Call<ResponseBody> call=api.setBazar(new BazarInsertRequest("2","9",bazarEt.getText().toString()));
+
+
+                Dialog dialog=new Dialog(getContext());
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setContentView(R.layout.dialog_add_bazar);
+                dialog.getWindow().setGravity(Gravity.BOTTOM);
+                dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+                dialog.show();
+                EditText totalBazarEt=dialog.findViewById(R.id.totalBazarEt);
+                EditText totalExtraBazarEt=dialog.findViewById(R.id.extraBazarEt);
+                Spinner userIdSp=dialog.findViewById(R.id.userIdSp);
+
+                //userIdSp.setOnItemSelectedListener(getContext());
+                //userIdSp.setOnItemSelectedListener((AdapterView.OnItemSelectedListener) getContext());
+
+                ArrayAdapter id=new ArrayAdapter(getContext(),android.R.layout.simple_spinner_item,userId);
+                id.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                userIdSp.setAdapter(id);
+
+                userIdSp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                        Toast.makeText(getContext(), userId[i], Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> adapterView) {
+
+                    }
+                });
+
+
+                /*Call<ResponseBody> call=api.setBazar(new BazarInsertRequest("2","9",""));
                 call.enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -83,7 +120,7 @@ public class ShoppingFragment extends Fragment {
 
                         Toast.makeText(getActivity(), "Failed", Toast.LENGTH_SHORT).show();
                     }
-                });
+                });*/
             }
         });
 
@@ -130,4 +167,16 @@ public class ShoppingFragment extends Fragment {
 
         return view;
     }
+/*
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+        Toast.makeText(getContext(),userId[i] , Toast.LENGTH_LONG).show();
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
+    }*/
 }
