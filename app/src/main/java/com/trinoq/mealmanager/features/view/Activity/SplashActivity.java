@@ -26,7 +26,7 @@ public class SplashActivity extends AppCompatActivity {
                 try {
                     Thread.sleep(2000);
                     startActivity(new Intent(SplashActivity.this, GroupMemberSearchActivity .class)
-                            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+               
                     finish();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
