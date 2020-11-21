@@ -6,6 +6,7 @@ import com.trinoq.mealmanager.features.model.pojo.request.BazarListRequest;
 import com.trinoq.mealmanager.features.model.pojo.request.DailyMealInputEndTimeRequest;
 import com.trinoq.mealmanager.features.model.pojo.request.GroupCreateRequest;
 import com.trinoq.mealmanager.features.model.pojo.request.GroupSearchRequest;
+import com.trinoq.mealmanager.features.model.pojo.request.MemberSearchRequest;
 import com.trinoq.mealmanager.features.model.pojo.request.PayablesRequest;
 import com.trinoq.mealmanager.features.model.pojo.request.PayablesUpdateRequest;
 import com.trinoq.mealmanager.features.model.pojo.request.PostMonthRequest;
@@ -72,6 +73,10 @@ public interface Api {
 
     @GET("Bazarlist/{group_id}")
     Call<BazarListRequest> getBazarList(@Path("group_id") String group_id);
+
+    @GET("Member_search/{phone_number}")
+    Call<MemberSearchRequest> getSearchMember(@Path("phone_number") String phone_number);
+
 
    /* @POST("preeMonthsCreate")
     Call<ResponseBody> addPreeMonth()*/

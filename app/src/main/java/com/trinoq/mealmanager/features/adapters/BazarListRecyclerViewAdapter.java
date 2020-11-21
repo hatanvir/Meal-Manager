@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -34,7 +35,7 @@ public class BazarListRecyclerViewAdapter  extends RecyclerView.Adapter<BazarLis
     public void onBindViewHolder(@NonNull BazarListRecyclerViewAdapter.ViewHolder holder, int position) {
 
         holder.totalBazarTv.setText(String.valueOf(Utils.bazarListInformations.get(position).getTotalAmount()));
-        holder.totalExtraBazarTv.setText(Utils.bazarListInformations.get(position).getExtraBazar());
+
 
     }
 
@@ -45,13 +46,17 @@ public class BazarListRecyclerViewAdapter  extends RecyclerView.Adapter<BazarLis
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView totalBazarTv,totalExtraBazarTv;
+        TextView totalBazarTv,bazarDateTv,userNameTv,userIdTv;
+        ImageButton editBazarIB;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             totalBazarTv=itemView.findViewById(R.id.totalBazarTv);
-            totalExtraBazarTv=itemView.findViewById(R.id.totalExtraTv);
+            bazarDateTv=itemView.findViewById(R.id.bazardateTv);
+            userNameTv=itemView.findViewById(R.id.userNameTv);
+            userIdTv=itemView.findViewById(R.id.userIdTv);
+            editBazarIB=itemView.findViewById(R.id.editBazar);
         }
     }
 }

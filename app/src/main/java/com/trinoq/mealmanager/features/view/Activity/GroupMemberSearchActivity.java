@@ -19,6 +19,9 @@ import android.widget.Toast;
 
 import com.trinoq.mealmanager.R;
 import com.trinoq.mealmanager.features.adapters.GroupMembersListRecyclerViewAdapter;
+import com.trinoq.mealmanager.features.model.pojo.request.Admininfo;
+import com.trinoq.mealmanager.features.model.pojo.request.Member;
+import com.trinoq.mealmanager.features.model.pojo.request.MemberSearchRequest;
 import com.trinoq.mealmanager.features.model.pojo.request1.GroupMember;
 import com.trinoq.mealmanager.features.model.pojo.request1.GroupMemberSearchRequest;
 import com.trinoq.mealmanager.network.Api;
@@ -45,6 +48,7 @@ public class GroupMemberSearchActivity extends AppCompatActivity {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager layoutManagergroupname;
     ArrayList<String> phoneNumber=new ArrayList<>();
+    ArrayList<String> userName=new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,17 +91,19 @@ public class GroupMemberSearchActivity extends AppCompatActivity {
 
                 if (i == EditorInfo.IME_ACTION_GO || i == EditorInfo.IME_ACTION_DONE||i==EditorInfo.IME_ACTION_SEARCH) {
                     phoneNumber.clear();
-                    Call<GroupMemberSearchRequest> groupMemberCall=api.GroupMember(phoneNumberEt.getText().toString().trim());
-                    groupMemberCall.enqueue(new Callback<GroupMemberSearchRequest>() {
+                    userName.clear();
+                    Call<MemberSearchRequest> memberSearchRequestCall=api.getSearchMember(phoneNumberEt.getText().toString().trim());
+                    memberSearchRequestCall.enqueue(new Callback<MemberSearchRequest>() {
                         @Override
-                        public void onResponse(Call<GroupMemberSearchRequest> call, Response<GroupMemberSearchRequest> response) {
+                        public void onResponse(Call<MemberSearchRequest> call, Response<MemberSearchRequest> response) {
                             if (response.code()==200){
-                                //Log.d("OOO",response.body().getGroupMembe);
-                                GroupMemberSearchRequest groupRequest=response.body();
-                                if (groupRequest.getGroupMembers().size()>0){
-                                    for (GroupMember groupMember:groupRequest.getGroupMembers())
+                                Log.d("OOO",response.body().getMember().toString());
+                                MemberSearchRequest groupRequest=response.body();
+
+                                if (groupRequest.getMember().size()>0){
+                                    for (Member groupMember:groupRequest.getMember())
                                     {
-                                        try {
+                                       /* try {
 
                                             phoneNumber.add(groupMember.getPhoneNumber());
                                             Log.d("GGG",groupMember.getPhoneNumber());
@@ -106,20 +112,27 @@ public class GroupMemberSearchActivity extends AppCompatActivity {
                                         }
                                         catch (Exception e){
 
-                                        }
+                                        }*/
+
+                                       for (Admininfo admininfo:groupMember.getAdmininfo()){
+                                           phoneNumber.add(admininfo.getPhoneNumber());
+                                           userName.add(admininfo.getFullName());
+                                           Toast.makeText(textView.getContext(), "Call", Toast.LENGTH_SHORT).show();
+                                       }
                                     }
 
 
                                 }
                                 //Log.d("OOO",mealtype.toString());
                                 //mAdapter=new GroupListRecyclerViewAdapter(textView.getContext(),groupname,phonenumber,adminName,mealtype,cookingtype,shoppingtype,groupcreated);
-                               mAdapter=new GroupMembersListRecyclerViewAdapter(textView.getContext(),phoneNumber);
+                               mAdapter=new GroupMembersListRecyclerViewAdapter(textView.getContext(),userName,phoneNumber);
                                 membersListRc.setAdapter(mAdapter);
-                            }
+                                Log.d("FSFS",userName.toString()+"  "+phoneNumber.toString())
+;                            }
                         }
 
                         @Override
-                        public void onFailure(Call<GroupMemberSearchRequest> call, Throwable t) {
+                        public void onFailure(Call<MemberSearchRequest> call, Throwable t) {
 
                         }
                     });
