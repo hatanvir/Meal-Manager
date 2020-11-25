@@ -1,5 +1,6 @@
 package com.trinoq.mealmanager.features.view.fragments;
 
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.os.Bundle;
 
@@ -7,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +18,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -31,6 +34,11 @@ import com.trinoq.mealmanager.features.model.pojo.request.Bazarlist;
 import com.trinoq.mealmanager.network.Api;
 import com.trinoq.mealmanager.network.RetrofitClient;
 import com.trinoq.mealmanager.utils.Utils;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -51,7 +59,16 @@ public class ShoppingFragment extends Fragment  {
     BazarListInformation bazarListInformation;
     private RecyclerView.LayoutManager layoutManagergroupname;
     private RecyclerView.Adapter adapter;
-    String[] userId={"Selected User Id","2","3"};
+    //String[] userId={"Selected User Id","2","3"};
+
+    ArrayList<String> userName=new ArrayList<>();
+    ArrayList<String> userId=new ArrayList<>();
+
+    DatePickerDialog datePickerDialog;
+    String currentdate,userid;
+    Retrofit retrofit;
+    Api api;
+
     public ShoppingFragment() {
         // Required empty public constructor
     }
@@ -67,8 +84,21 @@ public class ShoppingFragment extends Fragment  {
         layoutManagergroupname=new LinearLayoutManager(getContext());
         bazarListRcv.setLayoutManager(layoutManagergroupname);
 
-        Retrofit retrofit= RetrofitClient.getClient();
-        Api api=retrofit.create(Api.class);
+        retrofit= RetrofitClient.getClient();
+        api=retrofit.create(Api.class);
+
+        final Calendar calendar=Calendar.getInstance();
+
+        userId.clear();
+        userName.clear();
+
+        for (int i=0;i<Utils.groupAllMembersInformations.size();i++){
+            userName.add(Utils.groupAllMembersInformations.get(i).getUserName());
+            userId.add(String.valueOf(Utils.groupAllMembersInformations.get(i).getUserId()));
+
+        }
+
+        showBazarList();
 
 
         addBazarFab.setOnClickListener(new View.OnClickListener() {
@@ -83,20 +113,51 @@ public class ShoppingFragment extends Fragment  {
                 dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
                 dialog.show();
                 EditText totalBazarEt=dialog.findViewById(R.id.totalBazarEt);
-                EditText totalExtraBazarEt=dialog.findViewById(R.id.extraBazarEt);
-                Spinner userIdSp=dialog.findViewById(R.id.userIdSp);
+                Spinner userNameSp=dialog.findViewById(R.id.userNameSp);
+                TextView userIdTv=dialog.findViewById(R.id.userIdTv);
+                Button date=dialog.findViewById(R.id.bazarDateBt);
+                FloatingActionButton bazarInsertFab=dialog.findViewById(R.id.bazarInsertFab);
 
-                //userIdSp.setOnItemSelectedListener(getContext());
-                //userIdSp.setOnItemSelectedListener((AdapterView.OnItemSelectedListener) getContext());
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                Date current_date = new Date();
+                date.setText(String.valueOf(dateFormat.format(current_date)));
 
-                ArrayAdapter id=new ArrayAdapter(getContext(),android.R.layout.simple_spinner_item,userId);
+                date.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        int yearc=calendar.get(Calendar.YEAR);
+                        int monthc=calendar.get(Calendar.MONTH);
+                        final int dayc=calendar.get(Calendar.DAY_OF_MONTH);
+                        datePickerDialog=new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) {
+
+                                calendar.set(Calendar.YEAR,year);
+                                calendar.set(Calendar.MONTH,monthOfYear);
+                                calendar.set(Calendar.DAY_OF_MONTH,dayOfMonth);
+
+                                currentdate= String.valueOf(year)+"-"+String.valueOf(monthOfYear+1)+"-"+String.valueOf(dayOfMonth);
+
+                                Log.d("DDDDD",currentdate);
+                                date.setText(currentdate);
+
+                            }
+                        },yearc,monthc,dayc);
+
+                        datePickerDialog.show();
+                    }
+                });
+
+                ArrayAdapter id=new ArrayAdapter(getContext(),android.R.layout.simple_spinner_item,userName);
                 id.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                userIdSp.setAdapter(id);
+                userNameSp.setAdapter(id);
 
-                userIdSp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                userNameSp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                        Toast.makeText(getContext(), userId[i], Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(),userName.get(i)+" = "+ userId.get(i), Toast.LENGTH_SHORT).show();
+                        userIdTv.setText("User ID : "+userId.get(i));
+                        userid=userId.get(i);
                     }
 
                     @Override
@@ -106,25 +167,54 @@ public class ShoppingFragment extends Fragment  {
                 });
 
 
-                /*Call<ResponseBody> call=api.setBazar(new BazarInsertRequest("2","9",""));
-                call.enqueue(new Callback<ResponseBody>() {
+                bazarInsertFab.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        if (response.code()==200){
-                            Toast.makeText(getActivity(), "Seccess", Toast.LENGTH_SHORT).show();
-                        }
-                    }
+                    public void onClick(View view) {
 
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Call<ResponseBody> setBazarResponse=api.setBazar(new BazarInsertRequest("2",userid,totalBazarEt.getText().toString(),date.getText().toString()));
+                        setBazarResponse.enqueue(new Callback<ResponseBody>() {
+                            @Override
+                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 
-                        Toast.makeText(getActivity(), "Failed", Toast.LENGTH_SHORT).show();
+                                Log.d("BBBBB",String.valueOf(response.code())+"  "+userid+"  "+totalBazarEt.getText().toString()+"  "+date.getText().toString());
+
+                                if (response.code()==200){
+                                    Toast.makeText(getActivity(), "Seccess", Toast.LENGTH_SHORT).show();
+                                    showBazarList();
+                                }
+
+                            }
+
+                            @Override
+                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                                Toast.makeText(getActivity(), "Failed", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+                        dialog.dismiss();
                     }
-                });*/
+                });
+
+
             }
         });
 
-        Call<BazarListRequest> call=api.getBazarList("2");
+
+        return view;
+    }
+
+    private void showBazarList() {
+
+
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM");
+        Date current_date = new Date();
+
+        String fromdate=String.valueOf(dateFormat.format(current_date)+"-01");
+        String todate=String.valueOf(dateFormat.format(current_date)+"-31");
+        Log.d("FAFAFA",""+fromdate+"  "+todate);
+        Call<BazarListRequest> call=api.getBazarList("2",fromdate,todate);
         call.enqueue(new Callback<BazarListRequest>() {
             @Override
             public void onResponse(Call<BazarListRequest> call, Response<BazarListRequest> response) {
@@ -135,26 +225,16 @@ public class ShoppingFragment extends Fragment  {
                     if (bazarListRequest.getBazarlist().size()>0){
                         for (Bazarlist bazarlist:bazarListRequest.getBazarlist()){
 
-                            //String extra=bazarlist.getExtraBazar().toString();
-
-                           // if (extra.equals(null)){
-                                 bazarListInformation=new BazarListInformation(bazarlist.getId(),
-                                        bazarlist.getGroupId(),bazarlist.getUserId(),bazarlist.getTotalAmount(),
-                                        "0.00",bazarlist.getCreatedAt(),bazarlist.getUpdatedAt());
-
-
-                          /*  }
-                            else {
-                                 bazarListInformation=new BazarListInformation(bazarlist.getId(),
-                                        bazarlist.getGroupId(),bazarlist.getUserId(),bazarlist.getTotalAmount(),
-                                        bazarlist.getExtraBazar().toString(),bazarlist.getCreatedAt(),bazarlist.getUpdatedAt());
-                            }*/
+                            bazarListInformation=new BazarListInformation(bazarlist.getId(),
+                                    bazarlist.getGroupId(),bazarlist.getUserId(),bazarlist.getTotalAmount(),bazarlist.getDate()
+                                    ,bazarlist.getCreatedAt(),bazarlist.getUpdatedAt());
 
                             Utils.bazarListInformations.add(bazarListInformation);
                         }
                     }
                     adapter=new BazarListRecyclerViewAdapter(getContext());
                     bazarListRcv.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
                 }
             }
 
@@ -163,20 +243,7 @@ public class ShoppingFragment extends Fragment  {
 
             }
         });
-
-
-        return view;
-    }
-/*
-    @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
-        Toast.makeText(getContext(),userId[i] , Toast.LENGTH_LONG).show();
-
     }
 
-    @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
 
-    }*/
 }

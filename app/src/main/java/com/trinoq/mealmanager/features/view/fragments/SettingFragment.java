@@ -59,7 +59,7 @@ public class SettingFragment extends Fragment {
         View view= inflater.inflate(R.layout.fragment_setting, container, false);
         ButterKnife.bind(this,view);
 
-        Retrofit retrofit=RetrofitClient.getClient();
+       /* Retrofit retrofit=RetrofitClient.getClient();
         Api api=retrofit.create(Api.class);
 
         Call<UserInformationRequest> call=api.UserInformation("01781998168");
@@ -86,8 +86,10 @@ public class SettingFragment extends Fragment {
             public void onFailure(Call<UserInformationRequest> call, Throwable t) {
 
             }
-        });
+        });*/
 
+       userNameTv.setText(Utils.userInformations.get(0).getUserName());
+       phoneNumberTv.setText(Utils.userInformations.get(0).getPhoneNumber());
 
         generalLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
