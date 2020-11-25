@@ -98,7 +98,7 @@ public class ShoppingFragment extends Fragment  {
 
         }
 
-        showBazarList();
+        showBazarLists();
 
 
         addBazarFab.setOnClickListener(new View.OnClickListener() {
@@ -204,8 +204,15 @@ public class ShoppingFragment extends Fragment  {
         return view;
     }
 
-    private void showBazarList() {
+    private void showBazarLists() {
 
+        adapter=new BazarListRecyclerViewAdapter(getContext());
+        bazarListRcv.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+
+    }
+
+    private void showBazarList() {
 
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM");
