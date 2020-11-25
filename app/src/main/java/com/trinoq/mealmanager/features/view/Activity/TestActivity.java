@@ -11,14 +11,24 @@ import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.trinoq.mealmanager.R;
+import com.trinoq.mealmanager.features.model.models.UserInformation;
+import com.trinoq.mealmanager.features.model.pojo.request.User;
+import com.trinoq.mealmanager.features.model.pojo.request.UserInformationRequest;
 import com.trinoq.mealmanager.features.view.fragments.HomeFragment;
 import com.trinoq.mealmanager.features.view.fragments.NotificationFragment;
 import com.trinoq.mealmanager.features.view.fragments.SettingFragment;
 import com.trinoq.mealmanager.features.view.fragments.ShoppingFragment;
 import com.trinoq.mealmanager.features.view.fragments.SignUpFragment;
+import com.trinoq.mealmanager.network.Api;
+import com.trinoq.mealmanager.network.RetrofitClient;
+import com.trinoq.mealmanager.utils.Utils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class TestActivity extends AppCompatActivity {
 
@@ -54,6 +64,34 @@ public class TestActivity extends AppCompatActivity {
             homeFragment=new HomeFragment();
             setFragment(homeFragment);
         }
+
+        Retrofit retrofit= RetrofitClient.getClient();
+        Api api=retrofit.create(Api.class);
+
+        Call<UserInformationRequest> call=api.UserInformation("01747477690");
+        call.enqueue(new Callback<UserInformationRequest>() {
+            @Override
+            public void onResponse(Call<UserInformationRequest> call, Response<UserInformationRequest> response) {
+                if (response.code()==200){
+                    UserInformationRequest informationRequest=response.body();
+                    if (informationRequest.getUser().size()>0) {
+                        for (User user:informationRequest.getUser()){
+
+                            UserInformation userInformation=new UserInformation(user.getId().toString(),user.getPhoneNumber(),
+                                    "null",user.getFullName(),"null","null","null",
+                                    user.getCreatedAt(),user.getUpdatedAt());
+                            Utils.userInformations.add(userInformation);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserInformationRequest> call, Throwable t) {
+
+            }
+        });
+
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
