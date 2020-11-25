@@ -2,14 +2,14 @@ package com.trinoq.mealmanager.features.model.models;
 
 public class BazarListInformation {
     private Integer id,groupId,userId,totalAmount;
-    private String extraBazar,createdAt,updatedAt;
+    private String date,createdAt,updatedAt;
 
-    public BazarListInformation(Integer id, Integer groupId, Integer userId, Integer totalAmount, String extraBazar, String createdAt, String updatedAt) {
+    public BazarListInformation(Integer id, Integer groupId, Integer userId, Integer totalAmount, String date, String createdAt, String updatedAt) {
         this.id = id;
         this.groupId = groupId;
         this.userId = userId;
         this.totalAmount = totalAmount;
-        this.extraBazar = extraBazar;
+        this.date = date;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
@@ -46,12 +46,12 @@ public class BazarListInformation {
         this.totalAmount = totalAmount;
     }
 
-    public String getExtraBazar() {
-        return extraBazar;
+    public String getDate() {
+        return date;
     }
 
-    public void setExtraBazar(String extraBazar) {
-        this.extraBazar = extraBazar;
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public String getCreatedAt() {
