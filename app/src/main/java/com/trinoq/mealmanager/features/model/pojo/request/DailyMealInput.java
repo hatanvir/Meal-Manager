@@ -4,7 +4,7 @@ package com.trinoq.mealmanager.features.model.pojo.request;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Bazarlist {
+public class DailyMealInput {
 
     @SerializedName("id")
     @Expose
@@ -12,15 +12,15 @@ public class Bazarlist {
     @SerializedName("group_id")
     @Expose
     private Integer groupId;
-    @SerializedName("user_id")
+    @SerializedName("breakfast_date_time")
     @Expose
-    private Integer userId;
-    @SerializedName("total_amount")
+    private String breakfastDateTime;
+    @SerializedName("lunch_date_time")
     @Expose
-    private Integer totalAmount;
-    @SerializedName("date")
+    private String lunchDateTime;
+    @SerializedName("dinner_date_time")
     @Expose
-    private String date;
+    private String dinnerDateTime;
     @SerializedName("created_at")
     @Expose
     private String createdAt;
@@ -44,28 +44,28 @@ public class Bazarlist {
         this.groupId = groupId;
     }
 
-    public Integer getUserId() {
-        return userId;
+    public String getBreakfastDateTime() {
+        return breakfastDateTime;
     }
 
-    public void setUserId(Integer userId) {
-        this.userId = userId;
+    public void setBreakfastDateTime(String breakfastDateTime) {
+        this.breakfastDateTime = breakfastDateTime;
     }
 
-    public Integer getTotalAmount() {
-        return totalAmount;
+    public String getLunchDateTime() {
+        return lunchDateTime;
     }
 
-    public void setTotalAmount(Integer totalAmount) {
-        this.totalAmount = totalAmount;
+    public void setLunchDateTime(String lunchDateTime) {
+        this.lunchDateTime = lunchDateTime;
     }
 
-    public String getDate() {
-        return date;
+    public String getDinnerDateTime() {
+        return dinnerDateTime;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setDinnerDateTime(String dinnerDateTime) {
+        this.dinnerDateTime = dinnerDateTime;
     }
 
     public String getCreatedAt() {

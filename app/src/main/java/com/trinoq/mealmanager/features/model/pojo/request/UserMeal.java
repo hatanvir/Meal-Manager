@@ -4,7 +4,7 @@ package com.trinoq.mealmanager.features.model.pojo.request;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Bazarlist {
+public class UserMeal {
 
     @SerializedName("id")
     @Expose
@@ -15,12 +15,21 @@ public class Bazarlist {
     @SerializedName("user_id")
     @Expose
     private Integer userId;
-    @SerializedName("total_amount")
+    @SerializedName("phone_number")
     @Expose
-    private Integer totalAmount;
-    @SerializedName("date")
+    private String phoneNumber;
+    @SerializedName("meal_date")
     @Expose
-    private String date;
+    private String mealDate;
+    @SerializedName("is_breakfast")
+    @Expose
+    private Integer isBreakfast;
+    @SerializedName("is_lunch")
+    @Expose
+    private Integer isLunch;
+    @SerializedName("is_dinner")
+    @Expose
+    private Integer isDinner;
     @SerializedName("created_at")
     @Expose
     private String createdAt;
@@ -52,20 +61,44 @@ public class Bazarlist {
         this.userId = userId;
     }
 
-    public Integer getTotalAmount() {
-        return totalAmount;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setTotalAmount(Integer totalAmount) {
-        this.totalAmount = totalAmount;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
-    public String getDate() {
-        return date;
+    public String getMealDate() {
+        return mealDate;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setMealDate(String mealDate) {
+        this.mealDate = mealDate;
+    }
+
+    public Integer getIsBreakfast() {
+        return isBreakfast;
+    }
+
+    public void setIsBreakfast(Integer isBreakfast) {
+        this.isBreakfast = isBreakfast;
+    }
+
+    public Integer getIsLunch() {
+        return isLunch;
+    }
+
+    public void setIsLunch(Integer isLunch) {
+        this.isLunch = isLunch;
+    }
+
+    public Integer getIsDinner() {
+        return isDinner;
+    }
+
+    public void setIsDinner(Integer isDinner) {
+        this.isDinner = isDinner;
     }
 
     public String getCreatedAt() {

@@ -4,7 +4,7 @@ package com.trinoq.mealmanager.features.model.pojo.request;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Bazarlist {
+public class Allpayable {
 
     @SerializedName("id")
     @Expose
@@ -12,15 +12,18 @@ public class Bazarlist {
     @SerializedName("group_id")
     @Expose
     private Integer groupId;
-    @SerializedName("user_id")
+    @SerializedName("electricity_gas_water")
     @Expose
-    private Integer userId;
-    @SerializedName("total_amount")
+    private Integer electricityGasWater;
+    @SerializedName("others")
     @Expose
-    private Integer totalAmount;
-    @SerializedName("date")
+    private Integer others;
+    @SerializedName("meal_advanced")
     @Expose
-    private String date;
+    private Integer mealAdvanced;
+    @SerializedName("house_rent")
+    @Expose
+    private Integer houseRent;
     @SerializedName("created_at")
     @Expose
     private String createdAt;
@@ -44,28 +47,36 @@ public class Bazarlist {
         this.groupId = groupId;
     }
 
-    public Integer getUserId() {
-        return userId;
+    public Integer getElectricityGasWater() {
+        return electricityGasWater;
     }
 
-    public void setUserId(Integer userId) {
-        this.userId = userId;
+    public void setElectricityGasWater(Integer electricityGasWater) {
+        this.electricityGasWater = electricityGasWater;
     }
 
-    public Integer getTotalAmount() {
-        return totalAmount;
+    public Integer getOthers() {
+        return others;
     }
 
-    public void setTotalAmount(Integer totalAmount) {
-        this.totalAmount = totalAmount;
+    public void setOthers(Integer others) {
+        this.others = others;
     }
 
-    public String getDate() {
-        return date;
+    public Integer getMealAdvanced() {
+        return mealAdvanced;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setMealAdvanced(Integer mealAdvanced) {
+        this.mealAdvanced = mealAdvanced;
+    }
+
+    public Integer getHouseRent() {
+        return houseRent;
+    }
+
+    public void setHouseRent(Integer houseRent) {
+        this.houseRent = houseRent;
     }
 
     public String getCreatedAt() {
