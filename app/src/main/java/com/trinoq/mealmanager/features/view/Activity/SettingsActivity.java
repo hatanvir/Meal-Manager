@@ -22,9 +22,9 @@ public class SettingsActivity extends AppCompatActivity {
     @BindView(R.id.generallinearLayout)
     LinearLayout general;
     @BindView(R.id.accountlinearLayout)
-    LinearLayout  account;
+    LinearLayout account;
     @BindView(R.id.notificationlinearLayout)
-    LinearLayout  notification;
+    LinearLayout notification;
     @BindView(R.id.aboutlinearLayout)
     LinearLayout about;
 
@@ -44,27 +44,27 @@ public class SettingsActivity extends AppCompatActivity {
         general.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(SettingsActivity.this,GeneralActivity.class));
+                startActivity(new Intent(SettingsActivity.this, GeneralActivity.class));
             }
         });
 
         account.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(SettingsActivity.this,AccountActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                startActivity(new Intent(SettingsActivity.this, AccountActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
             }
         });
 
         notification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(SettingsActivity.this,NotificationActivity.class));
+                startActivity(new Intent(SettingsActivity.this, NotificationActivity.class));
             }
         });
         about.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(SettingsActivity.this,AboutActivity.class));
+                startActivity(new Intent(SettingsActivity.this, AboutActivity.class));
             }
         });
     }

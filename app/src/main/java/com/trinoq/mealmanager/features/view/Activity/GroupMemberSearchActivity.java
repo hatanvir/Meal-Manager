@@ -96,8 +96,9 @@ public class GroupMemberSearchActivity extends AppCompatActivity {
                     memberSearchRequestCall.enqueue(new Callback<MemberSearchRequest>() {
                         @Override
                         public void onResponse(Call<MemberSearchRequest> call, Response<MemberSearchRequest> response) {
+                            Log.d("OOO",String.valueOf(response.code()));
                             if (response.code()==200){
-                                Log.d("OOO",response.body().getMember().toString());
+                               // Log.d("OOO",response.body().getMember().toString());
                                 MemberSearchRequest groupRequest=response.body();
 
                                 if (groupRequest.getMember().size()>0){
