@@ -1,11 +1,10 @@
 
-package com.trinoq.mealmanager.features.model.pojo.request1;
+package com.trinoq.mealmanager.features.model.pojo.request;
 
-import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class GroupMember {
+public class DailyMealInput {
 
     @SerializedName("id")
     @Expose
@@ -13,21 +12,21 @@ public class GroupMember {
     @SerializedName("group_id")
     @Expose
     private Integer groupId;
-    @SerializedName("phone_number")
+    @SerializedName("breakfast_date_time")
     @Expose
-    private String phoneNumber;
-    @SerializedName("default_input")
+    private String breakfastDateTime;
+    @SerializedName("lunch_date_time")
     @Expose
-    private String defaultInput;
+    private String lunchDateTime;
+    @SerializedName("dinner_date_time")
+    @Expose
+    private String dinnerDateTime;
     @SerializedName("created_at")
     @Expose
     private String createdAt;
     @SerializedName("updated_at")
     @Expose
     private String updatedAt;
-    @SerializedName("userinfo")
-    @Expose
-    private List<Userinfo> userinfo = null;
 
     public Integer getId() {
         return id;
@@ -45,20 +44,28 @@ public class GroupMember {
         this.groupId = groupId;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getBreakfastDateTime() {
+        return breakfastDateTime;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setBreakfastDateTime(String breakfastDateTime) {
+        this.breakfastDateTime = breakfastDateTime;
     }
 
-    public String getDefaultInput() {
-        return defaultInput;
+    public String getLunchDateTime() {
+        return lunchDateTime;
     }
 
-    public void setDefaultInput(String defaultInput) {
-        this.defaultInput = defaultInput;
+    public void setLunchDateTime(String lunchDateTime) {
+        this.lunchDateTime = lunchDateTime;
+    }
+
+    public String getDinnerDateTime() {
+        return dinnerDateTime;
+    }
+
+    public void setDinnerDateTime(String dinnerDateTime) {
+        this.dinnerDateTime = dinnerDateTime;
     }
 
     public String getCreatedAt() {
@@ -75,14 +82,6 @@ public class GroupMember {
 
     public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
-    }
-
-    public List<Userinfo> getUserinfo() {
-        return userinfo;
-    }
-
-    public void setUserinfo(List<Userinfo> userinfo) {
-        this.userinfo = userinfo;
     }
 
 }

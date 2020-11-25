@@ -20,12 +20,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.trinoq.mealmanager.R;
+import com.trinoq.mealmanager.features.model.models.GroupAllMembersInformation;
 import com.trinoq.mealmanager.features.model.pojo.request.Payable;
 import com.trinoq.mealmanager.features.model.pojo.request.PayablesUpdateRequest;
 import com.trinoq.mealmanager.features.model.pojo.request.UserMealCreateRequest;
+import com.trinoq.mealmanager.features.model.pojo.request1.GroupMember;
+import com.trinoq.mealmanager.features.model.pojo.request1.GroupMemberSearchRequest;
+import com.trinoq.mealmanager.features.model.pojo.request1.Userinfo;
 import com.trinoq.mealmanager.features.model.pojo.response.PayablesResponse;
 import com.trinoq.mealmanager.network.Api;
 import com.trinoq.mealmanager.network.RetrofitClient;
+import com.trinoq.mealmanager.utils.Utils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -84,6 +89,8 @@ public class HomeFragment extends Fragment {
         countDownStart();
         retrofit= RetrofitClient.getClient();
         api=retrofit.create(Api.class);
+
+        getGroupAllMember();
 
         incrementImageBt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -181,6 +188,40 @@ public class HomeFragment extends Fragment {
 
 
         return view;
+    }
+
+    private void getGroupAllMember() {
+
+        Utils.groupAllMembersInformations.clear();
+
+        Call<GroupMemberSearchRequest> groupMemberSearchRequestCall=api.getAllGroupMember("2");
+        groupMemberSearchRequestCall.enqueue(new Callback<GroupMemberSearchRequest>() {
+            @Override
+            public void onResponse(Call<GroupMemberSearchRequest> call, Response<GroupMemberSearchRequest> response) {
+
+                if (response.code()==200){
+                    GroupMemberSearchRequest groupMemberSearchRequest=response.body();
+                    if (groupMemberSearchRequest.getGroupMembers().size()>0){
+                        for (GroupMember groupMember:groupMemberSearchRequest.getGroupMembers()){
+                            for (Userinfo userinfo:groupMember.getUserinfo()){
+
+                                Log.d("USER",userinfo.getFullName()+"  "+userinfo.getPhoneNumber()+"  "+userinfo.getId());
+
+                                GroupAllMembersInformation groupAllMembersInformation=new GroupAllMembersInformation(userinfo.getId(),userinfo.getPhoneNumber(),userinfo.getFullName(),userinfo.getEmail());
+                                Utils.groupAllMembersInformations.add(groupAllMembersInformation);
+                            }
+                        }
+                    }
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<GroupMemberSearchRequest> call, Throwable t) {
+
+            }
+        });
+
     }
 
     private void setUserMeal() {

@@ -16,11 +16,28 @@ public class BazarInsertRequest {
     @SerializedName("total_amount")
     @Expose
     private String totalAmount = null;
+    @SerializedName("date")
+    @Expose
+    private String date = null;
+   /*
+    @SerializedName("group_id")
+    @Expose
+    private String groupId = null;
+    @SerializedName("user_id")
+    @Expose
+    private String userId = null;
+    @SerializedName("total_amount")
+    @Expose
+    private String totalAmount = null;
+    @SerializedName("date")
+    @Expose
+    private String date = null;*/
 
-    public BazarInsertRequest(String groupId, String userId, String totalAmount) {
+    public BazarInsertRequest(String groupId, String userId, String totalAmount, String date) {
         this.groupId = groupId;
         this.userId = userId;
         this.totalAmount = totalAmount;
+        this.date = date;
     }
 
     public String getGroupId() {
@@ -45,5 +62,13 @@ public class BazarInsertRequest {
 
     public void setTotalAmount(String totalAmount) {
         this.totalAmount = totalAmount;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 }

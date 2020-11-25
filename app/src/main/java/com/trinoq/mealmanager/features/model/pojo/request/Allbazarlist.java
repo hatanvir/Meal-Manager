@@ -1,10 +1,11 @@
 
 package com.trinoq.mealmanager.features.model.pojo.request;
 
+import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Bazarlist {
+public class Allbazarlist {
 
     @SerializedName("id")
     @Expose
@@ -27,6 +28,15 @@ public class Bazarlist {
     @SerializedName("updated_at")
     @Expose
     private String updatedAt;
+    @SerializedName("allpayables")
+    @Expose
+    private List<Allpayable> allpayables = null;
+    @SerializedName("user_meal")
+    @Expose
+    private List<UserMeal> userMeal = null;
+    @SerializedName("daily_meal_input")
+    @Expose
+    private List<DailyMealInput> dailyMealInput = null;
 
     public Integer getId() {
         return id;
@@ -82,6 +92,30 @@ public class Bazarlist {
 
     public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public List<Allpayable> getAllpayables() {
+        return allpayables;
+    }
+
+    public void setAllpayables(List<Allpayable> allpayables) {
+        this.allpayables = allpayables;
+    }
+
+    public List<UserMeal> getUserMeal() {
+        return userMeal;
+    }
+
+    public void setUserMeal(List<UserMeal> userMeal) {
+        this.userMeal = userMeal;
+    }
+
+    public List<DailyMealInput> getDailyMealInput() {
+        return dailyMealInput;
+    }
+
+    public void setDailyMealInput(List<DailyMealInput> dailyMealInput) {
+        this.dailyMealInput = dailyMealInput;
     }
 
 }

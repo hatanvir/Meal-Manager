@@ -5,12 +5,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white">
+    android:background="@color/appcolor">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="15dp"
+        android:layout_margin="10dp"
         app:cardBackgroundColor="#EFFFFB"
         app:cardCornerRadius="10dp"
         app:cardElevation="0dp"
@@ -29,7 +29,7 @@
                 android:layout_height="wrap_content"
                 android:text="19-11-2020"
                 android:textColor="@color/black"
-                android:textSize="25sp"
+                android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -43,7 +43,7 @@
                 android:gravity="left"
                 android:text="Md.Omar Faruk"
                 android:textColor="@color/black"
-                android:textSize="18sp"
+                android:textSize="15sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.061"
@@ -58,7 +58,7 @@
                 android:gravity="right"
                 android:text="User Id 2"
                 android:textColor="@color/black"
-                android:textSize="18sp"
+                android:textSize="15sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.908"
@@ -72,13 +72,13 @@
                 android:layout_height="wrap_content"
                 android:text="Total Amount"
                 android:textColor="@color/black"
-                android:textSize="18sp"
+                android:textSize="15sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.054"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/userNameTv"
-                app:layout_constraintVertical_bias="0.035" />
+                app:layout_constraintVertical_bias="0.050000012" />
 
             <TextView
                 android:id="@+id/totalBazarTv"
@@ -87,13 +87,13 @@
                 android:gravity="right"
                 android:text="1000.00"
                 android:textColor="@color/black"
-                android:textSize="18sp"
+                android:textSize="15sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.917"
                 app:layout_constraintStart_toEndOf="@+id/textView2"
                 app:layout_constraintTop_toBottomOf="@+id/userIdTv"
-                app:layout_constraintVertical_bias="0.035" />
+                app:layout_constraintVertical_bias="0.050000012" />
 
             <ImageButton
                 android:id="@+id/editBazar"
@@ -103,7 +103,7 @@
                 android:padding="10dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.952"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/totalBazarTv"
                 app:layout_constraintVertical_bias="0.07999998"

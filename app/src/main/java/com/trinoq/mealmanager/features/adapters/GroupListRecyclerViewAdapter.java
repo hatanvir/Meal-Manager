@@ -13,7 +13,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.trinoq.mealmanager.R;
-import com.trinoq.mealmanager.features.view.Activity.GroupDetailsActivity;
+
 import com.trinoq.mealmanager.utils.Utils;
 
 import java.util.ArrayList;
@@ -56,22 +56,22 @@ public class GroupListRecyclerViewAdapter extends RecyclerView.Adapter<GroupList
     @Override
     public void onBindViewHolder(@NonNull GroupListRecyclerViewAdapter.ViewHolder holder, int position) {
         holder.groupName.setText(Utils.groupInformations.get(position).getGroupName());
-        //holder.phoneNumber.setText(Utils.groupInformations.get(position).getPhoneNumber());
+        holder.phoneNumber.setText(Utils.groupInformations.get(position).getAdminPhoneNo());
         //Log.d("FFFF",mealtype.get(position));
 
         holder.groupList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(context, GroupDetailsActivity.class);
+                //Intent intent=new Intent(context, GroupDetailsActivity.class);
                 //intent.putExtra("position",groupName.get(position));
-                intent.putExtra("position",position);
+                //intent.putExtra("position",position);
               /*  intent.putExtra("phonenumber",phoneNumber.get(position));
                 //intent.putExtra("admin",adminName.get(position));
                 intent.putExtra("mealtype",mealtype.get(position));*/
                 //intent.putExtra("cookingtype",cookingtype.get(position));
                 //intent.putExtra("shoppingtype",shoppingtype.get(position));
                 //intent.putExtra("created",groupcreated.get(position));
-                view.getContext().startActivity(intent);
+                //view.getContext().startActivity(intent);
             }
         });
 
