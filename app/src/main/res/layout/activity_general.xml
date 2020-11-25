@@ -69,16 +69,16 @@
 
         </LinearLayout>
 
-       <androidx.appcompat.widget.SwitchCompat
-           android:id="@+id/themeSwC"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:layout_gravity="center"
-           android:layout_marginLeft="30dp"
-           android:gravity="center"
-           android:thumb="@drawable/sw_thumb"
-           app:track="@drawable/sw_track"
-           />
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/themeSwC"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="30dp"
+            android:gravity="center"
+            android:thumb="@drawable/sw_thumb"
+            app:track="@drawable/sw_track"
+            />
 
     </LinearLayout>
 
