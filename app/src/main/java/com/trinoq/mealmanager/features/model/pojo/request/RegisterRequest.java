@@ -10,25 +10,24 @@ public class RegisterRequest implements Serializable {
     String phone_number;
     @SerializedName("full_name")
     String full_name;
+    @SerializedName("notification_token")
+    String notification_token;
 
-    public RegisterRequest(String phone_number, String full_name) {
+    public RegisterRequest(String phone_number, String full_name, String notification_token) {
         this.phone_number = phone_number;
         this.full_name = full_name;
+        this.notification_token = notification_token;
     }
 
     public String getPhone_number() {
         return phone_number;
     }
 
-    public void setPhone_number(String phone_number) {
-        this.phone_number = phone_number;
-    }
-
     public String getFull_name() {
         return full_name;
     }
 
-    public void setFull_name(String full_name) {
-        this.full_name = full_name;
+    public String getNotification_token() {
+        return notification_token;
     }
 }

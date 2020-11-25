@@ -232,7 +232,7 @@ public class HomeFragment extends Fragment {
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
 
-                        Toast.makeText(getContext(), "Failed", Toast.LENGTH_SHORT).show();
+                       //oi Toast.makeText(getContext(), "Failed", Toast.LENGTH_SHORT).show();
                         dialog.dismiss();
 
                     }

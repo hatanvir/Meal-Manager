@@ -10,7 +10,11 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.chaos.view.PinView;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
+import com.google.firebase.installations.FirebaseInstallations;
 import com.kaopiz.kprogresshud.KProgressHUD;
 import com.trinoq.mealmanager.R;
 import com.trinoq.mealmanager.features.model.phoneAuth.PhoneAuthModel;
@@ -30,6 +34,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
 import java.util.Objects;
+import java.util.concurrent.Executor;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -153,76 +158,85 @@ public class VerifyPhoneNumberFragment extends Fragment {
     }
 
     private void phoneAuthWithName() {
-        registerViewModel.register(new RegisterRequest(name,phoneNumber),registerModel);
-
-        registerViewModel.registerSuccess.observe(Objects.requireNonNull(getActivity()), new Observer() {
+        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(getActivity(),  new OnSuccessListener<InstanceIdResult>() {
             @Override
-            public void onChanged(Object o) {
-                if(o.toString() == "Success"){
-                   //snackbar("Data added");
-                    viewModel.authInfo(phoneNumber, getActivity(),model);
+            public void onSuccess(InstanceIdResult instanceIdResult) {
+                String newToken = instanceIdResult.getToken();
+                Log.e("newToken", newToken);
 
-                    viewModel.codeSentSuccess.observe(getActivity(), new Observer() {
-                        @Override
-                        public void onChanged(Object o) {
-                            snackbar("Verification code successfully sent");
-                            if (!o.toString().equals("sent")){
-                                pinView.setText(o.toString());
-                            }
+                registerViewModel.register(new RegisterRequest(name,phoneNumber,newToken),registerModel);
+
+                registerViewModel.registerSuccess.observe(Objects.requireNonNull(getActivity()), new Observer() {
+                    @Override
+                    public void onChanged(Object o) {
+                        if(o.toString() == "Success"){
+
+                            viewModel.authInfo(phoneNumber, getActivity(),model);
+
+                            viewModel.codeSentSuccess.observe(getActivity(), new Observer() {
+                                @Override
+                                public void onChanged(Object o) {
+                                    snackbar("Verification code successfully sent");
+                                    if (!o.toString().equals("sent")){
+                                        pinView.setText(o.toString());
+                                    }
+                                }
+                            });
+                            viewModel.codeSentfailed.observe(getActivity(), new Observer() {
+                                @Override
+                                public void onChanged(Object o) {
+                                    snackbar("Verification code sent failed ! Retry");
+                                    Objects.requireNonNull(getActivity()).getSupportFragmentManager().popBackStack();
+                                }
+                            });
+                            viewModel.verificationSuccess.observe(getActivity(), new Observer() {
+                                @Override
+                                public void onChanged(Object o) {
+                                    Toast.makeText(getActivity(), "Verification Success", Toast.LENGTH_SHORT).show();
+                                    FragmentManager fm = getFragmentManager();
+                                    assert fm != null;
+                                    int count = fm.getBackStackEntryCount();
+                                    for(int i = 0; i < count; ++i) {
+                                        fm.popBackStack();
+                                    }
+
+                                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                                    transaction.replace(R.id.authenticationContainer, new WelcomeFragment())
+                                            .addToBackStack("welcomeFrag").commit();
+                                }
+                            });
                         }
-                    });
-                    viewModel.codeSentfailed.observe(getActivity(), new Observer() {
-                        @Override
-                        public void onChanged(Object o) {
-                            snackbar("Verification code sent failed ! Retry");
-                            Objects.requireNonNull(getActivity()).getSupportFragmentManager().popBackStack();
+                    }
+                });
+                registerViewModel.registerFailed.observe(Objects.requireNonNull(getActivity()), new Observer() {
+                    @Override
+                    public void onChanged(Object o) {
+                        snackbar(o.toString()+". Try login.");
+                        setfargment(new LoginFragment(),"LOGON_FRAG");
+                    }
+                });
+
+
+                viewModel.verificationfailed.observe(getActivity(), new Observer() {
+                    @Override
+                    public void onChanged(Object o) {
+                        snackbar(((String)o));
+                        getActivity().getSupportFragmentManager().popBackStack();
+                    }
+                });
+                viewModel.progressbarLoading.observe(getActivity(), new Observer() {
+                    @Override
+                    public void onChanged(Object o) {
+                        if (((Boolean)o)){
+                            progressHUD.setLabel("Sending...").show();
+                        }else {
+                            progressHUD.dismiss();
                         }
-                    });
-                    viewModel.verificationSuccess.observe(getActivity(), new Observer() {
-                        @Override
-                        public void onChanged(Object o) {
-                            Toast.makeText(getActivity(), "Verification Success", Toast.LENGTH_SHORT).show();
-                            FragmentManager fm = getFragmentManager();
-                            assert fm != null;
-                            int count = fm.getBackStackEntryCount();
-                            for(int i = 0; i < count; ++i) {
-                                fm.popBackStack();
-                            }
-
-                            FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                            transaction.replace(R.id.authenticationContainer, new WelcomeFragment())
-                                    .addToBackStack("welcomeFrag").commit();
-                        }
-                    });
-                }
-            }
-        });
-        registerViewModel.registerFailed.observe(Objects.requireNonNull(getActivity()), new Observer() {
-            @Override
-            public void onChanged(Object o) {
-                snackbar(o.toString()+". Try login.");
-                setfargment(new LoginFragment(),"LOGON_FRAG");
+                    }
+                });
             }
         });
 
-
-        viewModel.verificationfailed.observe(getActivity(), new Observer() {
-            @Override
-            public void onChanged(Object o) {
-                snackbar(((String)o));
-                getActivity().getSupportFragmentManager().popBackStack();
-            }
-        });
-        viewModel.progressbarLoading.observe(getActivity(), new Observer() {
-            @Override
-            public void onChanged(Object o) {
-                if (((Boolean)o)){
-                    progressHUD.setLabel("Sending...").show();
-                }else {
-                    progressHUD.dismiss();
-                }
-            }
-        });
     }
 
     private void setfargment(Fragment fragment, String tag) {
