@@ -1,6 +1,7 @@
 
 package com.trinoq.mealmanager.network;
 
+import com.trinoq.mealmanager.features.model.pojo.request.AllBazarListSearchRequest;
 import com.trinoq.mealmanager.features.model.pojo.request.BazarInsertRequest;
 import com.trinoq.mealmanager.features.model.pojo.request.BazarListRequest;
 import com.trinoq.mealmanager.features.model.pojo.request.DailyMealInputEndTimeRequest;
@@ -57,6 +58,9 @@ public interface Api {
     @POST("BazarInsert")
     Call<ResponseBody> setBazar(@Body BazarInsertRequest bazarInsertRequest);
 
+    @POST("BazarUpdate/{id}")
+    Call<ResponseBody> setBazarUpdated(@Path("id") String id,@Body BazarInsertRequest bazarInsertRequest);
+
     @POST("usermealcreate")
     Call<ResponseBody> setUserMeall(@Body UserMealCreateRequest userMealCreateRequest);
 
@@ -64,18 +68,21 @@ public interface Api {
     Call<GroupSearchRequest> Group_search(@Path("groupname") String groupname);
 
     @GET("GroupMember/{group_id}")
-    Call<GroupMemberSearchRequest> GroupMember(@Path("group_id") String group_id);
+    Call<GroupMemberSearchRequest> getAllGroupMember(@Path("group_id") String group_id);
 
     @GET("GetPayables/{group_id}")
     Call<PayablesResponse> GetPayables(@Path("group_id") String group_id);
     @GET("UserInformation/{phone_number}")
     Call<UserInformationRequest> UserInformation(@Path("phone_number") String phone_number);
 
-    @GET("Bazarlist/{group_id}")
-    Call<BazarListRequest> getBazarList(@Path("group_id") String group_id);
+    @GET("Bazarlist/{group_id}/{from}/{to}")
+    Call<BazarListRequest> getBazarList(@Path("group_id") String group_id, @Path("from") String from, @Path("to") String to);
 
     @GET("Member_search/{phone_number}")
     Call<MemberSearchRequest> getSearchMember(@Path("phone_number") String phone_number);
+
+    @GET("GetAllBazarlist/{group_id}/{from}/{to}")
+    Call<AllBazarListSearchRequest> getAllBazarList(@Path("group_id") String group_id, @Path("from") String from, @Path("to") String to);
 
 
    /* @POST("preeMonthsCreate")
