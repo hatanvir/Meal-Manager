@@ -7,27 +7,40 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.trinoq.mealmanager.R;
 import com.trinoq.mealmanager.features.view.fragments.HomeFragment;
 import com.trinoq.mealmanager.features.view.fragments.SignUpFragment;
 
-public class SplashActivity extends AppCompatActivity {
+import java.util.Objects;
 
+public class SplashActivity extends AppCompatActivity {
+    String currentUserPhnNum="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-
-        SharedPreferences sharedPreferences=getSharedPreferences("MyPreferences",MODE_PRIVATE);
+        SharedPreferences sharedPreferences=getSharedPreferences("USER_DATA",MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
 
         final Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
                     Thread.sleep(2000);
-                    startActivity(new Intent(SplashActivity.this, TestActivity .class));
+                    try {
+                        currentUserPhnNum = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getPhoneNumber();
+                    }catch (Exception e){
 
-                            finish();
+                    }
+                    if(currentUserPhnNum !=null){
+
+                        startActivity(new Intent(SplashActivity.this, TestActivity.class));
+                        editor.putString("userPhoneNum",currentUserPhnNum).apply();
+                    }else {
+                        startActivity(new Intent(SplashActivity.this, AuthenticationActivity.class));
+                    }
+                    finish();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

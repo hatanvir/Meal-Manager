@@ -7,5 +7,5 @@ import com.trinoq.mealmanager.features.model.pojo.request.PremonthRequest;
 import okhttp3.ResponseBody;
 
 public interface PreMonthModel {
-    void postMostMonthRequest(PremonthRequest premonthRequest, RequestCompleteListener<ResponseBody> requestCompleteListener);
+    void preeMonthRequest(PremonthRequest premonthRequest, RequestCompleteListener<ResponseBody> requestCompleteListener);
 }

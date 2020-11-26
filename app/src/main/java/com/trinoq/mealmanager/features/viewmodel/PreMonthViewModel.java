@@ -14,7 +14,7 @@ public class PreMonthViewModel extends ViewModel {
     public MutableLiveData<String> setPreMothFailed = new MutableLiveData<>();
 
     public  void postMostMonthRequest(PremonthRequest premonthRequest, PreMonthModel model){
-        model.postMostMonthRequest(premonthRequest, new RequestCompleteListener<ResponseBody>() {
+        model.preeMonthRequest(premonthRequest, new RequestCompleteListener<ResponseBody>() {
             @Override
             public void OnSuccessListener(ResponseBody data) {
                 setPreMothSuccess.postValue(data);

@@ -1,0 +1,18 @@
+Index: app/src/main/java/com/trinoq/mealmanager/features/view/Activity/SplashActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>\r\npackage com.trinoq.mealmanager.features.view.Activity;\r\n\r\nimport androidx.appcompat.app.AppCompatActivity;\r\n\r\nimport android.content.Intent;\r\nimport android.content.SharedPreferences;\r\nimport android.os.Bundle;\r\n\r\nimport com.trinoq.mealmanager.R;\r\nimport com.trinoq.mealmanager.features.view.fragments.HomeFragment;\r\nimport com.trinoq.mealmanager.features.view.fragments.SignUpFragment;\r\n\r\npublic class SplashActivity extends AppCompatActivity {\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_splash);\r\n\r\n        SharedPreferences sharedPreferences=getSharedPreferences(\"MyPreferences\",MODE_PRIVATE);\r\n\r\n        final Thread thread = new Thread(new Runnable() {\r\n            @Override\r\n            public void run() {\r\n                try {\r\n                    Thread.sleep(2000);\r\n                    startActivity(new Intent(SplashActivity.this, AuthenticationActivity .class)\r\n                            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));\r\n                    finish();\r\n                } catch (InterruptedException e) {\r\n                    e.printStackTrace();\r\n                }\r\n            }\r\n        });\r\n        thread.start();\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/trinoq/mealmanager/features/view/Activity/SplashActivity.java	(revision c8eaa2bd376315a6717e4011ffea59fb7dbb0030)
++++ app/src/main/java/com/trinoq/mealmanager/features/view/Activity/SplashActivity.java	(date 1605895950340)
+@@ -25,7 +25,7 @@
+             public void run() {
+                 try {
+                     Thread.sleep(2000);
+-                    startActivity(new Intent(SplashActivity.this, AuthenticationActivity .class)
++                    startActivity(new Intent(SplashActivity.this, TestActivity .class)
+                             .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                     finish();
+                 } catch (InterruptedException e) {

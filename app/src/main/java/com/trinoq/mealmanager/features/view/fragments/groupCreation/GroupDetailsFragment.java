@@ -23,6 +23,7 @@ import com.trinoq.mealmanager.R;
 import com.trinoq.mealmanager.features.model.GroupDetails.GroupCreateImplimentation;
 import com.trinoq.mealmanager.features.model.GroupDetails.GroupCreateModel;
 import com.trinoq.mealmanager.features.model.pojo.request.GroupCreateRequest;
+import com.trinoq.mealmanager.features.model.pojo.response.groupcreate.GroupCreatResponse;
 import com.trinoq.mealmanager.features.viewmodel.GroupDetailsViewmodel;
 
 import java.util.List;
@@ -84,6 +85,7 @@ public class GroupDetailsFragment extends Fragment implements Validator.Validati
         validator.setValidationListener(this);
 
         model = new GroupCreateImplimentation(getActivity());
+        //viewmodel = new ViewModelProvider(this).get(GroupDetailsViewmodel.class);
 
         progressHUD =  KProgressHUD.create(getActivity())
                 .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
@@ -117,12 +119,13 @@ public class GroupDetailsFragment extends Fragment implements Validator.Validati
         if(launchCb.isChecked()) {lunch = "1";}else {lunch = "0";}
         if (dinnerCb.isChecked()) {dinner = "1";}else {dinner = "0";}
 
-      /*  viewmodel.groupDetailsRequest(new GroupCreateRequest(groupName,address,cooksName,"null",breakFast+"/"+lunch+"/"+dinner,"1"),model);
+        viewmodel.groupDetailsRequest(new GroupCreateRequest(groupName,address,cooksName,"null",breakFast+"/"+lunch+"/"+dinner,"1"),model);
 
-        viewmodel.groupDetailsRequestSuccess.observe(this, new Observer<ResponseBody>() {
+        viewmodel.groupDetailsRequestSuccess.observe(this, new Observer<GroupCreatResponse>() {
             @Override
-            public void onChanged(ResponseBody responseBody) {
-                setfargment(new MealPricingFragment());
+            public void onChanged(GroupCreatResponse responseBody) {
+                Fragment fragment = new MealPricingFragment();
+                setfargment(fragment,responseBody.getGroup().getId().toString());
                 progressHUD.dismiss();
             }
         });
@@ -132,16 +135,17 @@ public class GroupDetailsFragment extends Fragment implements Validator.Validati
                 Toast.makeText(getActivity(), "Failed to save data.Try Again"+s, Toast.LENGTH_SHORT).show();
                 progressHUD.dismiss();
             }
-        });*/
-        setfargment(new MealPricingFragment());
+        });
+       // setfargment(new MealPricingFragment());
         progressHUD.dismiss();
     }
-    private void setfargment(Fragment fragment) {
+    private void setfargment(Fragment fragment,String gpId) {
 
         Bundle bundle = new Bundle();
         bundle.putString("breakFast",breakFast);
         bundle.putString("lunch",lunch);
         bundle.putString("dinner",dinner);
+        bundle.putString("gpId",gpId);
         fragment.setArguments(bundle);
 
         FragmentTransaction transaction = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();

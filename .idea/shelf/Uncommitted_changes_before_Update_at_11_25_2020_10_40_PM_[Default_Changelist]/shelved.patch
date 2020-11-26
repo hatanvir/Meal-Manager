@@ -1,0 +1,1736 @@
+Index: app/src/main/java/com/trinoq/mealmanager/network/Api.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>\r\npackage com.trinoq.mealmanager.network;\r\n\r\nimport com.trinoq.mealmanager.features.model.pojo.request.BazarInsertRequest;\r\nimport com.trinoq.mealmanager.features.model.pojo.request.BazarListRequest;\r\nimport com.trinoq.mealmanager.features.model.pojo.request.DailyMealInputEndTimeRequest;\r\nimport com.trinoq.mealmanager.features.model.pojo.request.GroupCreateRequest;\r\nimport com.trinoq.mealmanager.features.model.pojo.request.GroupSearchRequest;\r\nimport com.trinoq.mealmanager.features.model.pojo.request.MemberSearchRequest;\r\nimport com.trinoq.mealmanager.features.model.pojo.request.PayablesRequest;\r\nimport com.trinoq.mealmanager.features.model.pojo.request.PayablesUpdateRequest;\r\nimport com.trinoq.mealmanager.features.model.pojo.request.PostMonthRequest;\r\nimport com.trinoq.mealmanager.features.model.pojo.request.PremonthRequest;\r\nimport com.trinoq.mealmanager.features.model.pojo.request.RegisterRequest;\r\nimport com.trinoq.mealmanager.features.model.pojo.request.UserInformationRequest;\r\nimport com.trinoq.mealmanager.features.model.pojo.request.UserMealCreateRequest;\r\nimport com.trinoq.mealmanager.features.model.pojo.request1.GroupMemberSearchRequest;\r\nimport com.trinoq.mealmanager.features.model.pojo.response.PayablesResponse;\r\n\r\nimport okhttp3.MultipartBody;\r\nimport okhttp3.RequestBody;\r\nimport okhttp3.ResponseBody;\r\nimport retrofit2.Call;\r\nimport retrofit2.http.Body;\r\nimport retrofit2.http.GET;\r\nimport retrofit2.http.Multipart;\r\nimport retrofit2.http.POST;\r\nimport retrofit2.http.Part;\r\nimport retrofit2.http.Path;\r\n\r\npublic interface Api {\r\n    @POST(\"register\")\r\n    Call<ResponseBody> register(@Body RegisterRequest  registerRequest);\r\n\r\n    @POST(\"groupCreate\")\r\n    Call<ResponseBody> groupCreate(@Body GroupCreateRequest groupCreateRequest);\r\n\r\n    @POST(\"payables\")\r\n    Call<ResponseBody> setPayables(@Body PayablesRequest payablesRequest);\r\n\r\n    @POST(\"preeMonthsCreate\")\r\n    Call<ResponseBody> setPreMonth(@Body PremonthRequest premonthRequest);\r\n\r\n    @POST(\"postMonthsCreate\")\r\n    Call<ResponseBody> setPostMonth(@Body PostMonthRequest postMonthRequest);\r\n\r\n    @POST(\"dailyMealInput\")\r\n    Call<ResponseBody> setDailyMealInput(@Body DailyMealInputEndTimeRequest dailyMealInputEndTimeRequest);\r\n\r\n    @POST(\"UpdatePayables/{id}\")\r\n    Call<ResponseBody> updatePayable(@Path(\"id\") String id, @Body PayablesUpdateRequest payablesUpdateRequest);\r\n\r\n    @Multipart\r\n    @POST(\"UpdateUser/{id}\")\r\n    Call<ResponseBody> updatedUser(@Path(\"id\") Integer id,@Part MultipartBody.Part file, @Part(\"email\") ResponseBody email);\r\n\r\n    @POST(\"BazarInsert\")\r\n    Call<ResponseBody> setBazar(@Body BazarInsertRequest bazarInsertRequest);\r\n\r\n    @POST(\"usermealcreate\")\r\n    Call<ResponseBody> setUserMeall(@Body UserMealCreateRequest userMealCreateRequest);\r\n\r\n    @GET(\"Group_search/{groupname}\")\r\n    Call<GroupSearchRequest> Group_search(@Path(\"groupname\") String groupname);\r\n\r\n    @GET(\"GroupMember/{group_id}\")\r\n    Call<GroupMemberSearchRequest> GroupMember(@Path(\"group_id\") String group_id);\r\n\r\n    @GET(\"GetPayables/{group_id}\")\r\n    Call<PayablesResponse> GetPayables(@Path(\"group_id\") String group_id);\r\n    @GET(\"UserInformation/{phone_number}\")\r\n    Call<UserInformationRequest> UserInformation(@Path(\"phone_number\") String phone_number);\r\n\r\n    @GET(\"Bazarlist/{group_id}\")\r\n    Call<BazarListRequest> getBazarList(@Path(\"group_id\") String group_id);\r\n\r\n    @GET(\"Member_search/{phone_number}\")\r\n    Call<MemberSearchRequest> getSearchMember(@Path(\"phone_number\") String phone_number);\r\n\r\n\r\n   /* @POST(\"preeMonthsCreate\")\r\n    Call<ResponseBody> addPreeMonth()*/\r\n\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/trinoq/mealmanager/network/Api.java	(revision 7b41a502874ab022c0570024ce1db70b1651cdac)
++++ app/src/main/java/com/trinoq/mealmanager/network/Api.java	(date 1606316768807)
+@@ -1,11 +1,14 @@
+ 
+ package com.trinoq.mealmanager.network;
+ 
++import com.trinoq.mealmanager.features.model.fcmNotification.NotificationSender;
+ import com.trinoq.mealmanager.features.model.pojo.request.BazarInsertRequest;
+ import com.trinoq.mealmanager.features.model.pojo.request.BazarListRequest;
+ import com.trinoq.mealmanager.features.model.pojo.request.DailyMealInputEndTimeRequest;
+ import com.trinoq.mealmanager.features.model.pojo.request.GroupCreateRequest;
++import com.trinoq.mealmanager.features.model.pojo.request.GroupMemberCreationRequest;
+ import com.trinoq.mealmanager.features.model.pojo.request.GroupSearchRequest;
++import com.trinoq.mealmanager.features.model.pojo.request.MemberInvitation;
+ import com.trinoq.mealmanager.features.model.pojo.request.MemberSearchRequest;
+ import com.trinoq.mealmanager.features.model.pojo.request.PayablesRequest;
+ import com.trinoq.mealmanager.features.model.pojo.request.PayablesUpdateRequest;
+@@ -16,13 +19,16 @@
+ import com.trinoq.mealmanager.features.model.pojo.request.UserMealCreateRequest;
+ import com.trinoq.mealmanager.features.model.pojo.request1.GroupMemberSearchRequest;
+ import com.trinoq.mealmanager.features.model.pojo.response.PayablesResponse;
++import com.trinoq.mealmanager.features.model.pojo.response.invitation.Invitation;
+ 
+ import okhttp3.MultipartBody;
+-import okhttp3.RequestBody;
+ import okhttp3.ResponseBody;
+ import retrofit2.Call;
+ import retrofit2.http.Body;
++import retrofit2.http.Field;
++import retrofit2.http.FormUrlEncoded;
+ import retrofit2.http.GET;
++import retrofit2.http.Headers;
+ import retrofit2.http.Multipart;
+ import retrofit2.http.POST;
+ import retrofit2.http.Part;
+@@ -50,6 +56,10 @@
+     @POST("UpdatePayables/{id}")
+     Call<ResponseBody> updatePayable(@Path("id") String id, @Body PayablesUpdateRequest payablesUpdateRequest);
+ 
++    //add group member
++    @POST("GroupMembercreate")
++    Call<ResponseBody> addGroupMember(@Body GroupMemberCreationRequest groupMemberCreationRequest);
++
+     @Multipart
+     @POST("UpdateUser/{id}")
+     Call<ResponseBody> updatedUser(@Path("id") Integer id,@Part MultipartBody.Part file, @Part("email") ResponseBody email);
+@@ -77,8 +87,28 @@
+     @GET("Member_search/{phone_number}")
+     Call<MemberSearchRequest> getSearchMember(@Path("phone_number") String phone_number);
+ 
++    //member invitation
++    @POST("Groupinvitation")
++    Call<ResponseBody> invitation(@Body MemberInvitation memberInvitation);
++
++    @GET("Invitationdataget/{user_id}")
++    Call<Invitation> getInvitationData(@Path("user_id") String user_id);
++
++    @POST("GroupInviationStatusUpdate/{id}")
++    @FormUrlEncoded
++    Call<ResponseBody> invitationUpdate(@Path("id") Integer id, @Field("status") int status);
+ 
+    /* @POST("preeMonthsCreate")
+     Call<ResponseBody> addPreeMonth()*/
+ 
++
++    //firebase messaging
++    @Headers({"Content-Type:application/json",
++            "Authorization:key=AAAAPNmSOrk:APA91bFSf7n1w6mdMJtsqigZ4ncY_qq-qb0ZGGccsZlEYyjwE6vqDvPYw3JGXl2K9LOxd9B1NG6tFuozMYng2Nk6oasPKYt-gW9vOw0H3Oyu_C8AjBVerzGOhd5ZqftK2ZfzPjF_bMOn" // fcm server key
++             }
++    )
++
++    @POST("fcm/send")
++    Call<ResponseBody> sendNotifcation(@Body NotificationSender body);
++
+ }
+\ No newline at end of file
+Index: app/src/main/java/com/trinoq/mealmanager/features/view/Activity/SplashActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>\r\npackage com.trinoq.mealmanager.features.view.Activity;\r\n\r\nimport androidx.appcompat.app.AppCompatActivity;\r\n\r\nimport android.content.Intent;\r\nimport android.content.SharedPreferences;\r\nimport android.os.Bundle;\r\n\r\nimport com.trinoq.mealmanager.R;\r\nimport com.trinoq.mealmanager.features.view.fragments.HomeFragment;\r\nimport com.trinoq.mealmanager.features.view.fragments.SignUpFragment;\r\n\r\npublic class SplashActivity extends AppCompatActivity {\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_splash);\r\n\r\n        SharedPreferences sharedPreferences=getSharedPreferences(\"MyPreferences\",MODE_PRIVATE);\r\n\r\n        final Thread thread = new Thread(new Runnable() {\r\n            @Override\r\n            public void run() {\r\n                try {\r\n                    Thread.sleep(2000);\r\n                    startActivity(new Intent(SplashActivity.this, GroupMemberSearchActivity .class)\r\n               \r\n                    finish();\r\n                } catch (InterruptedException e) {\r\n                    e.printStackTrace();\r\n                }\r\n            }\r\n        });\r\n        thread.start();\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/trinoq/mealmanager/features/view/Activity/SplashActivity.java	(revision 7b41a502874ab022c0570024ce1db70b1651cdac)
++++ app/src/main/java/com/trinoq/mealmanager/features/view/Activity/SplashActivity.java	(date 1605982982348)
+@@ -25,7 +25,7 @@
+             public void run() {
+                 try {
+                     Thread.sleep(2000);
+-                    startActivity(new Intent(SplashActivity.this, GroupMemberSearchActivity .class)
++                    startActivity(new Intent(SplashActivity.this, TestActivity .class));
+                
+                     finish();
+                 } catch (InterruptedException e) {
+Index: app/src/main/java/com/trinoq/mealmanager/features/model/pojo/response/invitation/Groupinfo.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/trinoq/mealmanager/features/model/pojo/response/invitation/Groupinfo.java	(date 1605981205188)
++++ app/src/main/java/com/trinoq/mealmanager/features/model/pojo/response/invitation/Groupinfo.java	(date 1605981205188)
+@@ -0,0 +1,109 @@
++
++package com.trinoq.mealmanager.features.model.pojo.response.invitation;
++
++import com.google.gson.annotations.Expose;
++import com.google.gson.annotations.SerializedName;
++
++public class Groupinfo {
++
++    @SerializedName("id")
++    @Expose
++    private Integer id;
++    @SerializedName("group_name")
++    @Expose
++    private String groupName;
++    @SerializedName("address")
++    @Expose
++    private String address;
++    @SerializedName("cooks_name")
++    @Expose
++    private Object cooksName;
++    @SerializedName("shopping_type")
++    @Expose
++    private String shoppingType;
++    @SerializedName("meal_type")
++    @Expose
++    private String mealType;
++    @SerializedName("is_admin")
++    @Expose
++    private Object isAdmin;
++    @SerializedName("created_at")
++    @Expose
++    private String createdAt;
++    @SerializedName("updated_at")
++    @Expose
++    private String updatedAt;
++
++    public Integer getId() {
++        return id;
++    }
++
++    public void setId(Integer id) {
++        this.id = id;
++    }
++
++    public String getGroupName() {
++        return groupName;
++    }
++
++    public void setGroupName(String groupName) {
++        this.groupName = groupName;
++    }
++
++    public String getAddress() {
++        return address;
++    }
++
++    public void setAddress(String address) {
++        this.address = address;
++    }
++
++    public Object getCooksName() {
++        return cooksName;
++    }
++
++    public void setCooksName(Object cooksName) {
++        this.cooksName = cooksName;
++    }
++
++    public String getShoppingType() {
++        return shoppingType;
++    }
++
++    public void setShoppingType(String shoppingType) {
++        this.shoppingType = shoppingType;
++    }
++
++    public String getMealType() {
++        return mealType;
++    }
++
++    public void setMealType(String mealType) {
++        this.mealType = mealType;
++    }
++
++    public Object getIsAdmin() {
++        return isAdmin;
++    }
++
++    public void setIsAdmin(Object isAdmin) {
++        this.isAdmin = isAdmin;
++    }
++
++    public String getCreatedAt() {
++        return createdAt;
++    }
++
++    public void setCreatedAt(String createdAt) {
++        this.createdAt = createdAt;
++    }
++
++    public String getUpdatedAt() {
++        return updatedAt;
++    }
++
++    public void setUpdatedAt(String updatedAt) {
++        this.updatedAt = updatedAt;
++    }
++
++}
+Index: app/src/main/java/com/trinoq/mealmanager/features/model/pojo/response/invitation/SenderInfo.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/trinoq/mealmanager/features/model/pojo/response/invitation/SenderInfo.java	(date 1605981205174)
++++ app/src/main/java/com/trinoq/mealmanager/features/model/pojo/response/invitation/SenderInfo.java	(date 1605981205174)
+@@ -0,0 +1,109 @@
++
++package com.trinoq.mealmanager.features.model.pojo.response.invitation;
++
++import com.google.gson.annotations.Expose;
++import com.google.gson.annotations.SerializedName;
++
++public class SenderInfo {
++
++    @SerializedName("id")
++    @Expose
++    private Integer id;
++    @SerializedName("phone_number")
++    @Expose
++    private String phoneNumber;
++    @SerializedName("notification_token")
++    @Expose
++    private Object notificationToken;
++    @SerializedName("full_name")
++    @Expose
++    private String fullName;
++    @SerializedName("email")
++    @Expose
++    private String email;
++    @SerializedName("image")
++    @Expose
++    private String image;
++    @SerializedName("active_groupid")
++    @Expose
++    private Object activeGroupid;
++    @SerializedName("created_at")
++    @Expose
++    private String createdAt;
++    @SerializedName("updated_at")
++    @Expose
++    private String updatedAt;
++
++    public Integer getId() {
++        return id;
++    }
++
++    public void setId(Integer id) {
++        this.id = id;
++    }
++
++    public String getPhoneNumber() {
++        return phoneNumber;
++    }
++
++    public void setPhoneNumber(String phoneNumber) {
++        this.phoneNumber = phoneNumber;
++    }
++
++    public Object getNotificationToken() {
++        return notificationToken;
++    }
++
++    public void setNotificationToken(Object notificationToken) {
++        this.notificationToken = notificationToken;
++    }
++
++    public String getFullName() {
++        return fullName;
++    }
++
++    public void setFullName(String fullName) {
++        this.fullName = fullName;
++    }
++
++    public String getEmail() {
++        return email;
++    }
++
++    public void setEmail(String email) {
++        this.email = email;
++    }
++
++    public String getImage() {
++        return image;
++    }
++
++    public void setImage(String image) {
++        this.image = image;
++    }
++
++    public Object getActiveGroupid() {
++        return activeGroupid;
++    }
++
++    public void setActiveGroupid(Object activeGroupid) {
++        this.activeGroupid = activeGroupid;
++    }
++
++    public String getCreatedAt() {
++        return createdAt;
++    }
++
++    public void setCreatedAt(String createdAt) {
++        this.createdAt = createdAt;
++    }
++
++    public String getUpdatedAt() {
++        return updatedAt;
++    }
++
++    public void setUpdatedAt(String updatedAt) {
++        this.updatedAt = updatedAt;
++    }
++
++}
+Index: app/src/main/java/com/trinoq/mealmanager/notification/MyFirebaseMessagingService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/trinoq/mealmanager/notification/MyFirebaseMessagingService.java	(date 1605967256753)
++++ app/src/main/java/com/trinoq/mealmanager/notification/MyFirebaseMessagingService.java	(date 1605967256753)
+@@ -0,0 +1,82 @@
++package com.trinoq.mealmanager.notification;
++
++import android.app.NotificationChannel;
++import android.app.NotificationManager;
++import android.app.PendingIntent;
++import android.content.Context;
++import android.content.Intent;
++import android.graphics.Bitmap;
++import android.graphics.BitmapFactory;
++import android.graphics.Color;
++import android.media.RingtoneManager;
++import android.net.Uri;
++import android.os.Build;
++
++import androidx.annotation.RequiresApi;
++import androidx.core.app.NotificationCompat;
++
++import com.google.firebase.messaging.FirebaseMessagingService;
++import com.google.firebase.messaging.RemoteMessage;
++import com.trinoq.mealmanager.R;
++import com.trinoq.mealmanager.features.view.Activity.MainActivity;
++
++import java.util.Random;
++
++public class MyFirebaseMessagingService extends FirebaseMessagingService {
++
++    private final String ADMIN_CHANNEL_ID ="admin_channel";
++
++    @Override
++    public void onMessageReceived(RemoteMessage remoteMessage) {
++        final Intent intent = new Intent(this, MainActivity.class);
++        NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
++        int notificationID = new Random().nextInt(3000);
++
++      /*
++        Apps targeting SDK 26 or above (Android O) must implement notification channels and add its notifications
++        to at least one of them. Therefore, confirm if version is Oreo or higher, then setup notification channel
++      */
++        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
++            setupChannels(notificationManager);
++        }
++
++        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
++        PendingIntent pendingIntent = PendingIntent.getActivity(this , 0, intent,
++                PendingIntent.FLAG_ONE_SHOT);
++
++        Bitmap largeIcon = BitmapFactory.decodeResource(getResources(),
++                R.drawable.add_group);
++
++        Uri notificationSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
++        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, ADMIN_CHANNEL_ID)
++                .setSmallIcon(R.drawable.add_group)
++                .setLargeIcon(largeIcon)
++                .setContentTitle(remoteMessage.getData().get("title"))
++                .setContentText(remoteMessage.getData().get("message"))
++                .setAutoCancel(true)
++                .setSound(notificationSoundUri)
++                .setContentIntent(pendingIntent);
++
++        //Set notification color to match your app color template
++        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
++            notificationBuilder.setColor(getResources().getColor(R.color.colorPrimaryDark));
++        }
++        notificationManager.notify(notificationID, notificationBuilder.build());
++    }
++
++    @RequiresApi(api = Build.VERSION_CODES.O)
++    private void setupChannels(NotificationManager notificationManager){
++        CharSequence adminChannelName = "New notification";
++        String adminChannelDescription = "Device to devie notification";
++
++        NotificationChannel adminChannel;
++        adminChannel = new NotificationChannel(ADMIN_CHANNEL_ID, adminChannelName, NotificationManager.IMPORTANCE_HIGH);
++        adminChannel.setDescription(adminChannelDescription);
++        adminChannel.enableLights(true);
++        adminChannel.setLightColor(Color.RED);
++        adminChannel.enableVibration(true);
++        if (notificationManager != null) {
++            notificationManager.createNotificationChannel(adminChannel);
++        }
++    }
++}
+Index: app/src/main/java/com/trinoq/mealmanager/features/model/pojo/response/invitation/Invitation.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/trinoq/mealmanager/features/model/pojo/response/invitation/Invitation.java	(date 1605981205181)
++++ app/src/main/java/com/trinoq/mealmanager/features/model/pojo/response/invitation/Invitation.java	(date 1605981205181)
+@@ -0,0 +1,33 @@
++
++package com.trinoq.mealmanager.features.model.pojo.response.invitation;
++
++import java.util.List;
++import com.google.gson.annotations.Expose;
++import com.google.gson.annotations.SerializedName;
++
++public class Invitation {
++
++    @SerializedName("Success")
++    @Expose
++    private String success;
++    @SerializedName("Inviationdata")
++    @Expose
++    private List<Inviationdatum> inviationdata = null;
++
++    public String getSuccess() {
++        return success;
++    }
++
++    public void setSuccess(String success) {
++        this.success = success;
++    }
++
++    public List<Inviationdatum> getInviationdata() {
++        return inviationdata;
++    }
++
++    public void setInviationdata(List<Inviationdatum> inviationdata) {
++        this.inviationdata = inviationdata;
++    }
++
++}
+Index: app/src/main/res/layout/notification_rv_receiver.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/notification_rv_receiver.xml	(date 1606060114291)
++++ app/src/main/res/layout/notification_rv_receiver.xml	(date 1606060114291)
+@@ -0,0 +1,49 @@
++<?xml version="1.0" encoding="utf-8"?>
++<androidx.constraintlayout.widget.ConstraintLayout
++    xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:app="http://schemas.android.com/apk/res-auto"
++    android:layout_width="match_parent"
++    android:layout_height="wrap_content"
++    android:background="#7FE3AE"
++    android:layout_margin="5dp">
++
++    <TextView
++        android:id="@+id/receiverNotificationTv"
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        android:layout_margin="5dp"
++        android:layout_marginTop="10dp"
++        android:text="Tanvir want to add you to Group One"
++        android:textColor="#474747"
++        app:layout_constraintEnd_toEndOf="parent"
++        app:layout_constraintHorizontal_bias="0.04"
++        app:layout_constraintStart_toStartOf="parent"
++        app:layout_constraintTop_toTopOf="parent" />
++
++    <Button
++        android:id="@+id/receiverAcceptBt"
++        android:layout_width="wrap_content"
++        android:layout_height="35dp"
++        android:background="#114E14"
++        android:text="Accept"
++        android:textAllCaps="false"
++        android:layout_marginTop="10dp"
++        android:layout_marginLeft="10dp"
++        android:layout_marginBottom="10dp"
++        app:layout_constraintBottom_toBottomOf="parent"
++        app:layout_constraintStart_toStartOf="parent"
++        app:layout_constraintTop_toBottomOf="@+id/receiverNotificationTv" />
++
++    <Button
++        android:id="@+id/receiverDeclineBt"
++        android:layout_width="wrap_content"
++        android:layout_height="35dp"
++        android:background="#C81E11"
++        android:text="Decline"
++        android:textAllCaps="false"
++        app:layout_constraintBottom_toBottomOf="parent"
++        app:layout_constraintEnd_toEndOf="parent"
++        app:layout_constraintHorizontal_bias="0.06"
++        app:layout_constraintStart_toEndOf="@+id/receiverAcceptBt"
++        app:layout_constraintTop_toBottomOf="@+id/receiverNotificationTv" />
++</androidx.constraintlayout.widget.ConstraintLayout>
+\ No newline at end of file
+Index: app/src/main/res/layout/activity_group_member_search.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<androidx.constraintlayout.widget.ConstraintLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    tools:context=\".features.view.Activity.GroupMemberSearchActivity\"\r\n    android:background=\"#50D890\">\r\n\r\n    <LinearLayout\r\n        android:id=\"@+id/linearLayout2\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"50dp\"\r\n        android:gravity=\"center\"\r\n        android:orientation=\"horizontal\"\r\n        android:weightSum=\"2\"\r\n        app:layout_constraintBottom_toBottomOf=\"parent\"\r\n        app:layout_constraintTop_toTopOf=\"parent\"\r\n        app:layout_constraintVertical_bias=\"0.07999998\">\r\n\r\n        <ImageView\r\n            android:layout_width=\"30dp\"\r\n            android:layout_height=\"30dp\"\r\n            android:layout_marginStart=\"16dp\"\r\n            android:layout_marginLeft=\"16dp\"\r\n            android:src=\"@drawable/back\"\r\n            app:layout_constraintStart_toStartOf=\"parent\"\r\n            app:layout_constraintTop_toTopOf=\"parent\" />\r\n\r\n        <LinearLayout\r\n            android:layout_width=\"0dp\"\r\n            android:layout_height=\"40dp\"\r\n            android:layout_gravity=\"center\"\r\n            android:layout_marginLeft=\"20dp\"\r\n            android:layout_marginRight=\"10dp\"\r\n            android:layout_weight=\"1.8\"\r\n            android:background=\"@drawable/border\">\r\n\r\n\r\n            <EditText\r\n                android:id=\"@+id/phoneNumberEt\"\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"match_parent\"\r\n                android:background=\"@android:color/transparent\"\r\n                android:ems=\"10\"\r\n                android:fontFamily=\"@font/montserrat\"\r\n                android:hint=\"Search Member\"\r\n                android:imeOptions=\"actionSearch\"\r\n                android:inputType=\"text\"\r\n                android:paddingLeft=\"15dp\"\r\n                android:paddingTop=\"8dp\"\r\n                android:paddingBottom=\"8dp\"\r\n                android:singleLine=\"true\"\r\n                android:textColorHint=\"#50D890\" />\r\n\r\n        </LinearLayout>\r\n\r\n        <ImageView\r\n            android:id=\"@+id/clearBt\"\r\n            android:layout_width=\"30dp\"\r\n            android:layout_height=\"30dp\"\r\n            android:layout_gravity=\"center\"\r\n            android:layout_marginStart=\"16dp\"\r\n            android:layout_marginLeft=\"16dp\"\r\n            android:visibility=\"invisible\"\r\n            app:srcCompat=\"@drawable/cancel\" />\r\n\r\n    </LinearLayout>\r\n\r\n    <androidx.recyclerview.widget.RecyclerView\r\n        android:id=\"@+id/membersList\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:padding=\"10dp\"\r\n        android:layout_marginLeft=\"10dp\"\r\n        android:layout_marginRight=\"10dp\"\r\n        app:layout_constraintBottom_toBottomOf=\"parent\"\r\n        app:layout_constraintTop_toBottomOf=\"@+id/linearLayout2\"\r\n        app:layout_constraintVertical_bias=\"0.128\"\r\n        tools:layout_editor_absoluteX=\"0dp\">\r\n\r\n    </androidx.recyclerview.widget.RecyclerView>\r\n\r\n</androidx.constraintlayout.widget.ConstraintLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/activity_group_member_search.xml	(revision 7b41a502874ab022c0570024ce1db70b1651cdac)
++++ app/src/main/res/layout/activity_group_member_search.xml	(date 1605941095480)
+@@ -11,14 +11,16 @@
+         android:id="@+id/linearLayout2"
+         android:layout_width="match_parent"
+         android:layout_height="50dp"
++        android:layout_marginTop="20dp"
+         android:gravity="center"
+         android:orientation="horizontal"
+         android:weightSum="2"
+-        app:layout_constraintBottom_toBottomOf="parent"
+-        app:layout_constraintTop_toTopOf="parent"
+-        app:layout_constraintVertical_bias="0.07999998">
++        app:layout_constraintEnd_toEndOf="parent"
++        app:layout_constraintStart_toStartOf="parent"
++        app:layout_constraintTop_toTopOf="parent">
+ 
+         <ImageView
++            android:id="@+id/backBt"
+             android:layout_width="30dp"
+             android:layout_height="30dp"
+             android:layout_marginStart="16dp"
+@@ -71,13 +73,11 @@
+         android:id="@+id/membersList"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
++        android:layout_marginTop="10dp"
+         android:padding="10dp"
+-        android:layout_marginLeft="10dp"
+-        android:layout_marginRight="10dp"
+-        app:layout_constraintBottom_toBottomOf="parent"
+-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
+-        app:layout_constraintVertical_bias="0.128"
+-        tools:layout_editor_absoluteX="0dp">
++        app:layout_constraintEnd_toEndOf="parent"
++        app:layout_constraintStart_toStartOf="parent"
++        app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
+ 
+     </androidx.recyclerview.widget.RecyclerView>
+ 
+Index: app/src/main/java/com/trinoq/mealmanager/features/view/Activity/GroupMemberSearchActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.trinoq.mealmanager.features.view.Activity;\r\n\r\nimport androidx.appcompat.app.AppCompatActivity;\r\nimport androidx.recyclerview.widget.LinearLayoutManager;\r\nimport androidx.recyclerview.widget.RecyclerView;\r\n\r\nimport android.content.Context;\r\nimport android.content.SharedPreferences;\r\nimport android.os.Bundle;\r\nimport android.util.Log;\r\nimport android.view.KeyEvent;\r\nimport android.view.View;\r\nimport android.view.inputmethod.EditorInfo;\r\nimport android.view.inputmethod.InputMethodManager;\r\nimport android.widget.EditText;\r\nimport android.widget.ImageView;\r\nimport android.widget.TextView;\r\nimport android.widget.Toast;\r\n\r\nimport com.trinoq.mealmanager.R;\r\nimport com.trinoq.mealmanager.features.adapters.GroupMembersListRecyclerViewAdapter;\r\nimport com.trinoq.mealmanager.features.model.pojo.request.Admininfo;\r\nimport com.trinoq.mealmanager.features.model.pojo.request.Member;\r\nimport com.trinoq.mealmanager.features.model.pojo.request.MemberSearchRequest;\r\nimport com.trinoq.mealmanager.features.model.pojo.request1.GroupMember;\r\nimport com.trinoq.mealmanager.features.model.pojo.request1.GroupMemberSearchRequest;\r\nimport com.trinoq.mealmanager.network.Api;\r\nimport com.trinoq.mealmanager.network.RetrofitClient;\r\n\r\nimport java.util.ArrayList;\r\n\r\nimport butterknife.BindView;\r\nimport butterknife.ButterKnife;\r\nimport retrofit2.Call;\r\nimport retrofit2.Callback;\r\nimport retrofit2.Response;\r\nimport retrofit2.Retrofit;\r\n\r\npublic class GroupMemberSearchActivity extends AppCompatActivity {\r\n\r\n    @BindView(R.id.phoneNumberEt)\r\n    EditText phoneNumberEt;\r\n    @BindView(R.id.membersList)\r\n    RecyclerView membersListRc;\r\n    @BindView(R.id.clearBt)\r\n    ImageView clearBt;\r\n\r\n    private RecyclerView.Adapter mAdapter;\r\n    private RecyclerView.LayoutManager layoutManagergroupname;\r\n    ArrayList<String> phoneNumber=new ArrayList<>();\r\n    ArrayList<String> userName=new ArrayList<>();\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        SharedPreferences myPreferences=getSharedPreferences(\"MyPreferences\",MODE_PRIVATE);\r\n        if (myPreferences.getString(\"theme\",\"\").equals(\"true\")){\r\n            setTheme(R.style.LightTheme);\r\n        }\r\n        else {\r\n            setTheme(R.style.AppTheme);\r\n        }\r\n\r\n        setContentView(R.layout.activity_group_member_search);\r\n        ButterKnife.bind(GroupMemberSearchActivity.this);\r\n\r\n        Retrofit retrofit= RetrofitClient.getClient();\r\n        Api api=retrofit.create(Api.class);\r\n\r\n        membersListRc.setHasFixedSize(true);\r\n        layoutManagergroupname=new LinearLayoutManager(this);\r\n        membersListRc.setLayoutManager(layoutManagergroupname);\r\n\r\n        phoneNumberEt.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View view) {\r\n                clearBt.setVisibility(View.VISIBLE);\r\n            }\r\n        });\r\n        clearBt.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View view) {\r\n                phoneNumberEt.setText(null);\r\n            }\r\n        });\r\n\r\n\r\n        phoneNumberEt.setOnEditorActionListener(new TextView.OnEditorActionListener() {\r\n            @Override\r\n            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {\r\n\r\n                if (i == EditorInfo.IME_ACTION_GO || i == EditorInfo.IME_ACTION_DONE||i==EditorInfo.IME_ACTION_SEARCH) {\r\n                    phoneNumber.clear();\r\n                    userName.clear();\r\n                    Call<MemberSearchRequest> memberSearchRequestCall=api.getSearchMember(phoneNumberEt.getText().toString().trim());\r\n                    memberSearchRequestCall.enqueue(new Callback<MemberSearchRequest>() {\r\n                        @Override\r\n                        public void onResponse(Call<MemberSearchRequest> call, Response<MemberSearchRequest> response) {\r\n                            if (response.code()==200){\r\n                                Log.d(\"OOO\",response.body().getMember().toString());\r\n                                MemberSearchRequest groupRequest=response.body();\r\n\r\n                                if (groupRequest.getMember().size()>0){\r\n                                    for (Member groupMember:groupRequest.getMember())\r\n                                    {\r\n                                       /* try {\r\n\r\n                                            phoneNumber.add(groupMember.getPhoneNumber());\r\n                                            Log.d(\"GGG\",groupMember.getPhoneNumber());\r\n                                            Toast.makeText(textView.getContext(), \"Call\", Toast.LENGTH_SHORT).show();\r\n\r\n                                        }\r\n                                        catch (Exception e){\r\n\r\n                                        }*/\r\n\r\n                                       for (Admininfo admininfo:groupMember.getAdmininfo()){\r\n                                           phoneNumber.add(admininfo.getPhoneNumber());\r\n                                           userName.add(admininfo.getFullName());\r\n                                           Toast.makeText(textView.getContext(), \"Call\", Toast.LENGTH_SHORT).show();\r\n                                       }\r\n                                    }\r\n\r\n\r\n                                }\r\n                                //Log.d(\"OOO\",mealtype.toString());\r\n                                //mAdapter=new GroupListRecyclerViewAdapter(textView.getContext(),groupname,phonenumber,adminName,mealtype,cookingtype,shoppingtype,groupcreated);\r\n                               mAdapter=new GroupMembersListRecyclerViewAdapter(textView.getContext(),userName,phoneNumber);\r\n                                membersListRc.setAdapter(mAdapter);\r\n                                Log.d(\"FSFS\",userName.toString()+\"  \"+phoneNumber.toString())\r\n;                            }\r\n                        }\r\n\r\n                        @Override\r\n                        public void onFailure(Call<MemberSearchRequest> call, Throwable t) {\r\n\r\n                        }\r\n                    });\r\n\r\n\r\n                    // hide virtual keyboard\r\n                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);\r\n                    imm.hideSoftInputFromWindow(phoneNumberEt.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);\r\n\r\n                    return true;\r\n                }\r\n\r\n\r\n\r\n                return false;\r\n            }\r\n        });\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/trinoq/mealmanager/features/view/Activity/GroupMemberSearchActivity.java	(revision 7b41a502874ab022c0570024ce1db70b1651cdac)
++++ app/src/main/java/com/trinoq/mealmanager/features/view/Activity/GroupMemberSearchActivity.java	(date 1605944149872)
+@@ -17,6 +17,7 @@
+ import android.widget.TextView;
+ import android.widget.Toast;
+ 
++import com.kaopiz.kprogresshud.KProgressHUD;
+ import com.trinoq.mealmanager.R;
+ import com.trinoq.mealmanager.features.adapters.GroupMembersListRecyclerViewAdapter;
+ import com.trinoq.mealmanager.features.model.pojo.request.Admininfo;
+@@ -44,12 +45,17 @@
+     RecyclerView membersListRc;
+     @BindView(R.id.clearBt)
+     ImageView clearBt;
++    @BindView(R.id.backBt)
++    ImageView backImage;
+ 
+     private RecyclerView.Adapter mAdapter;
+     private RecyclerView.LayoutManager layoutManagergroupname;
++
+     ArrayList<String> phoneNumber=new ArrayList<>();
+     ArrayList<String> userName=new ArrayList<>();
+ 
++    private KProgressHUD progressHUD;
++
+     @Override
+     protected void onCreate(Bundle savedInstanceState) {
+         super.onCreate(savedInstanceState);
+@@ -64,6 +70,14 @@
+         setContentView(R.layout.activity_group_member_search);
+         ButterKnife.bind(GroupMemberSearchActivity.this);
+ 
++
++
++        progressHUD =  KProgressHUD.create(this)
++                .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
++                .setCancellable(false)
++                .setAnimationSpeed(2)
++                .setDimAmount(0.5f);
++
+         Retrofit retrofit= RetrofitClient.getClient();
+         Api api=retrofit.create(Api.class);
+ 
+@@ -83,6 +97,12 @@
+                 phoneNumberEt.setText(null);
+             }
+         });
++        backImage.setOnClickListener(new View.OnClickListener() {
++            @Override
++            public void onClick(View v) {
++                finish();
++            }
++        });
+ 
+ 
+         phoneNumberEt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+@@ -92,18 +112,20 @@
+                 if (i == EditorInfo.IME_ACTION_GO || i == EditorInfo.IME_ACTION_DONE||i==EditorInfo.IME_ACTION_SEARCH) {
+                     phoneNumber.clear();
+                     userName.clear();
++                    progressHUD.show();
+                     Call<MemberSearchRequest> memberSearchRequestCall=api.getSearchMember(phoneNumberEt.getText().toString().trim());
+                     memberSearchRequestCall.enqueue(new Callback<MemberSearchRequest>() {
+                         @Override
+                         public void onResponse(Call<MemberSearchRequest> call, Response<MemberSearchRequest> response) {
++                           // Log.d("OOO",response.body().getMember().toString());
+                             if (response.code()==200){
+                                 Log.d("OOO",response.body().getMember().toString());
+                                 MemberSearchRequest groupRequest=response.body();
+ 
+                                 if (groupRequest.getMember().size()>0){
+-                                    for (Member groupMember:groupRequest.getMember())
++                                   /* for (Member groupMember:groupRequest.getMember())
+                                     {
+-                                       /* try {
++                                       *//* try {
+ 
+                                             phoneNumber.add(groupMember.getPhoneNumber());
+                                             Log.d("GGG",groupMember.getPhoneNumber());
+@@ -112,28 +134,33 @@
+                                         }
+                                         catch (Exception e){
+ 
+-                                        }*/
++                                        }*//*
+ 
+                                        for (Admininfo admininfo:groupMember.getAdmininfo()){
+                                            phoneNumber.add(admininfo.getPhoneNumber());
+                                            userName.add(admininfo.getFullName());
+                                            Toast.makeText(textView.getContext(), "Call", Toast.LENGTH_SHORT).show();
+                                        }
+-                                    }
++                                    }*/
+ 
+-
+-                                }
+-                                //Log.d("OOO",mealtype.toString());
+-                                //mAdapter=new GroupListRecyclerViewAdapter(textView.getContext(),groupname,phonenumber,adminName,mealtype,cookingtype,shoppingtype,groupcreated);
+-                               mAdapter=new GroupMembersListRecyclerViewAdapter(textView.getContext(),userName,phoneNumber);
+-                                membersListRc.setAdapter(mAdapter);
+-                                Log.d("FSFS",userName.toString()+"  "+phoneNumber.toString())
+-;                            }
++                                    mAdapter=new GroupMembersListRecyclerViewAdapter(GroupMemberSearchActivity.this,groupRequest.getMember());
++                                    membersListRc.setAdapter(mAdapter);
++                                    // Log.d("FSFS",userName.toString()+"  "+phoneNumber.toString())
++
++
++                                }
++                                progressHUD.dismiss();
++
++;                            }else {
++                                Toast.makeText(GroupMemberSearchActivity.this, "Not found", Toast.LENGTH_SHORT).show();
++                                progressHUD.dismiss();
++                            }
+                         }
+ 
+                         @Override
+                         public void onFailure(Call<MemberSearchRequest> call, Throwable t) {
+-
++                            Toast.makeText(GroupMemberSearchActivity.this, ""+t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
++                            progressHUD.dismiss();
+                         }
+                     });
+ 
+Index: app/src/main/java/com/trinoq/mealmanager/features/view/fragments/WelcomeFragment.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.trinoq.mealmanager.features.view.fragments;\r\n\r\nimport android.content.Intent;\r\nimport android.os.Bundle;\r\nimport android.view.LayoutInflater;\r\nimport android.view.View;\r\nimport android.view.ViewGroup;\r\nimport android.widget.LinearLayout;\r\nimport android.widget.TextView;\r\n\r\nimport androidx.fragment.app.Fragment;\r\n\r\nimport com.trinoq.mealmanager.R;\r\nimport com.trinoq.mealmanager.features.view.Activity.GroupCreateActivity;\r\n\r\nimport butterknife.BindView;\r\nimport butterknife.ButterKnife;\r\n\r\npublic class WelcomeFragment extends Fragment {\r\n\r\n    @BindView(R.id.logOut)\r\n    TextView logOut;\r\n    @BindView(R.id.groupSearchLayout)\r\n    LinearLayout groupSearchLayout;\r\n    @BindView(R.id.createGroupLayout)\r\n    LinearLayout createGroupLayout;\r\n    @BindView(R.id.createGroupTv)\r\n    TextView createGroupTv;\r\n\r\n    public WelcomeFragment() {\r\n        // Required empty public constructor\r\n    }\r\n\r\n    @Override\r\n    public View onCreateView(LayoutInflater inflater, ViewGroup container,\r\n                             Bundle savedInstanceState) {\r\n        // Inflate the layout for this fragment\r\n        View v = inflater.inflate(R.layout.fragment_welcome, container, false);\r\n        ButterKnife.bind(this, v);\r\n\r\n        createGroupLayout.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                startActivity(new Intent(getActivity(), GroupCreateActivity.class));\r\n            }\r\n        });\r\n        createGroupTv.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                startActivity(new Intent(getActivity(), GroupCreateActivity.class));\r\n            }\r\n        });\r\n        return v;\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/trinoq/mealmanager/features/view/fragments/WelcomeFragment.java	(revision 7b41a502874ab022c0570024ce1db70b1651cdac)
++++ app/src/main/java/com/trinoq/mealmanager/features/view/fragments/WelcomeFragment.java	(date 1605938560559)
+@@ -12,6 +12,7 @@
+ 
+ import com.trinoq.mealmanager.R;
+ import com.trinoq.mealmanager.features.view.Activity.GroupCreateActivity;
++import com.trinoq.mealmanager.features.view.Activity.GroupMemberSearchActivity;
+ 
+ import butterknife.BindView;
+ import butterknife.ButterKnife;
+@@ -41,7 +42,7 @@
+         createGroupLayout.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+-                startActivity(new Intent(getActivity(), GroupCreateActivity.class));
++                startActivity(new Intent(getActivity(), GroupMemberSearchActivity.class));
+             }
+         });
+         createGroupTv.setOnClickListener(new View.OnClickListener() {
+Index: app/src/main/java/com/trinoq/mealmanager/features/view/fragments/NotificationFragment.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.trinoq.mealmanager.features.view.fragments;\r\n\r\nimport android.os.Bundle;\r\n\r\nimport androidx.fragment.app.Fragment;\r\n\r\nimport android.view.LayoutInflater;\r\nimport android.view.View;\r\nimport android.view.ViewGroup;\r\n\r\nimport com.trinoq.mealmanager.R;\r\n\r\npublic class NotificationFragment extends Fragment {\r\n\r\n\r\n    public NotificationFragment() {\r\n        // Required empty public constructor\r\n    }\r\n\r\n    @Override\r\n    public View onCreateView(LayoutInflater inflater, ViewGroup container,\r\n                             Bundle savedInstanceState) {\r\n        // Inflate the layout for this fragment\r\n        View view= inflater.inflate(R.layout.fragment_notification, container, false);\r\n\r\n\r\n        return view;\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/trinoq/mealmanager/features/view/fragments/NotificationFragment.java	(revision 7b41a502874ab022c0570024ce1db70b1651cdac)
++++ app/src/main/java/com/trinoq/mealmanager/features/view/fragments/NotificationFragment.java	(date 1606239388003)
+@@ -3,27 +3,96 @@
+ import android.os.Bundle;
+ 
+ import androidx.fragment.app.Fragment;
++import androidx.recyclerview.widget.LinearLayoutManager;
++import androidx.recyclerview.widget.RecyclerView;
+ 
++import android.util.Log;
+ import android.view.LayoutInflater;
+ import android.view.View;
+ import android.view.ViewGroup;
++import android.widget.Toast;
+ 
++import com.kaopiz.kprogresshud.KProgressHUD;
+ import com.trinoq.mealmanager.R;
++import com.trinoq.mealmanager.features.adapters.NotificationListAdapter;
++import com.trinoq.mealmanager.features.model.pojo.response.invitation.Inviationdatum;
++import com.trinoq.mealmanager.features.model.pojo.response.invitation.Invitation;
++import com.trinoq.mealmanager.network.Api;
++import com.trinoq.mealmanager.network.RetrofitClient;
++
++import java.util.ArrayList;
++import java.util.List;
++
++import retrofit2.Call;
++import retrofit2.Callback;
++import retrofit2.Response;
+ 
+ public class NotificationFragment extends Fragment {
+-
++    RecyclerView recyclerView;
+ 
+     public NotificationFragment() {
+         // Required empty public constructor
+     }
+ 
++    KProgressHUD progressHUD;
++
++    List<Inviationdatum>notificationList;
+     @Override
+     public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                              Bundle savedInstanceState) {
+         // Inflate the layout for this fragment
+         View view= inflater.inflate(R.layout.fragment_notification, container, false);
++        recyclerView = view.findViewById(R.id.notificationRv);
++        notificationList = new ArrayList<>();
+ 
+-
++        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
++        progressHUD =  KProgressHUD.create(getActivity())
++                .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
++                .setCancellable(false)
++                .setAnimationSpeed(2)
++                .setDimAmount(0.5f);
++        getNotificationData();
+         return view;
+     }
++
++    private void getNotificationData() {
++        progressHUD.show();
++        Api api = RetrofitClient.getClient().create(Api.class);
++
++        api.getInvitationData("3")
++                .enqueue(new Callback<Invitation>() {
++                    @Override
++                    public void onResponse(Call<Invitation> call, Response<Invitation> response) {
++                        if(response.code() == 200){
++                        /*    String senderId = response.body().getInviationdata().
++                            if()
++                            recyclerView.setAdapter(new NotificationListAdapter(getActivity(),response.body().getInviationdata(),));*/
++                            String rvViewType="";
++
++                            for (Inviationdatum i:response.body().getInviationdata()){
++                                String senderId = i.getSenderId().toString();
++                                String receiverId = i.getReceiverId().toString();
++
++                                if(senderId.equals("3")){
++                                    rvViewType = "sender";
++                                }else rvViewType = "receiver";
++
++                                notificationList.add(i);
++                                recyclerView.setAdapter(new NotificationListAdapter(getActivity(),notificationList,rvViewType));
++                            }
++
++                            Toast.makeText(getActivity(), ""+notificationList.size(), Toast.LENGTH_SHORT).show();
++                        }else {
++                            Toast.makeText(getActivity(), ""+response.code(), Toast.LENGTH_SHORT).show();
++                        }
++                        progressHUD.dismiss();
++                    }
++
++                    @Override
++                    public void onFailure(Call<Invitation> call, Throwable t) {
++                        Toast.makeText(getActivity(), ""+t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
++                        progressHUD.dismiss();
++                    }
++                });
++    }
+ }
+Index: app/src/main/java/com/trinoq/mealmanager/features/model/pojo/request/GroupMemberCreationRequest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/trinoq/mealmanager/features/model/pojo/request/GroupMemberCreationRequest.java	(date 1606234048098)
++++ app/src/main/java/com/trinoq/mealmanager/features/model/pojo/request/GroupMemberCreationRequest.java	(date 1606234048098)
+@@ -0,0 +1,23 @@
++package com.trinoq.mealmanager.features.model.pojo.request;
++
++import com.google.gson.annotations.SerializedName;
++
++public class GroupMemberCreationRequest {
++    @SerializedName("group_id")
++    String group_id;
++    @SerializedName("phone_number")
++    String phone_number;
++
++    public GroupMemberCreationRequest(String group_id, String phone_number) {
++        this.group_id = group_id;
++        this.phone_number = phone_number;
++    }
++
++    public String getGroup_id() {
++        return group_id;
++    }
++
++    public String getPhone_number() {
++        return phone_number;
++    }
++}
+Index: app/src/main/java/com/trinoq/mealmanager/features/model/fcmNotification/Data.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/trinoq/mealmanager/features/model/fcmNotification/Data.java	(date 1605968115128)
++++ app/src/main/java/com/trinoq/mealmanager/features/model/fcmNotification/Data.java	(date 1605968115128)
+@@ -0,0 +1,31 @@
++package com.trinoq.mealmanager.features.model.fcmNotification;
++
++public class Data {
++    private String Title;
++    private String Message;
++
++    public Data(String title, String message) {
++        Title = title;
++        Message = message;
++    }
++
++    public Data() {
++    }
++
++    public String getTitle() {
++        return Title;
++    }
++
++    public void setTitle(String title) {
++        Title = title;
++    }
++
++    public String getMessage() {
++        return Message;
++    }
++
++    public void setMessage(String message) {
++        Message = message;
++    }
++
++}
+\ No newline at end of file
+Index: app/src/main/java/com/trinoq/mealmanager/features/model/fcmNotification/NotificationSender.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/trinoq/mealmanager/features/model/fcmNotification/NotificationSender.java	(date 1605968199266)
++++ app/src/main/java/com/trinoq/mealmanager/features/model/fcmNotification/NotificationSender.java	(date 1605968199266)
+@@ -0,0 +1,14 @@
++package com.trinoq.mealmanager.features.model.fcmNotification;
++
++public class NotificationSender {
++    public Data data;
++    public String to;
++
++    public NotificationSender(Data data, String to) {
++        this.data = data;
++        this.to = to;
++    }
++
++    public NotificationSender() {
++    }
++}
+Index: app/src/main/res/layout/fragment_notification.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<FrameLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    tools:context=\".features.view.fragments.NotificationFragment\">\r\n\r\n    <!-- TODO: Update blank fragment layout -->\r\n    <TextView\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"match_parent\"\r\n        android:text=\"@string/hello_blank_fragment\" />\r\n\r\n</FrameLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/fragment_notification.xml	(revision 7b41a502874ab022c0570024ce1db70b1651cdac)
++++ app/src/main/res/layout/fragment_notification.xml	(date 1605984242030)
+@@ -1,14 +1,18 @@
+ <?xml version="1.0" encoding="utf-8"?>
+-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
++<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:app="http://schemas.android.com/apk/res-auto"
+     xmlns:tools="http://schemas.android.com/tools"
+     android:layout_width="match_parent"
+     android:layout_height="match_parent"
+     tools:context=".features.view.fragments.NotificationFragment">
+ 
+-    <!-- TODO: Update blank fragment layout -->
+-    <TextView
++    <androidx.recyclerview.widget.RecyclerView
++        android:id="@+id/notificationRv"
+         android:layout_width="match_parent"
+         android:layout_height="match_parent"
+-        android:text="@string/hello_blank_fragment" />
+-
+-</FrameLayout>
+\ No newline at end of file
++        app:layout_constraintBottom_toBottomOf="parent"
++        app:layout_constraintEnd_toEndOf="parent"
++        app:layout_constraintHorizontal_bias="0.0"
++        app:layout_constraintStart_toStartOf="parent"
++        app:layout_constraintTop_toTopOf="parent" />
++</androidx.constraintlayout.widget.ConstraintLayout>
+\ No newline at end of file
+Index: app/src/main/java/com/trinoq/mealmanager/features/model/pojo/request/MemberInvitation.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/trinoq/mealmanager/features/model/pojo/request/MemberInvitation.java	(date 1605943426725)
++++ app/src/main/java/com/trinoq/mealmanager/features/model/pojo/request/MemberInvitation.java	(date 1605943426725)
+@@ -0,0 +1,44 @@
++package com.trinoq.mealmanager.features.model.pojo.request;
++
++import com.google.gson.annotations.Expose;
++import com.google.gson.annotations.SerializedName;
++
++public class MemberInvitation {
++    @SerializedName("group_id")
++    @Expose
++    private Integer group_id;
++
++    @SerializedName("sender_id")
++    @Expose
++    private Integer sender_id;
++
++    @SerializedName("receiver_id")
++    @Expose
++    private Integer receiver_id;
++
++    @SerializedName("date")
++    String date;
++
++    public MemberInvitation(Integer group_id, Integer sender_id, Integer receiver_id, String date) {
++        this.group_id = group_id;
++        this.sender_id = sender_id;
++        this.receiver_id = receiver_id;
++        this.date = date;
++    }
++
++    public Integer getGroup_id() {
++        return group_id;
++    }
++
++    public Integer getSender_id() {
++        return sender_id;
++    }
++
++    public Integer getReceiver_id() {
++        return receiver_id;
++    }
++
++    public String getDate() {
++        return date;
++    }
++}
+Index: app/src/main/java/com/trinoq/mealmanager/features/adapters/GroupMembersListRecyclerViewAdapter.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.trinoq.mealmanager.features.adapters;\r\n\r\nimport android.content.Context;\r\nimport android.view.LayoutInflater;\r\nimport android.view.View;\r\nimport android.view.ViewGroup;\r\nimport android.widget.Button;\r\nimport android.widget.TextView;\r\n\r\nimport androidx.annotation.NonNull;\r\nimport androidx.recyclerview.widget.RecyclerView;\r\n\r\nimport com.trinoq.mealmanager.R;\r\n\r\nimport java.util.ArrayList;\r\n\r\npublic class GroupMembersListRecyclerViewAdapter extends RecyclerView.Adapter<GroupMembersListRecyclerViewAdapter.ViewHolder> {\r\n    private Context context;\r\n    private ArrayList<String> memberName=new ArrayList<>();\r\n    private ArrayList<String> phoneNumber=new ArrayList<>();\r\n\r\n    public GroupMembersListRecyclerViewAdapter(Context context, ArrayList<String> memberName, ArrayList<String> phoneNumber) {\r\n        this.context = context;\r\n        this.memberName = memberName;\r\n        this.phoneNumber = phoneNumber;\r\n    }\r\n\r\n    public GroupMembersListRecyclerViewAdapter(Context context, ArrayList<String> phoneNumber) {\r\n        this.context = context;\r\n        this.phoneNumber = phoneNumber;\r\n    }\r\n\r\n    @NonNull\r\n    @Override\r\n    public GroupMembersListRecyclerViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {\r\n\r\n        View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.group_members_list_recyclerview,parent,false);\r\n        ViewHolder holder=new ViewHolder(view);\r\n\r\n        return holder;\r\n    }\r\n\r\n    @Override\r\n    public void onBindViewHolder(@NonNull GroupMembersListRecyclerViewAdapter.ViewHolder holder, int position) {\r\n\r\n        holder.memberNameTv.setText(memberName.get(position));\r\n        holder.phoneNumberTv.setText(phoneNumber.get(position));\r\n\r\n    }\r\n\r\n    @Override\r\n    public int getItemCount() {\r\n        return phoneNumber.size();\r\n    }\r\n\r\n    public class ViewHolder extends RecyclerView.ViewHolder {\r\n\r\n        TextView memberNameTv,phoneNumberTv;\r\n        Button invietBt;\r\n\r\n        public ViewHolder(@NonNull View itemView) {\r\n            super(itemView);\r\n\r\n            memberNameTv=itemView.findViewById(R.id.memberNameTv);\r\n            phoneNumberTv=itemView.findViewById(R.id.phoneNumberTv);\r\n            invietBt=itemView.findViewById(R.id.invietBt);\r\n        }\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/trinoq/mealmanager/features/adapters/GroupMembersListRecyclerViewAdapter.java	(revision 7b41a502874ab022c0570024ce1db70b1651cdac)
++++ app/src/main/java/com/trinoq/mealmanager/features/adapters/GroupMembersListRecyclerViewAdapter.java	(date 1605968705559)
+@@ -1,59 +1,158 @@
+ package com.trinoq.mealmanager.features.adapters;
+ 
+ import android.content.Context;
++import android.util.Log;
+ import android.view.LayoutInflater;
+ import android.view.View;
+ import android.view.ViewGroup;
+ import android.widget.Button;
+ import android.widget.TextView;
++import android.widget.Toast;
+ 
+ import androidx.annotation.NonNull;
+ import androidx.recyclerview.widget.RecyclerView;
+ 
++import com.kaopiz.kprogresshud.KProgressHUD;
+ import com.trinoq.mealmanager.R;
++import com.trinoq.mealmanager.features.model.fcmNotification.Data;
++import com.trinoq.mealmanager.features.model.fcmNotification.NotificationSender;
++import com.trinoq.mealmanager.features.model.pojo.request.Member;
++import com.trinoq.mealmanager.features.model.pojo.request.MemberInvitation;
++import com.trinoq.mealmanager.network.Api;
++import com.trinoq.mealmanager.network.RetrofitClient;
+ 
++import java.text.SimpleDateFormat;
++import java.time.LocalDateTime;
++import java.time.format.DateTimeFormatter;
+ import java.util.ArrayList;
++import java.util.Date;
++import java.util.List;
++import java.util.Locale;
++
++import okhttp3.ResponseBody;
++import retrofit2.Call;
++import retrofit2.Callback;
++import retrofit2.Response;
++import retrofit2.Retrofit;
++import retrofit2.converter.gson.GsonConverterFactory;
++import retrofit2.http.Body;
++import retrofit2.http.Headers;
++import retrofit2.http.POST;
+ 
+ public class GroupMembersListRecyclerViewAdapter extends RecyclerView.Adapter<GroupMembersListRecyclerViewAdapter.ViewHolder> {
+     private Context context;
+     private ArrayList<String> memberName=new ArrayList<>();
+     private ArrayList<String> phoneNumber=new ArrayList<>();
+ 
+-    public GroupMembersListRecyclerViewAdapter(Context context, ArrayList<String> memberName, ArrayList<String> phoneNumber) {
+-        this.context = context;
+-        this.memberName = memberName;
+-        this.phoneNumber = phoneNumber;
++    List<Member> members = new ArrayList<>();
++
++    private KProgressHUD progressHUD;
++
++
++    public GroupMembersListRecyclerViewAdapter(Context context,List<Member> members) {
++        this.context = context;this.members = members;
+     }
+ 
+-    public GroupMembersListRecyclerViewAdapter(Context context, ArrayList<String> phoneNumber) {
++   /* public GroupMembersListRecyclerViewAdapter(Context context, ArrayList<String> phoneNumber) {
+         this.context = context;
+         this.phoneNumber = phoneNumber;
+     }
+-
++*/
+     @NonNull
+     @Override
+     public GroupMembersListRecyclerViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+ 
+         View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.group_members_list_recyclerview,parent,false);
+-        ViewHolder holder=new ViewHolder(view);
++        ViewHolder holder= new ViewHolder(view);
+ 
++        progressHUD =  KProgressHUD.create(context)
++                .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
++                .setCancellable(false)
++                .setAnimationSpeed(2)
++                .setDimAmount(0.5f);
++
+         return holder;
+     }
+ 
+     @Override
+     public void onBindViewHolder(@NonNull GroupMembersListRecyclerViewAdapter.ViewHolder holder, int position) {
+ 
+-        holder.memberNameTv.setText(memberName.get(position));
+-        holder.phoneNumberTv.setText(phoneNumber.get(position));
++        holder.memberNameTv.setText(members.get(position).getAdmininfo().get(0).getFullName());
++        holder.phoneNumberTv.setText(members.get(position).getPhoneNumber());
+ 
++       // holder.invietBt.setBackgroundColor();
++        holder.invietBt.setOnClickListener(new View.OnClickListener() {
++            @Override
++            public void onClick(View v) {
++                Log.d("ttttt","Clicked");
++                sendInvitationRequest(position);
++            }
++        });
++    }
++
++    private void sendInvitationRequest(int position) {
++     /*   Date myDate = new Date();
++        String s = new SimpleDateFormat("yyyy-MM-dd").format(myDate);
++
++        Date date = new SimpleDateFormat("yyyy-MM-dd").parse(s);*/
++
++        Api api = RetrofitClient.getClient().create(Api.class);
++        Toast.makeText(context, "Called", Toast.LENGTH_SHORT).show();
++        api.invitation(new MemberInvitation(2,2,3,"2020-05-05")).enqueue(new Callback<ResponseBody>() {
++            @Override
++            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
++               // Log.d("ttttt",response.body().toString());
++                progressHUD.show();
++                if (response.code() == 200){
++                   progressHUD.dismiss();
++                    Toast.makeText(context, "Sent request successfully", Toast.LENGTH_SHORT).show();
++                    sendNotificationToReceiver(position);
++                }else {
++                    Log.d("tttt",""+response.code());
++                    Toast.makeText(context, "Failed to sent request", Toast.LENGTH_SHORT).show();
++                    progressHUD.dismiss();
++                }
++            }
++
++            @Override
++            public void onFailure(Call<ResponseBody> call, Throwable t) {
++                Toast.makeText(context, ""+t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
++                progressHUD.dismiss();
++            }
++        });
++    }
++
++    private void sendNotificationToReceiver(int position) {
++        Retrofit retrofit = new Retrofit.Builder().baseUrl("https://fcm.googleapis.com/").build();
++
++        Data data = new Data("Invitation","Tanvir want you to group oONE");
++        NotificationSender notificationSender = new NotificationSender(data,members.get(position).getAdmininfo().get(0).getNotificationToken().toString());
++        Api api = retrofit.create(Api.class);
++        api.sendNotifcation(notificationSender)
++                .enqueue(new Callback<ResponseBody>() {
++                    @Override
++                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
++                        if (response.code() == 200) {
++                            Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show();
++                           /* if (response.body().success != 1) {
++                               // Toast.makeText(SendNotif.this, "Failed ", Toast.LENGTH_LONG);
++                            }*/
++                        }
++                    }
++
++                    @Override
++                    public void onFailure(Call<ResponseBody> call, Throwable t) {
++
++                    }
++                });
+     }
+ 
+     @Override
+     public int getItemCount() {
+-        return phoneNumber.size();
++        return members.size();
+     }
+ 
+-    public class ViewHolder extends RecyclerView.ViewHolder {
++    public static class ViewHolder extends RecyclerView.ViewHolder {
+ 
+         TextView memberNameTv,phoneNumberTv;
+         Button invietBt;
+Index: app/src/main/java/com/trinoq/mealmanager/features/adapters/NotificationListAdapter.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/trinoq/mealmanager/features/adapters/NotificationListAdapter.java	(date 1606322359990)
++++ app/src/main/java/com/trinoq/mealmanager/features/adapters/NotificationListAdapter.java	(date 1606322359990)
+@@ -0,0 +1,195 @@
++package com.trinoq.mealmanager.features.adapters;
++
++import android.content.Context;
++import android.graphics.Color;
++import android.util.Log;
++import android.view.LayoutInflater;
++import android.view.View;
++import android.view.ViewGroup;
++import android.widget.Button;
++import android.widget.TextView;
++import android.widget.Toast;
++
++import androidx.annotation.NonNull;
++import androidx.recyclerview.widget.RecyclerView;
++
++import com.trinoq.mealmanager.R;
++import com.trinoq.mealmanager.features.model.fcmNotification.Data;
++import com.trinoq.mealmanager.features.model.fcmNotification.NotificationSender;
++import com.trinoq.mealmanager.features.model.pojo.request.GroupCreateRequest;
++import com.trinoq.mealmanager.features.model.pojo.request.GroupMemberCreationRequest;
++import com.trinoq.mealmanager.features.model.pojo.response.invitation.Inviationdatum;
++import com.trinoq.mealmanager.network.Api;
++import com.trinoq.mealmanager.network.RetrofitClient;
++
++import java.util.List;
++
++import okhttp3.ResponseBody;
++import retrofit2.Call;
++import retrofit2.Callback;
++import retrofit2.Response;
++import retrofit2.Retrofit;
++
++public class NotificationListAdapter extends RecyclerView.Adapter<NotificationListAdapter.Viewholder> {
++    Context context;
++    List<Inviationdatum> inviationdata;
++    String viewTypeTag;
++
++    public NotificationListAdapter(Context context, List<Inviationdatum> inviationdata, String viewType) {
++        this.context = context;
++        this.inviationdata = inviationdata;
++        this.viewTypeTag = viewType;
++    }
++
++    @NonNull
++    @Override
++    public NotificationListAdapter.Viewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
++        View view;
++        if (viewTypeTag.equals("sender")){
++            view = LayoutInflater.from(context).inflate(R.layout.notification_rv_sender,parent,false);
++        }else {
++            view = LayoutInflater.from(context).inflate(R.layout.notification_rv_receiver,parent,false);
++        }
++
++        return new Viewholder(view);
++    }
++
++    @Override
++    public void onBindViewHolder(@NonNull NotificationListAdapter.Viewholder holder, int position) {
++        if(viewTypeTag.equals("sender")){
++            holder.senderMsgTv.setText("Tanvir Accept your request.");
++        }else {
++            if(inviationdata.get(position).getStatus() == 1){
++                holder.receiverAccBt.setBackgroundColor(Color.GRAY);
++                holder.receiverDecBt.setBackgroundColor(Color.GRAY);
++
++                holder.receiverDecBt.setClickable(false);
++                holder.receiverAccBt.setClickable(false);
++            }else if(inviationdata.get(position).getStatus() == 2){
++                holder.receiverAccBt.setBackgroundColor(Color.GRAY);
++                holder.receiverDecBt.setBackgroundColor(Color.GRAY);
++
++                holder.receiverDecBt.setClickable(false);
++                holder.receiverAccBt.setClickable(false);
++            }
++            holder.receiverMsgTv.setText("Tanvir sent you a invitation request to group one.");
++            holder.receiverDecBt.setOnClickListener(new View.OnClickListener() {
++                @Override
++                public void onClick(View v) {
++                    accDeclineRequest(2,position,holder);
++                }
++            });
++
++            holder.receiverAccBt.setOnClickListener(new View.OnClickListener() {
++                @Override
++                public void onClick(View v) {
++                    accDeclineRequest(1,position,holder);
++                }
++            });
++        }
++    }
++
++    private void accDeclineRequest(int i,int position,NotificationListAdapter.Viewholder holder) {
++        Api api = RetrofitClient.getClient().create(Api.class);
++
++        api.invitationUpdate(2,i)
++                .enqueue(new Callback<ResponseBody>() {
++                    @Override
++                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
++                        if(response.code() == 200){
++                            addMemberTogroup(position,holder);
++                        }else{
++                            //Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show();
++                            Log.d("tttt",""+response.code()+" "+response.body());
++                        }
++                    }
++
++                    @Override
++                    public void onFailure(Call<ResponseBody> call, Throwable t) {
++                        Toast.makeText(context, ""+t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
++                    }
++                });
++    }
++
++    private void addMemberTogroup(int position,NotificationListAdapter.Viewholder holder) {
++
++        GroupMemberCreationRequest groupMemberCreationRequest=
++                new GroupMemberCreationRequest(inviationdata.get(position).getGroupId().toString(),"01781998168");
++        Api api = RetrofitClient.getClient().create(Api.class);
++
++        api.addGroupMember(groupMemberCreationRequest)
++                .enqueue(new Callback<ResponseBody>() {
++                    @Override
++                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
++                        if(response.code() == 200) {
++                            Toast.makeText(context, "Successfully accepted", Toast.LENGTH_SHORT).show();
++
++                            sendNotificationToReceiver(position,"");
++                            holder.receiverAccBt.setBackgroundColor(Color.GRAY);
++                            holder.receiverDecBt.setBackgroundColor(Color.GRAY);
++
++                            holder.receiverDecBt.setClickable(false);
++                            holder.receiverAccBt.setClickable(false);
++                        }else {
++                            Toast.makeText(context, "Failed to join group", Toast.LENGTH_SHORT).show();
++                        }
++                    }
++
++                    @Override
++                    public void onFailure(Call<ResponseBody> call, Throwable t) {
++                        Toast.makeText(context, ""+t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
++                    }
++                });
++    }
++
++
++    private void sendNotificationToReceiver(int position,String status) {
++        Retrofit retrofit = new Retrofit.Builder().baseUrl("https://fcm.googleapis.com/").build();
++
++        Data data = new Data("Invitation","Accepted your request.");
++
++        NotificationSender notificationSender = new NotificationSender(data,inviationdata.get(position).getSenderInfo().get(0).getNotificationToken().toString());
++
++        Api api = retrofit.create(Api.class);
++        api.sendNotifcation(notificationSender)
++                .enqueue(new Callback<ResponseBody>() {
++                    @Override
++                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
++                        if (response.code() == 200) {
++
++                        }else {
++
++                        }
++                    }
++
++                    @Override
++                    public void onFailure(Call<ResponseBody> call, Throwable t) {
++
++                    }
++                });
++    }
++
++    @Override
++    public int getItemCount() {
++        return inviationdata.size();
++    }
++
++    public class Viewholder extends RecyclerView.ViewHolder{
++        TextView senderMsgTv;
++
++        TextView receiverMsgTv;
++        Button receiverAccBt,receiverDecBt;
++        public Viewholder(@NonNull View itemView) {
++            super(itemView);
++
++            if (viewTypeTag.endsWith("sender")){
++                senderMsgTv = itemView.findViewById(R.id.notificationSenderTv);
++            }else {
++                receiverMsgTv = itemView.findViewById(R.id.receiverNotificationTv);
++                receiverAccBt = itemView.findViewById(R.id.receiverAcceptBt);
++                receiverDecBt = itemView.findViewById(R.id.receiverDeclineBt);
++            }
++
++        }
++    }
++}
+Index: app/src/main/AndroidManifest.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    package=\"com.trinoq.mealmanager\">\r\n\r\n    <uses-permission android:name=\"android.permission.INTERNET\" />\r\n    <uses-permission android:name=\"android.permission.CAMERA\" />\r\n    <uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\" />\r\n    <uses-permission android:name=\"android.permission.READ_EXTERNAL_STORAGE\" />\r\n\r\n    <application\r\n        android:name=\"androidx.multidex.MultiDexApplication\"\r\n        android:allowBackup=\"true\"\r\n        android:icon=\"@mipmap/ic_launcher\"\r\n        android:label=\"@string/app_name\"\r\n        android:roundIcon=\"@mipmap/ic_launcher_round\"\r\n        android:supportsRtl=\"true\"\r\n        android:theme=\"@style/Theme.AppCompat.NoActionBar\"\r\n        android:usesCleartextTraffic=\"true\">\r\n        <activity android:name=\".features.view.Activity.TestActivity\"></activity>\r\n        <activity android:name=\".features.view.Activity.AboutActivity\" />\r\n        <activity android:name=\".features.view.Activity.NotificationActivity\" />\r\n        <activity android:name=\".features.view.Activity.AccountActivity\" />\r\n        <activity android:name=\".features.view.Activity.GeneralActivity\" />\r\n        <activity android:name=\".features.view.Activity.SettingsActivity\" />\r\n        <activity android:name=\".features.view.Activity.GroupMemberSearchActivity\" />\r\n        <activity android:name=\".features.view.Activity.GroupDetailsActivity\" />\r\n        <activity android:name=\".features.view.Activity.GroupCreateActivity\" />\r\n        <activity android:name=\".features.view.Activity.GroupSearchActivity\" />\r\n        <activity android:name=\".features.view.Activity.AuthenticationActivity\" />\r\n        <activity android:name=\".features.view.Activity.SplashActivity\">\r\n            <intent-filter>\r\n                <action android:name=\"android.intent.action.MAIN\" />\r\n\r\n                <category android:name=\"android.intent.category.LAUNCHER\" />\r\n            </intent-filter>\r\n        </activity>\r\n        <activity android:name=\".features.view.Activity.MainActivity\" />\r\n\r\n        <meta-data\r\n            android:name=\"preloaded_fonts\"\r\n            android:resource=\"@array/preloaded_fonts\" />\r\n    </application>\r\n\r\n</manifest>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/AndroidManifest.xml	(revision 7b41a502874ab022c0570024ce1db70b1651cdac)
++++ app/src/main/AndroidManifest.xml	(date 1605967312924)
+@@ -6,6 +6,7 @@
+     <uses-permission android:name="android.permission.CAMERA" />
+     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
++    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+ 
+     <application
+         android:name="androidx.multidex.MultiDexApplication"
+@@ -39,6 +40,15 @@
+         <meta-data
+             android:name="preloaded_fonts"
+             android:resource="@array/preloaded_fonts" />
++
++        <service
++            android:name=".notification.MyFirebaseMessagingService"
++            android:permission="com.google.android.c2dm.permission.SEND">
++            <intent-filter>
++                <action android:name="com.google.firebase.MESSAGING_EVENT" />
++                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
++            </intent-filter>
++        </service>
+     </application>
+ 
+ </manifest>
+\ No newline at end of file
+Index: app/src/main/res/layout/group_members_list_recyclerview.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<androidx.constraintlayout.widget.ConstraintLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"wrap_content\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    android:background=\"#50D890\">\r\n    <ImageView\r\n        android:id=\"@+id/imageView4\"\r\n        android:layout_width=\"40dp\"\r\n        android:layout_height=\"40dp\"\r\n        android:layout_marginTop=\"20dp\"\r\n        android:layout_marginBottom=\"20dp\"\r\n        android:src=\"@drawable/icon_material_group\"\r\n        app:layout_constraintBottom_toBottomOf=\"parent\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintHorizontal_bias=\"0.043\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintTop_toTopOf=\"parent\"\r\n        app:layout_constraintVertical_bias=\"0.0\" />\r\n\r\n    <TextView\r\n        android:id=\"@+id/memberNameTv\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginTop=\"4dp\"\r\n        android:text=\"Tanvir Hasan\"\r\n        android:textColor=\"#FFFFFF\"\r\n        android:textSize=\"20dp\"\r\n        app:layout_constraintBottom_toBottomOf=\"parent\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintHorizontal_bias=\"0.092\"\r\n        app:layout_constraintStart_toEndOf=\"@+id/imageView4\"\r\n        app:layout_constraintTop_toTopOf=\"parent\"\r\n        app:layout_constraintVertical_bias=\"0.19\" />\r\n\r\n    <TextView\r\n        android:id=\"@+id/phoneNumberTv\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginTop=\"4dp\"\r\n        android:layout_marginBottom=\"10dp\"\r\n        android:text=\"1234567890\"\r\n        android:textColor=\"#FFFFFF\"\r\n        android:textSize=\"17dp\"\r\n        app:layout_constraintBottom_toBottomOf=\"parent\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintHorizontal_bias=\"0.097\"\r\n        app:layout_constraintStart_toEndOf=\"@+id/imageView4\"\r\n        app:layout_constraintTop_toBottomOf=\"@+id/groupNameTv\"\r\n        app:layout_constraintVertical_bias=\"0.0\" />\r\n\r\n    <Button\r\n        android:id=\"@+id/invietBt\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:background=\"@drawable/bottom_border\"\r\n        android:text=\"Invite\"\r\n        android:textAllCaps=\"false\"\r\n        android:textColor=\"#50D890\"\r\n        android:enabled=\"false\"\r\n        app:layout_constraintBottom_toBottomOf=\"parent\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintHorizontal_bias=\"0.94\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintTop_toTopOf=\"parent\" />\r\n\r\n</androidx.constraintlayout.widget.ConstraintLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/group_members_list_recyclerview.xml	(revision 7b41a502874ab022c0570024ce1db70b1651cdac)
++++ app/src/main/res/layout/group_members_list_recyclerview.xml	(date 1605942744902)
+@@ -57,7 +57,6 @@
+         android:text="Invite"
+         android:textAllCaps="false"
+         android:textColor="#50D890"
+-        android:enabled="false"
+         app:layout_constraintBottom_toBottomOf="parent"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintHorizontal_bias="0.94"
+Index: app/src/main/res/layout/notification_rv_sender.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/notification_rv_sender.xml	(date 1606060114297)
++++ app/src/main/res/layout/notification_rv_sender.xml	(date 1606060114297)
+@@ -0,0 +1,21 @@
++<?xml version="1.0" encoding="utf-8"?>
++<androidx.constraintlayout.widget.ConstraintLayout
++    xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:app="http://schemas.android.com/apk/res-auto"
++    android:layout_width="match_parent"
++    android:layout_height="wrap_content"
++    android:background="#7FE3AE"
++    android:layout_margin="5dp">
++
++    <TextView
++        android:id="@+id/notificationSenderTv"
++        android:layout_width="match_parent"
++        android:layout_height="wrap_content"
++        android:padding="10dp"
++        android:text="Your request pending"
++        android:textColor="#474747"
++        app:layout_constraintBottom_toBottomOf="parent"
++        app:layout_constraintEnd_toEndOf="parent"
++        app:layout_constraintStart_toStartOf="parent"
++        app:layout_constraintTop_toTopOf="parent" />
++</androidx.constraintlayout.widget.ConstraintLayout>
+\ No newline at end of file
+Index: app/src/main/java/com/trinoq/mealmanager/features/model/pojo/response/invitation/ReceiverInfo.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/trinoq/mealmanager/features/model/pojo/response/invitation/ReceiverInfo.java	(date 1605981205198)
++++ app/src/main/java/com/trinoq/mealmanager/features/model/pojo/response/invitation/ReceiverInfo.java	(date 1605981205198)
+@@ -0,0 +1,109 @@
++
++package com.trinoq.mealmanager.features.model.pojo.response.invitation;
++
++import com.google.gson.annotations.Expose;
++import com.google.gson.annotations.SerializedName;
++
++public class ReceiverInfo {
++
++    @SerializedName("id")
++    @Expose
++    private Integer id;
++    @SerializedName("phone_number")
++    @Expose
++    private String phoneNumber;
++    @SerializedName("notification_token")
++    @Expose
++    private Object notificationToken;
++    @SerializedName("full_name")
++    @Expose
++    private String fullName;
++    @SerializedName("email")
++    @Expose
++    private String email;
++    @SerializedName("image")
++    @Expose
++    private String image;
++    @SerializedName("active_groupid")
++    @Expose
++    private Object activeGroupid;
++    @SerializedName("created_at")
++    @Expose
++    private String createdAt;
++    @SerializedName("updated_at")
++    @Expose
++    private String updatedAt;
++
++    public Integer getId() {
++        return id;
++    }
++
++    public void setId(Integer id) {
++        this.id = id;
++    }
++
++    public String getPhoneNumber() {
++        return phoneNumber;
++    }
++
++    public void setPhoneNumber(String phoneNumber) {
++        this.phoneNumber = phoneNumber;
++    }
++
++    public Object getNotificationToken() {
++        return notificationToken;
++    }
++
++    public void setNotificationToken(Object notificationToken) {
++        this.notificationToken = notificationToken;
++    }
++
++    public String getFullName() {
++        return fullName;
++    }
++
++    public void setFullName(String fullName) {
++        this.fullName = fullName;
++    }
++
++    public String getEmail() {
++        return email;
++    }
++
++    public void setEmail(String email) {
++        this.email = email;
++    }
++
++    public String getImage() {
++        return image;
++    }
++
++    public void setImage(String image) {
++        this.image = image;
++    }
++
++    public Object getActiveGroupid() {
++        return activeGroupid;
++    }
++
++    public void setActiveGroupid(Object activeGroupid) {
++        this.activeGroupid = activeGroupid;
++    }
++
++    public String getCreatedAt() {
++        return createdAt;
++    }
++
++    public void setCreatedAt(String createdAt) {
++        this.createdAt = createdAt;
++    }
++
++    public String getUpdatedAt() {
++        return updatedAt;
++    }
++
++    public void setUpdatedAt(String updatedAt) {
++        this.updatedAt = updatedAt;
++    }
++
++}
+Index: app/src/main/java/com/trinoq/mealmanager/features/model/pojo/response/invitation/Inviationdatum.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/trinoq/mealmanager/features/model/pojo/response/invitation/Inviationdatum.java	(date 1605981205193)
++++ app/src/main/java/com/trinoq/mealmanager/features/model/pojo/response/invitation/Inviationdatum.java	(date 1605981205193)
+@@ -0,0 +1,131 @@
++
++package com.trinoq.mealmanager.features.model.pojo.response.invitation;
++
++import java.util.List;
++import com.google.gson.annotations.Expose;
++import com.google.gson.annotations.SerializedName;
++public class Inviationdatum {
++
++    @SerializedName("id")
++    @Expose
++    private Integer id;
++    @SerializedName("group_id")
++    @Expose
++    private Integer groupId;
++    @SerializedName("sender_id")
++    @Expose
++    private Integer senderId;
++    @SerializedName("receiver_id")
++    @Expose
++    private Integer receiverId;
++    @SerializedName("date")
++    @Expose
++    private String date;
++    @SerializedName("status")
++    @Expose
++    private Integer status;
++    @SerializedName("created_at")
++    @Expose
++    private String createdAt;
++    @SerializedName("updated_at")
++    @Expose
++    private String updatedAt;
++    @SerializedName("groupinfo")
++    @Expose
++    private List<Groupinfo> groupinfo = null;
++    @SerializedName("sender_info")
++    @Expose
++    private List<SenderInfo> senderInfo = null;
++    @SerializedName("receiver_info")
++    @Expose
++    private List<ReceiverInfo> receiverInfo = null;
++
++    public Integer getId() {
++        return id;
++    }
++
++    public void setId(Integer id) {
++        this.id = id;
++    }
++
++    public Integer getGroupId() {
++        return groupId;
++    }
++
++    public void setGroupId(Integer groupId) {
++        this.groupId = groupId;
++    }
++
++    public Integer getSenderId() {
++        return senderId;
++    }
++
++    public void setSenderId(Integer senderId) {
++        this.senderId = senderId;
++    }
++
++    public Integer getReceiverId() {
++        return receiverId;
++    }
++
++    public void setReceiverId(Integer receiverId) {
++        this.receiverId = receiverId;
++    }
++
++    public String getDate() {
++        return date;
++    }
++
++    public void setDate(String date) {
++        this.date = date;
++    }
++
++    public Integer getStatus() {
++        return status;
++    }
++
++    public void setStatus(Integer status) {
++        this.status = status;
++    }
++
++    public String getCreatedAt() {
++        return createdAt;
++    }
++
++    public void setCreatedAt(String createdAt) {
++        this.createdAt = createdAt;
++    }
++
++    public String getUpdatedAt() {
++        return updatedAt;
++    }
++
++    public void setUpdatedAt(String updatedAt) {
++        this.updatedAt = updatedAt;
++    }
++
++    public List<Groupinfo> getGroupinfo() {
++        return groupinfo;
++    }
++
++    public void setGroupinfo(List<Groupinfo> groupinfo) {
++        this.groupinfo = groupinfo;
++    }
++
++    public List<SenderInfo> getSenderInfo() {
++        return senderInfo;
++    }
++
++    public void setSenderInfo(List<SenderInfo> senderInfo) {
++        this.senderInfo = senderInfo;
++    }
++
++    public List<ReceiverInfo> getReceiverInfo() {
++        return receiverInfo;
++    }
++
++    public void setReceiverInfo(List<ReceiverInfo> receiverInfo) {
++        this.receiverInfo = receiverInfo;
++    }
++
++}

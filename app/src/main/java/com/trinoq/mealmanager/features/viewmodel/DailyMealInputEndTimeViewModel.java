@@ -13,7 +13,7 @@ public class DailyMealInputEndTimeViewModel extends ViewModel {
     public MutableLiveData<ResponseBody> setDailyMealInputEndTimeSuccess = new MutableLiveData<>();
     public MutableLiveData<String> setDailyMealInputEndTimeFailed = new MutableLiveData<>();
 
-    void dailyMealInputRequest(DailyMealInputEndTimeRequest dailyMealInputEndTimeRequest, MealInputEndTimeModel model){
+    public void dailyMealInputRequest(DailyMealInputEndTimeRequest dailyMealInputEndTimeRequest, MealInputEndTimeModel model){
         model.dailyMealInputRequest(dailyMealInputEndTimeRequest, new RequestCompleteListener<ResponseBody>() {
             @Override
             public void OnSuccessListener(ResponseBody data) {
