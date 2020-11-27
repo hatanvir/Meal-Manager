@@ -1,5 +1,8 @@
 package com.trinoq.mealmanager.features.view.fragments.groupCreation;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +19,7 @@ import com.trinoq.mealmanager.R;
 import com.trinoq.mealmanager.features.model.Payables.PayablesModel;
 import com.trinoq.mealmanager.features.model.Payables.PayablesModelImplementation;
 import com.trinoq.mealmanager.features.model.pojo.request.PayablesRequest;
+import com.trinoq.mealmanager.features.view.Activity.TestActivity;
 import com.trinoq.mealmanager.features.viewmodel.PayablesViewModel;
 
 import butterknife.BindView;
@@ -40,6 +44,10 @@ public class PayablesFragment extends Fragment {
     private PayablesModel model;
     private PayablesViewModel viewModel;
 
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
+    String gpId;
+
     public PayablesFragment() {
         // Required empty public constructor
     }
@@ -50,6 +58,12 @@ public class PayablesFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_payables, container, false);
         ButterKnife.bind(this, v);
+
+        sharedPreferences = getActivity().getSharedPreferences("GRP_INFO", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+         gpId = getArguments().getString("gpId").toString();
+
+
 
         model = new PayablesModelImplementation(getActivity());
         viewModel = new ViewModelProvider(getActivity()).get(PayablesViewModel.class);
@@ -67,7 +81,11 @@ public class PayablesFragment extends Fragment {
         viewModel.payablesCreateSuccess.observe(getActivity(), new Observer<ResponseBody>() {
             @Override
             public void onChanged(ResponseBody responseBody) {
+                getActivity().finish();
+                startActivity(new Intent(getActivity(), TestActivity.class));
                 Toast.makeText(getActivity(), "Success", Toast.LENGTH_SHORT).show();
+
+                editor.putString("gpId",gpId).apply();
             }
         });
         viewModel.payablesCreateFailed.observe(getActivity(), new Observer<String>() {

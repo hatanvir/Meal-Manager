@@ -65,12 +65,12 @@ public class LoginFragment extends Fragment implements Validator.ValidationListe
 
         confirmPhoneNumberDialog.setCancelable(false);
 
-        /*haveAccountTv.setOnClickListener(new View.OnClickListener() {
+        haveAccountTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            setfargment(new LoginFragment(), "loginFragment");
+            setfargment(new SignUpFragment(), "signUpFragment");
         }
-      });*/
+      });
         nextImage.setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View view) {

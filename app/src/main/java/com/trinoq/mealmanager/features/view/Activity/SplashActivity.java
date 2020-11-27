@@ -24,6 +24,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import com.google.firebase.auth.FirebaseAuth;
 import com.trinoq.mealmanager.R;
 import com.trinoq.mealmanager.features.model.models.ActiveGroupInformation;
 import com.trinoq.mealmanager.features.model.models.UserInformation;
@@ -47,7 +49,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class SplashActivity extends AppCompatActivity {
+import java.util.Objects;
 
     Retrofit retrofit;
     Api api;
@@ -66,6 +68,8 @@ public class SplashActivity extends AppCompatActivity {
     String currentPhoneNumber;
 
 
+public class SplashActivity extends AppCompatActivity {
+    String currentUserPhnNum="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -137,6 +141,8 @@ public class SplashActivity extends AppCompatActivity {
 
             }
         });
+        SharedPreferences sharedPreferences=getSharedPreferences("USER_DATA",MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
 
 
     }
@@ -226,6 +232,25 @@ private void getActiveGroup(){
                         frameLayout.setVisibility(View.VISIBLE);
                         setFragment(new WelcomeFragment());
                     }
+                  
+            public void run() {
+                try {
+                    Thread.sleep(2000);
+                    try {
+                        currentUserPhnNum = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getPhoneNumber();
+                    }catch (Exception e){
+
+                    }
+                    if(currentUserPhnNum !=null){
+
+                        startActivity(new Intent(SplashActivity.this, GroupSearchActivity.class));
+                        editor.putString("userPhoneNum",currentUserPhnNum).apply();
+                    }else {
+                        startActivity(new Intent(SplashActivity.this, AuthenticationActivity.class));
+                    }
+                    finish();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
 

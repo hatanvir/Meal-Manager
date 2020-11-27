@@ -1,41 +1,75 @@
 package com.trinoq.mealmanager.features.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.kaopiz.kprogresshud.KProgressHUD;
 import com.trinoq.mealmanager.R;
+import com.trinoq.mealmanager.features.model.fcmNotification.Data;
+import com.trinoq.mealmanager.features.model.fcmNotification.NotificationSender;
+import com.trinoq.mealmanager.features.model.pojo.request.Member;
+import com.trinoq.mealmanager.features.model.pojo.request.MemberInvitation;
+import com.trinoq.mealmanager.network.Api;
+import com.trinoq.mealmanager.network.RetrofitClient;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.Body;
+import retrofit2.http.Headers;
+import retrofit2.http.POST;
 
 public class GroupMembersListRecyclerViewAdapter extends RecyclerView.Adapter<GroupMembersListRecyclerViewAdapter.ViewHolder> {
     private Context context;
     private ArrayList<String> memberName=new ArrayList<>();
     private ArrayList<String> phoneNumber=new ArrayList<>();
 
-    public GroupMembersListRecyclerViewAdapter(Context context, ArrayList<String> memberName, ArrayList<String> phoneNumber) {
-        this.context = context;
-        this.memberName = memberName;
-        this.phoneNumber = phoneNumber;
+    List<Member> members = new ArrayList<>();
+
+    private KProgressHUD progressHUD;
+
+
+    public GroupMembersListRecyclerViewAdapter(Context context,List<Member> members) {
+        this.context = context;this.members = members;
     }
 
-    public GroupMembersListRecyclerViewAdapter(Context context, ArrayList<String> phoneNumber) {
+   /* public GroupMembersListRecyclerViewAdapter(Context context, ArrayList<String> phoneNumber) {
         this.context = context;
         this.phoneNumber = phoneNumber;
     }
-
+*/
     @NonNull
     @Override
     public GroupMembersListRecyclerViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.group_members_list_recyclerview,parent,false);
-        ViewHolder holder=new ViewHolder(view);
+        ViewHolder holder= new ViewHolder(view);
+
+        progressHUD =  KProgressHUD.create(context)
+                .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
+                .setCancellable(false)
+                .setAnimationSpeed(2)
+                .setDimAmount(0.5f);
 
         return holder;
     }
@@ -43,17 +77,82 @@ public class GroupMembersListRecyclerViewAdapter extends RecyclerView.Adapter<Gr
     @Override
     public void onBindViewHolder(@NonNull GroupMembersListRecyclerViewAdapter.ViewHolder holder, int position) {
 
-        holder.memberNameTv.setText(memberName.get(position));
-        holder.phoneNumberTv.setText(phoneNumber.get(position));
+        holder.memberNameTv.setText(members.get(position).getAdmininfo().get(0).getFullName());
+        holder.phoneNumberTv.setText(members.get(position).getPhoneNumber());
 
+       // holder.invietBt.setBackgroundColor();
+        holder.invietBt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("ttttt","Clicked");
+                sendInvitationRequest(position);
+            }
+        });
+    }
+
+    private void sendInvitationRequest(int position) {
+     /*   Date myDate = new Date();
+        String s = new SimpleDateFormat("yyyy-MM-dd").format(myDate);
+
+        Date date = new SimpleDateFormat("yyyy-MM-dd").parse(s);*/
+
+        Api api = RetrofitClient.getClient().create(Api.class);
+        Toast.makeText(context, "Called", Toast.LENGTH_SHORT).show();
+        api.invitation(new MemberInvitation(2,2,3,"2020-05-05")).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+               // Log.d("ttttt",response.body().toString());
+                progressHUD.show();
+                if (response.code() == 200){
+                   progressHUD.dismiss();
+                    Toast.makeText(context, "Sent request successfully", Toast.LENGTH_SHORT).show();
+                    sendNotificationToReceiver(position);
+                }else {
+                    Log.d("tttt",""+response.code());
+                    Toast.makeText(context, "Failed to sent request", Toast.LENGTH_SHORT).show();
+                    progressHUD.dismiss();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(context, ""+t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                progressHUD.dismiss();
+            }
+        });
+    }
+
+    private void sendNotificationToReceiver(int position) {
+        Retrofit retrofit = new Retrofit.Builder().baseUrl("https://fcm.googleapis.com/").build();
+
+        Data data = new Data("Invitation","Tanvir want you to group oONE");
+        NotificationSender notificationSender = new NotificationSender(data,members.get(position).getAdmininfo().get(0).getNotificationToken().toString());
+        Api api = retrofit.create(Api.class);
+        api.sendNotifcation(notificationSender)
+                .enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if (response.code() == 200) {
+                            Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show();
+                           /* if (response.body().success != 1) {
+                               // Toast.makeText(SendNotif.this, "Failed ", Toast.LENGTH_LONG);
+                            }*/
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                    }
+                });
     }
 
     @Override
     public int getItemCount() {
-        return phoneNumber.size();
+        return members.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView memberNameTv,phoneNumberTv;
         Button invietBt;
