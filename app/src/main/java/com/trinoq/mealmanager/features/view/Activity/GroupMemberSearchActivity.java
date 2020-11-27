@@ -84,7 +84,6 @@ public class GroupMemberSearchActivity extends AppCompatActivity {
             }
         });
 
-
         phoneNumberEt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
@@ -104,28 +103,13 @@ public class GroupMemberSearchActivity extends AppCompatActivity {
                                 if (groupRequest.getMember().size()>0){
                                     for (Member groupMember:groupRequest.getMember())
                                     {
-                                       /* try {
-
-                                            phoneNumber.add(groupMember.getPhoneNumber());
-                                            Log.d("GGG",groupMember.getPhoneNumber());
-                                            Toast.makeText(textView.getContext(), "Call", Toast.LENGTH_SHORT).show();
-
-                                        }
-                                        catch (Exception e){
-
-                                        }*/
-
                                        for (Admininfo admininfo:groupMember.getAdmininfo()){
                                            phoneNumber.add(admininfo.getPhoneNumber());
                                            userName.add(admininfo.getFullName());
                                            Toast.makeText(textView.getContext(), "Call", Toast.LENGTH_SHORT).show();
                                        }
                                     }
-
-
                                 }
-                                //Log.d("OOO",mealtype.toString());
-                                //mAdapter=new GroupListRecyclerViewAdapter(textView.getContext(),groupname,phonenumber,adminName,mealtype,cookingtype,shoppingtype,groupcreated);
                                mAdapter=new GroupMembersListRecyclerViewAdapter(textView.getContext(),userName,phoneNumber);
                                 membersListRc.setAdapter(mAdapter);
                                 Log.d("FSFS",userName.toString()+"  "+phoneNumber.toString())
@@ -137,16 +121,12 @@ public class GroupMemberSearchActivity extends AppCompatActivity {
 
                         }
                     });
-
-
                     // hide virtual keyboard
                     InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(phoneNumberEt.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
 
                     return true;
                 }
-
-
 
                 return false;
             }

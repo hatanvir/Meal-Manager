@@ -3,8 +3,7 @@ package com.trinoq.mealmanager.features.model.pojo.request;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class UserMealCreateRequest {
-
+public class DailyMealInsertRequest {
 
     @SerializedName("group_id")
     @Expose
@@ -20,38 +19,39 @@ public class UserMealCreateRequest {
     private String mealDate = null;
     @SerializedName("is_breakfast")
     @Expose
-    private Integer isBreakfast = 0;
+    private String breakfast = null;
     @SerializedName("is_lunch")
     @Expose
-    private Integer isLunch = 0;
+    private String lunch = null;
     @SerializedName("is_dinner")
     @Expose
-    private Integer isDinner = 0;
+    private String dinner = null;
 
-    public UserMealCreateRequest(String groupId, String userId, String phoneNumber, String mealDate, Integer isBreakfast, Integer isLunch, Integer isDinner) {
+    public DailyMealInsertRequest(String groupId, String userId, String phoneNumber, String mealDate, String breakfast, String lunch, String dinner) {
         this.groupId = groupId;
         this.userId = userId;
         this.phoneNumber = phoneNumber;
         this.mealDate = mealDate;
-        this.isBreakfast = isBreakfast;
-        this.isLunch = isLunch;
-        this.isDinner = isDinner;
+        this.breakfast = breakfast;
+        this.lunch = lunch;
+        this.dinner = dinner;
     }
 
-    public UserMealCreateRequest(String groupId, String userId, String phoneNumber, String mealDate, Integer mealNumber, String mealName) {
+    public DailyMealInsertRequest(String groupId, String userId, String phoneNumber, String mealDate, String mealNumber,String mealName) {
         this.groupId = groupId;
         this.userId = userId;
         this.phoneNumber = phoneNumber;
         this.mealDate = mealDate;
         if (mealName.equals("Breakfast")){
-            this.isDinner = mealNumber;
+            this.breakfast = mealNumber;
         }
         else if (mealName.equals("Lunch")){
-            this.isLunch = mealNumber;
+            this.lunch = mealNumber;
         }
         else if (mealName.equals("Dinner")){
-            this.isDinner = mealNumber;
+            this.dinner = mealNumber;
         }
+
     }
 
     public String getGroupId() {
@@ -60,6 +60,14 @@ public class UserMealCreateRequest {
 
     public void setGroupId(String groupId) {
         this.groupId = groupId;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getPhoneNumber() {
@@ -78,35 +86,27 @@ public class UserMealCreateRequest {
         this.mealDate = mealDate;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getBreakfast() {
+        return breakfast;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setBreakfast(String breakfast) {
+        this.breakfast = breakfast;
     }
 
-    public Integer getIsBreakfast() {
-        return isBreakfast;
+    public String getLunch() {
+        return lunch;
     }
 
-    public void setIsBreakfast(Integer isBreakfast) {
-        this.isBreakfast = isBreakfast;
+    public void setLunch(String lunch) {
+        this.lunch = lunch;
     }
 
-    public Integer getIsLunch() {
-        return isLunch;
+    public String getDinner() {
+        return dinner;
     }
 
-    public void setIsLunch(Integer isLunch) {
-        this.isLunch = isLunch;
-    }
-
-    public Integer getIsDinner() {
-        return isDinner;
-    }
-
-    public void setIsDinner(Integer isDinner) {
-        this.isDinner = isDinner;
+    public void setDinner(String dinner) {
+        this.dinner = dinner;
     }
 }

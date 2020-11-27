@@ -26,7 +26,7 @@ public class User {
     private Object image;
     @SerializedName("active_groupid")
     @Expose
-    private Object activeGroupid;
+    private String activeGroupid;
     @SerializedName("created_at")
     @Expose
     private String createdAt;
@@ -82,11 +82,11 @@ public class User {
         this.image = image;
     }
 
-    public Object getActiveGroupid() {
+    public String getActiveGroupid() {
         return activeGroupid;
     }
 
-    public void setActiveGroupid(Object activeGroupid) {
+    public void setActiveGroupid(String activeGroupid) {
         this.activeGroupid = activeGroupid;
     }
 

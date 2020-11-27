@@ -1,10 +1,13 @@
 
 package com.trinoq.mealmanager.network;
 
+import com.trinoq.mealmanager.features.model.pojo.request.ActiveGroupRequest;
+import com.trinoq.mealmanager.features.model.pojo.request.ActiveGroupUpdatedRequest;
 import com.trinoq.mealmanager.features.model.pojo.request.AllBazarListSearchRequest;
 import com.trinoq.mealmanager.features.model.pojo.request.BazarInsertRequest;
 import com.trinoq.mealmanager.features.model.pojo.request.BazarListRequest;
 import com.trinoq.mealmanager.features.model.pojo.request.DailyMealInputEndTimeRequest;
+import com.trinoq.mealmanager.features.model.pojo.request.DailyMealInputTimeRequest;
 import com.trinoq.mealmanager.features.model.pojo.request.GroupCreateRequest;
 import com.trinoq.mealmanager.features.model.pojo.request.GroupSearchRequest;
 import com.trinoq.mealmanager.features.model.pojo.request.MemberSearchRequest;
@@ -15,6 +18,7 @@ import com.trinoq.mealmanager.features.model.pojo.request.PremonthRequest;
 import com.trinoq.mealmanager.features.model.pojo.request.RegisterRequest;
 import com.trinoq.mealmanager.features.model.pojo.request.UserInformationRequest;
 import com.trinoq.mealmanager.features.model.pojo.request.UserMealCreateRequest;
+import com.trinoq.mealmanager.features.model.pojo.request.UserTotalMealRequest;
 import com.trinoq.mealmanager.features.model.pojo.request1.GroupMemberSearchRequest;
 import com.trinoq.mealmanager.features.model.pojo.response.PayablesResponse;
 
@@ -64,6 +68,10 @@ public interface Api {
     @POST("usermealcreate")
     Call<ResponseBody> setUserMeall(@Body UserMealCreateRequest userMealCreateRequest);
 
+    @POST("active_field_update/{phone_number}")
+    Call<ResponseBody> setActiveGroup(@Path("phone_number") String phone_number, @Body ActiveGroupUpdatedRequest activeGroupUpdatedRequest);
+
+
     @GET("Group_search/{groupname}")
     Call<GroupSearchRequest> Group_search(@Path("groupname") String groupname);
 
@@ -84,6 +92,13 @@ public interface Api {
     @GET("GetAllBazarlist/{group_id}/{from}/{to}")
     Call<AllBazarListSearchRequest> getAllBazarList(@Path("group_id") String group_id, @Path("from") String from, @Path("to") String to);
 
+    @GET("Daily_meal_input/{group_id}")
+    Call<DailyMealInputTimeRequest> getMealEndTime(@Path("group_id") String group_id);
+    @GET("User_Meal_Total/{group_id}/{from}/{to}")
+    Call<UserTotalMealRequest> getUserMeal(@Path("group_id") String group_id, @Path("from") String from, @Path("to") String to);
+
+    @GET("GroupActive/{phone_number}")
+    Call<ActiveGroupRequest> getActiveGroup(@Path("phone_number") String phone_number);
 
    /* @POST("preeMonthsCreate")
     Call<ResponseBody> addPreeMonth()*/

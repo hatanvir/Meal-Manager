@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -80,6 +81,7 @@ public class AccountActivity extends AppCompatActivity {
     UserInformation userInformation;
     Retrofit retrofit;
     Api api;
+    int groupId,userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +93,9 @@ public class AccountActivity extends AppCompatActivity {
         else {
             setTheme(R.style.AppTheme);
         }
+        //myPreferences=getActivity().getSharedPreferences("MyPreferences", Context.MODE_PRIVATE);
+        userId=myPreferences.getInt("UserId",0);
+        groupId=myPreferences.getInt("GroupId",0);
 
         setContentView(R.layout.activity_account);
         ButterKnife.bind(AccountActivity.this);
@@ -190,7 +195,7 @@ public class AccountActivity extends AppCompatActivity {
         api=retrofit.create(Api.class);
 
         Log.d("ttttttt",part+" "+emailEt.getText().toString());
-        Call<ResponseBody> call=api.updatedUser(3,part,ResponseBody.create(MultipartBody.FORM,emailEt.getText().toString()));
+        Call<ResponseBody> call=api.updatedUser(userId,part,ResponseBody.create(MultipartBody.FORM,emailEt.getText().toString()));
 
         call.enqueue(new Callback<ResponseBody>() {
             @Override
