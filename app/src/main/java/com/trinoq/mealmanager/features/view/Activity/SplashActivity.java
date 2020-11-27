@@ -1,4 +1,3 @@
-
 package com.trinoq.mealmanager.features.view.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,7 +23,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.trinoq.mealmanager.R;
 import com.trinoq.mealmanager.features.model.models.ActiveGroupInformation;
@@ -49,7 +47,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-import java.util.Objects;
+public class SplashActivity extends AppCompatActivity {
 
     Retrofit retrofit;
     Api api;
@@ -58,6 +56,7 @@ import java.util.Objects;
     ArrayList<String> groupId=new ArrayList<>();
     String groupid;
     SharedPreferences.Editor myPreferences;
+
     SharedPreferences sharedPreferences;
     @BindView(R.id.frameLayout)
     FrameLayout frameLayout;
@@ -68,8 +67,6 @@ import java.util.Objects;
     String currentPhoneNumber;
 
 
-public class SplashActivity extends AppCompatActivity {
-    String currentUserPhnNum="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,9 +79,22 @@ public class SplashActivity extends AppCompatActivity {
         myPreferences=getSharedPreferences("MyPreferences",MODE_PRIVATE).edit();
         sharedPreferences=getSharedPreferences("MyPreferences",MODE_PRIVATE);
 
-        currentPhoneNumber="01742195643";
+        currentPhoneNumber = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
+        try{
+            if(currentPhoneNumber == ""){
+                startActivity(new Intent(this,AuthenticationActivity.class));
+            }else {
+                getCurrentUserInfo();
+            }
+        }catch (Exception e){
+            startActivity(new Intent(this,AuthenticationActivity.class));
+        }
 
-        getCurrentUserInfo();
+      /*  if(currentPhoneNumber == null){
+            startActivity(new Intent(this,AuthenticationActivity.class));
+        }else {
+            getCurrentUserInfo();
+        }*/
 
     }
 
@@ -133,6 +143,8 @@ public class SplashActivity extends AppCompatActivity {
 
                         }
                     }
+                }else {
+                    startActivity(new Intent(SplashActivity.this,AuthenticationActivity.class));
                 }
             }
 
@@ -141,12 +153,10 @@ public class SplashActivity extends AppCompatActivity {
 
             }
         });
-        SharedPreferences sharedPreferences=getSharedPreferences("USER_DATA",MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
 
 
     }
-private void getActiveGroup(){
+    private void getActiveGroup(){
         Call<ActiveGroupRequest> activeGroupRequestCall=api.getActiveGroup(currentPhoneNumber);
         activeGroupRequestCall.enqueue(new Callback<ActiveGroupRequest>() {
             @Override
@@ -232,25 +242,6 @@ private void getActiveGroup(){
                         frameLayout.setVisibility(View.VISIBLE);
                         setFragment(new WelcomeFragment());
                     }
-                  
-            public void run() {
-                try {
-                    Thread.sleep(2000);
-                    try {
-                        currentUserPhnNum = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getPhoneNumber();
-                    }catch (Exception e){
-
-                    }
-                    if(currentUserPhnNum !=null){
-
-                        startActivity(new Intent(SplashActivity.this, GroupSearchActivity.class));
-                        editor.putString("userPhoneNum",currentUserPhnNum).apply();
-                    }else {
-                        startActivity(new Intent(SplashActivity.this, AuthenticationActivity.class));
-                    }
-                    finish();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
                 }
             }
 
@@ -259,7 +250,7 @@ private void getActiveGroup(){
 
             }
         });
-}
+    }
 
     private void setFragment(Fragment fragment) {
         FragmentTransaction fragmentTransaction=getSupportFragmentManager().beginTransaction();

@@ -45,8 +45,8 @@ public class GroupMemberSearchActivity extends AppCompatActivity {
     RecyclerView membersListRc;
     @BindView(R.id.clearBt)
     ImageView clearBt;
-    @BindView(R.id.backBt)
-    ImageView backImage;
+   /* @BindView(R.id.backBt)
+    ImageView backImage;*/
 
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager layoutManagergroupname;
@@ -97,12 +97,12 @@ public class GroupMemberSearchActivity extends AppCompatActivity {
                 phoneNumberEt.setText(null);
             }
         });
-        backImage.setOnClickListener(new View.OnClickListener() {
+       /* backImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
-        });
+        });*/
 
         phoneNumberEt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override

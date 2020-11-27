@@ -57,7 +57,6 @@
         android:text="Invite"
         android:textAllCaps="false"
         android:textColor="#50D890"
-        android:enabled="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.94"

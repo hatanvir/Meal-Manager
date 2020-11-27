@@ -1,6 +1,7 @@
 package com.trinoq.mealmanager.features.adapters;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,7 +45,7 @@ public class GroupMembersListRecyclerViewAdapter extends RecyclerView.Adapter<Gr
     private ArrayList<String> memberName=new ArrayList<>();
     private ArrayList<String> phoneNumber=new ArrayList<>();
 
-    List<Member> members = new ArrayList<>();
+    List<Member> members;
 
     private KProgressHUD progressHUD;
 
@@ -77,28 +78,27 @@ public class GroupMembersListRecyclerViewAdapter extends RecyclerView.Adapter<Gr
     @Override
     public void onBindViewHolder(@NonNull GroupMembersListRecyclerViewAdapter.ViewHolder holder, int position) {
 
-        holder.memberNameTv.setText(members.get(position).getAdmininfo().get(0).getFullName());
+       // holder.memberNameTv.setText(members.get(position).getAdmininfo().get(0).getFullName());
         holder.phoneNumberTv.setText(members.get(position).getPhoneNumber());
 
        // holder.invietBt.setBackgroundColor();
         holder.invietBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("ttttt","Clicked");
-                sendInvitationRequest(position);
+               sendInvitationRequest(position);
             }
         });
     }
 
     private void sendInvitationRequest(int position) {
-     /*   Date myDate = new Date();
-        String s = new SimpleDateFormat("yyyy-MM-dd").format(myDate);
 
-        Date date = new SimpleDateFormat("yyyy-MM-dd").parse(s);*/
-
+        SharedPreferences sharedPreferences = context.getSharedPreferences("MyPreferences",Context.MODE_PRIVATE);
         Api api = RetrofitClient.getClient().create(Api.class);
-        Toast.makeText(context, "Called", Toast.LENGTH_SHORT).show();
-        api.invitation(new MemberInvitation(2,2,3,"2020-05-05")).enqueue(new Callback<ResponseBody>() {
+
+        String gpId = sharedPreferences.getString("GroupId","");
+        String userId =  sharedPreferences.getString("UserId","");
+
+        api.invitation(new MemberInvitation(Integer.parseInt(gpId),Integer.parseInt(userId),members.get(position).getId(),"2020-05-05")).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                // Log.d("ttttt",response.body().toString());
@@ -126,25 +126,31 @@ public class GroupMembersListRecyclerViewAdapter extends RecyclerView.Adapter<Gr
         Retrofit retrofit = new Retrofit.Builder().baseUrl("https://fcm.googleapis.com/").build();
 
         Data data = new Data("Invitation","Tanvir want you to group oONE");
-        NotificationSender notificationSender = new NotificationSender(data,members.get(position).getAdmininfo().get(0).getNotificationToken().toString());
-        Api api = retrofit.create(Api.class);
-        api.sendNotifcation(notificationSender)
-                .enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        if (response.code() == 200) {
-                            Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show();
+
+        try{
+            NotificationSender notificationSender = new NotificationSender(data,members.get(position).getAdmininfo().get(0).getNotificationToken().toString());
+            Api api = retrofit.create(Api.class);
+            api.sendNotifcation(notificationSender)
+                    .enqueue(new Callback<ResponseBody>() {
+                        @Override
+                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            if (response.code() == 200) {
+                                Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show();
                            /* if (response.body().success != 1) {
                                // Toast.makeText(SendNotif.this, "Failed ", Toast.LENGTH_LONG);
                             }*/
+                            }
                         }
-                    }
 
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        @Override
+                        public void onFailure(Call<ResponseBody> call, Throwable t) {
 
-                    }
-                });
+                        }
+                    });
+        }catch (Exception e){
+            Toast.makeText(context, "Failed try again", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     @Override

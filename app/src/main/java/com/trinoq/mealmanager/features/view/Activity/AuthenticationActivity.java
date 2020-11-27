@@ -8,6 +8,8 @@ import android.os.Bundle;
 
 import com.trinoq.mealmanager.R;
 import com.trinoq.mealmanager.features.view.fragments.SignUpFragment;
+import com.trinoq.mealmanager.features.view.fragments.WelcomeFragment;
+import com.trinoq.mealmanager.features.view.fragments.groupCreation.CongrastFragment;
 
 public class AuthenticationActivity extends AppCompatActivity {
 

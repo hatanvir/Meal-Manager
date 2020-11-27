@@ -92,7 +92,7 @@ public class NotificationListAdapter extends RecyclerView.Adapter<NotificationLi
     private void accDeclineRequest(int i,int position,NotificationListAdapter.Viewholder holder) {
         Api api = RetrofitClient.getClient().create(Api.class);
 
-        api.invitationUpdate(2,i)
+        api.invitationUpdate(inviationdata.get(position).getId(),i)
                 .enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

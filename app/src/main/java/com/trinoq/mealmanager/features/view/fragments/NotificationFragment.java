@@ -1,5 +1,7 @@
 package com.trinoq.mealmanager.features.view.fragments;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -57,9 +59,14 @@ public class NotificationFragment extends Fragment {
 
     private void getNotificationData() {
         progressHUD.show();
+
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("MyPreferences", Context.MODE_PRIVATE);
         Api api = RetrofitClient.getClient().create(Api.class);
 
-        api.getInvitationData("3")
+        int gpId = sharedPreferences.getInt("GroupId",0);
+        int userId =  sharedPreferences.getInt("UserId",0);
+
+        api.getInvitationData(String.valueOf(userId))
                 .enqueue(new Callback<Invitation>() {
                     @Override
                     public void onResponse(Call<Invitation> call, Response<Invitation> response) {
@@ -81,9 +88,9 @@ public class NotificationFragment extends Fragment {
                                 recyclerView.setAdapter(new NotificationListAdapter(getActivity(),notificationList,rvViewType));
                             }
 
-                            Toast.makeText(getActivity(), ""+notificationList.size(), Toast.LENGTH_SHORT).show();
+                          //  Toast.makeText(getActivity(), ""+notificationList.size(), Toast.LENGTH_SHORT).show();
                         }else {
-                            Toast.makeText(getActivity(), ""+response.code(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "Data not found", Toast.LENGTH_SHORT).show();
                         }
                         progressHUD.dismiss();
                     }
