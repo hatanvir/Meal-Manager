@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.chaos.view.PinView;
@@ -46,6 +47,8 @@ public class VerifyPhoneNumberFragment extends Fragment {
     PinView pinView;
     @BindView(R.id.nextImage)
     ImageView nextImage;
+    @BindView(R.id.phnVerificationMsgTv)
+    TextView phnVerificationMsgTv;
 
     String phoneNumber;
     Dialog loadingDialog;
@@ -95,6 +98,9 @@ public class VerifyPhoneNumberFragment extends Fragment {
         }else {
             phoneAuthWithName();
         }
+
+
+        phnVerificationMsgTv.setText("A verification code will be sent to" + phoneNumber+" this number.");
 
         nextImage.setOnClickListener(new View.OnClickListener() {
             @Override

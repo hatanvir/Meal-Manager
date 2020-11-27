@@ -129,6 +129,8 @@ public class NotificationListAdapter extends RecyclerView.Adapter<NotificationLi
 
                             holder.receiverDecBt.setClickable(false);
                             holder.receiverAccBt.setClickable(false);
+
+                            sendNotificationToReceiver(position);
                         }else {
                             Toast.makeText(context, "Failed to join group", Toast.LENGTH_SHORT).show();
                         }
@@ -142,7 +144,7 @@ public class NotificationListAdapter extends RecyclerView.Adapter<NotificationLi
     }
 
 
-    private void sendNotificationToReceiver(int position,String status) {
+    private void sendNotificationToReceiver(int position) {
         Retrofit retrofit = new Retrofit.Builder().baseUrl("https://fcm.googleapis.com/").build();
 
         Data data = new Data("Invitation","Accepted your request.");

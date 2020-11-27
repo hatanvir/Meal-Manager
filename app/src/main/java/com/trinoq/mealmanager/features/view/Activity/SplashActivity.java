@@ -35,7 +35,7 @@ public class SplashActivity extends AppCompatActivity {
                     }
                     if(currentUserPhnNum !=null){
 
-                        startActivity(new Intent(SplashActivity.this, TestActivity.class));
+                        startActivity(new Intent(SplashActivity.this, GroupSearchActivity.class));
                         editor.putString("userPhoneNum",currentUserPhnNum).apply();
                     }else {
                         startActivity(new Intent(SplashActivity.this, AuthenticationActivity.class));

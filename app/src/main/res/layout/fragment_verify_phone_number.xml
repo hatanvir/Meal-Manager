@@ -83,9 +83,9 @@
         app:viewType="line" />-->
 
     <TextView
+        android:id="@+id/phnVerificationMsgTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="A verification code will be sent to \n(+880 1234 5678) this number."
         android:textColor="#7FE3AE"
         android:textSize="16dp"
         android:gravity="center"
