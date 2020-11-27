@@ -2,6 +2,8 @@ package com.trinoq.mealmanager.features.view.fragments;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -62,12 +64,14 @@ public class ShoppingFragment extends Fragment  {
     //String[] userId={"Selected User Id","2","3"};
 
     ArrayList<String> userName=new ArrayList<>();
-    ArrayList<String> userId=new ArrayList<>();
+    ArrayList<String> userIds=new ArrayList<>();
 
     DatePickerDialog datePickerDialog;
     String currentdate,userid;
     Retrofit retrofit;
     Api api;
+    SharedPreferences myPreferences;
+    int groupId,userId;
 
     public ShoppingFragment() {
         // Required empty public constructor
@@ -83,18 +87,21 @@ public class ShoppingFragment extends Fragment  {
         bazarListRcv.setHasFixedSize(true);
         layoutManagergroupname=new LinearLayoutManager(getContext());
         bazarListRcv.setLayoutManager(layoutManagergroupname);
+        myPreferences=getActivity().getSharedPreferences("MyPreferences", Context.MODE_PRIVATE);
+        userId=myPreferences.getInt("UserId",0);
+        groupId=myPreferences.getInt("GroupId",0);
 
         retrofit= RetrofitClient.getClient();
         api=retrofit.create(Api.class);
 
         final Calendar calendar=Calendar.getInstance();
 
-        userId.clear();
+        userIds.clear();
         userName.clear();
 
         for (int i=0;i<Utils.groupAllMembersInformations.size();i++){
             userName.add(Utils.groupAllMembersInformations.get(i).getUserName());
-            userId.add(String.valueOf(Utils.groupAllMembersInformations.get(i).getUserId()));
+            userIds.add(String.valueOf(Utils.groupAllMembersInformations.get(i).getUserId()));
 
         }
 
@@ -155,9 +162,9 @@ public class ShoppingFragment extends Fragment  {
                 userNameSp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                        Toast.makeText(getContext(),userName.get(i)+" = "+ userId.get(i), Toast.LENGTH_SHORT).show();
-                        userIdTv.setText("User ID : "+userId.get(i));
-                        userid=userId.get(i);
+                        Toast.makeText(getContext(),userName.get(i)+" = "+ userIds.get(i), Toast.LENGTH_SHORT).show();
+                        userIdTv.setText("User ID : "+userIds.get(i));
+                        userid=userIds.get(i);
                     }
 
                     @Override
@@ -171,7 +178,7 @@ public class ShoppingFragment extends Fragment  {
                     @Override
                     public void onClick(View view) {
 
-                        Call<ResponseBody> setBazarResponse=api.setBazar(new BazarInsertRequest("2",userid,totalBazarEt.getText().toString(),date.getText().toString()));
+                        Call<ResponseBody> setBazarResponse=api.setBazar(new BazarInsertRequest(String.valueOf(groupId),userid,totalBazarEt.getText().toString(),date.getText().toString()));
                         setBazarResponse.enqueue(new Callback<ResponseBody>() {
                             @Override
                             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

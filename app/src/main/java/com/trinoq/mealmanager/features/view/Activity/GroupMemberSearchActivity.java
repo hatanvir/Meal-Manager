@@ -104,7 +104,6 @@ public class GroupMemberSearchActivity extends AppCompatActivity {
             }
         });
 
-
         phoneNumberEt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
@@ -136,11 +135,18 @@ public class GroupMemberSearchActivity extends AppCompatActivity {
 
                                         }*//*
 
+
                                        for (Admininfo admininfo:groupMember.getAdmininfo()){
                                            phoneNumber.add(admininfo.getPhoneNumber());
                                            userName.add(admininfo.getFullName());
                                            Toast.makeText(textView.getContext(), "Call", Toast.LENGTH_SHORT).show();
                                        }
+
+                                    }
+                                }
+                               mAdapter=new GroupMembersListRecyclerViewAdapter(textView.getContext(),userName,phoneNumber);
+                                membersListRc.setAdapter(mAdapter);
+                                Log.d("FSFS",userName.toString()+"  "+phoneNumber.toString());                            }
                                     }*/
 
                                     mAdapter=new GroupMembersListRecyclerViewAdapter(GroupMemberSearchActivity.this,groupRequest.getMember());
@@ -150,8 +156,7 @@ public class GroupMemberSearchActivity extends AppCompatActivity {
 
                                 }
                                 progressHUD.dismiss();
-
-;                            }else {
+                            }else {
                                 Toast.makeText(GroupMemberSearchActivity.this, "Not found", Toast.LENGTH_SHORT).show();
                                 progressHUD.dismiss();
                             }
@@ -163,16 +168,12 @@ public class GroupMemberSearchActivity extends AppCompatActivity {
                             progressHUD.dismiss();
                         }
                     });
-
-
                     // hide virtual keyboard
                     InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(phoneNumberEt.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
 
                     return true;
                 }
-
-
 
                 return false;
             }
