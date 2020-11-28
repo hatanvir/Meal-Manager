@@ -252,7 +252,7 @@ public class VerifyPhoneNumberFragment extends Fragment {
     }
 
     private void snackbar(String msg) {
-        //Snackbar.make(nextImage,msg,Snackbar.LENGTH_SHORT).show();
-        Log.d("ttt",msg);
+        Snackbar.make(nextImage,msg,Snackbar.LENGTH_SHORT).show();
+        //Log.d("ttt",msg);
     }
 }

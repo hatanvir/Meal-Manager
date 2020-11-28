@@ -102,7 +102,7 @@ public class MealPricingFragment extends Fragment {
 
     private String[] mealPricingType = {"Pree month pricing", "Post month pricing "};
     private String[] mealType = {"Full", "Half"};
-    private int melTypePriceType = 0;double postMonthFirstSpData =0.5 ,postMonthSecondSpData = 0.5,postMonthThirdSpData = 0.5;
+    private int melTypePriceType = 0;double postMonthFirstSpData =1 ,postMonthSecondSpData = 1,postMonthThirdSpData = 1;
 
     public MealPricingFragment() {
         // Required empty public constructor
@@ -268,18 +268,6 @@ public class MealPricingFragment extends Fragment {
         ArrayAdapter mealPricingSpAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_dropdown_item_1line, mealPricingType);
         mealPricingSp.setAdapter(mealPricingSpAdapter);
 
-        mealPricingSp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                melTypePriceType = position;
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
         ArrayAdapter mealTypeAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_dropdown_item_1line, mealType);
         postMonthFirstSp.setAdapter(mealTypeAdapter);
         postMonthSecondSp.setAdapter(mealTypeAdapter);
@@ -311,6 +299,8 @@ public class MealPricingFragment extends Fragment {
                         dinnerLay.setVisibility(View.GONE);
                     }
 
+                    melTypePriceType = position;
+
                 } else {
 
                     if (breakFast == "1") {
@@ -329,9 +319,13 @@ public class MealPricingFragment extends Fragment {
                     } else {
                         postMonthThirdSpLay.setVisibility(View.GONE);
                     }
+
+                    melTypePriceType = position;
                     lunchLay.setVisibility(View.GONE);
                     breakfastLay.setVisibility(View.GONE);
                     dinnerLay.setVisibility(View.GONE);
+
+
 
                 }
             }

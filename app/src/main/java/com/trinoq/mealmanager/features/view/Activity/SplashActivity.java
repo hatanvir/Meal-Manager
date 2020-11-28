@@ -79,12 +79,13 @@ public class SplashActivity extends AppCompatActivity {
         myPreferences=getSharedPreferences("MyPreferences",MODE_PRIVATE).edit();
         sharedPreferences=getSharedPreferences("MyPreferences",MODE_PRIVATE);
 
-        currentPhoneNumber = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
         try{
+            currentPhoneNumber = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
             if(currentPhoneNumber == ""){
                 startActivity(new Intent(this,AuthenticationActivity.class));
             }else {
                 getCurrentUserInfo();
+               // startActivity(new Intent(this,AuthenticationActivity.class));
             }
         }catch (Exception e){
             startActivity(new Intent(this,AuthenticationActivity.class));
