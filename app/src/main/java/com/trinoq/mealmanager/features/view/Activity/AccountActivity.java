@@ -2,13 +2,16 @@ package com.trinoq.mealmanager.features.view.Activity;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -113,6 +116,8 @@ public class AccountActivity extends AppCompatActivity {
         emailEt.setText(Utils.userInformations.get(0).getEmail());
         phoneNumberEt.setText(Utils.userInformations.get(0).getPhoneNumber());
 
+        checkPermissio();
+
         backBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -173,10 +178,30 @@ public class AccountActivity extends AppCompatActivity {
             addImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    imagePickerTypeBottomSheet();
+                    try {
+                        if (ActivityCompat.checkSelfPermission(AccountActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                            ActivityCompat.requestPermissions(AccountActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                        } else {
+                            imagePickerTypeBottomSheet();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             });
 
+    }
+
+    private void checkPermissio() {
+        try {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+            } else {
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 

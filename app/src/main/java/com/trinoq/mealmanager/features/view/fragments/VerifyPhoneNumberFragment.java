@@ -170,7 +170,7 @@ public class VerifyPhoneNumberFragment extends Fragment {
                 String newToken = instanceIdResult.getToken();
                 Log.e("newToken", newToken);
 
-                registerViewModel.register(new RegisterRequest(name,phoneNumber,newToken),registerModel);
+                registerViewModel.register(new RegisterRequest(phoneNumber,name,newToken),registerModel);
 
                 registerViewModel.registerSuccess.observe(Objects.requireNonNull(getActivity()), new Observer() {
                     @Override
@@ -252,7 +252,7 @@ public class VerifyPhoneNumberFragment extends Fragment {
     }
 
     private void snackbar(String msg) {
-        //Snackbar.make(nextImage,msg,Snackbar.LENGTH_SHORT).show();
-        Log.d("ttt",msg);
+        Snackbar.make(nextImage,msg,Snackbar.LENGTH_SHORT).show();
+        //Log.d("ttt",msg);
     }
 }

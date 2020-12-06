@@ -85,7 +85,6 @@ public class SplashActivity extends AppCompatActivity {
                 startActivity(new Intent(this,AuthenticationActivity.class));
             }else {
                 getCurrentUserInfo();
-                // startActivity(new Intent(this,AuthenticationActivity.class));
             }
         }catch (Exception e){
             startActivity(new Intent(this,AuthenticationActivity.class));

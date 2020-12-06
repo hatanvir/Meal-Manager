@@ -3,6 +3,7 @@ package com.trinoq.mealmanager.features.view.fragments.groupCreation;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,16 +16,24 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.trinoq.mealmanager.R;
+import com.trinoq.mealmanager.features.adapters.NotificationListAdapter;
 import com.trinoq.mealmanager.features.model.Payables.PayablesModel;
 import com.trinoq.mealmanager.features.model.Payables.PayablesModelImplementation;
+import com.trinoq.mealmanager.features.model.pojo.request.GroupMemberCreationRequest;
 import com.trinoq.mealmanager.features.model.pojo.request.PayablesRequest;
 import com.trinoq.mealmanager.features.view.Activity.TestActivity;
 import com.trinoq.mealmanager.features.viewmodel.PayablesViewModel;
+import com.trinoq.mealmanager.network.Api;
+import com.trinoq.mealmanager.network.RetrofitClient;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class PayablesFragment extends Fragment {
 
@@ -83,8 +92,8 @@ public class PayablesFragment extends Fragment {
             public void onChanged(ResponseBody responseBody) {
                 getActivity().finish();
                 startActivity(new Intent(getActivity(), TestActivity.class));
-                Toast.makeText(getActivity(), "Success", Toast.LENGTH_SHORT).show();
 
+                addMemberTogroup();
                 editor.putString("gpId",gpId).apply();
             }
         });
@@ -94,5 +103,31 @@ public class PayablesFragment extends Fragment {
                 Toast.makeText(getActivity(), "Failed", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void addMemberTogroup() {
+
+        GroupMemberCreationRequest groupMemberCreationRequest=
+                new GroupMemberCreationRequest(gpId, FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
+        Api api = RetrofitClient.getClient().create(Api.class);
+
+        api.addGroupMember(groupMemberCreationRequest)
+                .enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if(response.code() == 200) {
+                            Toast.makeText(getActivity(), "Success", Toast.LENGTH_SHORT).show();
+
+
+                        }else {
+                            Toast.makeText(getActivity(), "Failed to join group", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Toast.makeText(getActivity(), ""+t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 }
