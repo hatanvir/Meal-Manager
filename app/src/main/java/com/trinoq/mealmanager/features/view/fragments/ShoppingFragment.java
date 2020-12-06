@@ -27,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.kaopiz.kprogresshud.KProgressHUD;
 import com.trinoq.mealmanager.R;
 import com.trinoq.mealmanager.features.adapters.BazarListRecyclerViewAdapter;
 import com.trinoq.mealmanager.features.model.models.BazarListInformation;
@@ -72,6 +73,7 @@ public class ShoppingFragment extends Fragment  {
     Api api;
     SharedPreferences myPreferences;
     int groupId,userId;
+    KProgressHUD progressHUD;
 
     public ShoppingFragment() {
         // Required empty public constructor
@@ -93,6 +95,11 @@ public class ShoppingFragment extends Fragment  {
 
         retrofit= RetrofitClient.getClient();
         api=retrofit.create(Api.class);
+        progressHUD =  KProgressHUD.create(getActivity())
+                .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
+                .setCancellable(false)
+                .setAnimationSpeed(2)
+                .setDimAmount(0.5f);
 
         final Calendar calendar=Calendar.getInstance();
 
@@ -105,7 +112,7 @@ public class ShoppingFragment extends Fragment  {
 
         }
 
-        showBazarLists();
+        showBazarList();
 
 
         addBazarFab.setOnClickListener(new View.OnClickListener() {
@@ -213,6 +220,25 @@ public class ShoppingFragment extends Fragment  {
 
     private void showBazarLists() {
 
+
+        progressHUD.show();
+
+        final Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(1000);
+
+                    /*startActivity(new Intent(SplashActivity.this, TestActivity.class));
+
+                    finish();*/
+                    progressHUD.dismiss();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        thread.start();
         adapter=new BazarListRecyclerViewAdapter(getContext());
         bazarListRcv.setAdapter(adapter);
         adapter.notifyDataSetChanged();
@@ -221,14 +247,14 @@ public class ShoppingFragment extends Fragment  {
 
     private void showBazarList() {
 
-
+        progressHUD.show();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM");
         Date current_date = new Date();
 
         String fromdate=String.valueOf(dateFormat.format(current_date)+"-01");
         String todate=String.valueOf(dateFormat.format(current_date)+"-31");
         Log.d("FAFAFA",""+fromdate+"  "+todate);
-        Call<BazarListRequest> call=api.getBazarList("2",fromdate,todate);
+        Call<BazarListRequest> call=api.getBazarList(String.valueOf(groupId),fromdate,todate);
         call.enqueue(new Callback<BazarListRequest>() {
             @Override
             public void onResponse(Call<BazarListRequest> call, Response<BazarListRequest> response) {
@@ -245,16 +271,19 @@ public class ShoppingFragment extends Fragment  {
 
                             Utils.bazarListInformations.add(bazarListInformation);
                         }
+                        adapter=new BazarListRecyclerViewAdapter(getContext());
+                        bazarListRcv.setAdapter(adapter);
+                        adapter.notifyDataSetChanged();
                     }
-                    adapter=new BazarListRecyclerViewAdapter(getContext());
-                    bazarListRcv.setAdapter(adapter);
-                    adapter.notifyDataSetChanged();
+
                 }
+                progressHUD.dismiss();
             }
 
             @Override
             public void onFailure(Call<BazarListRequest> call, Throwable t) {
 
+                progressHUD.dismiss();
             }
         });
     }

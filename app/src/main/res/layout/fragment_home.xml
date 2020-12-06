@@ -356,7 +356,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView10"
                 app:layout_constraintVertical_bias="0.0" />
 
-            <TextView
+           <!-- <TextView
                 android:id="@+id/textView7"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -372,8 +372,8 @@
 
             <TextView
                 android:id="@+id/totalDueTv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="38dp"
+                android:layout_height="18dp"
                 android:gravity="right"
                 android:text="2300/-"
                 android:textColor="#50D890"
@@ -383,7 +383,7 @@
                 app:layout_constraintHorizontal_bias="0.95"
                 app:layout_constraintStart_toEndOf="@+id/textView7"
                 app:layout_constraintTop_toBottomOf="@+id/textView11"
-                app:layout_constraintVertical_bias="0.01999998" />
+                app:layout_constraintVertical_bias="0.01999998" />-->
 
             <View
                 android:id="@+id/view4"
@@ -395,8 +395,8 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView7"
-                app:layout_constraintVertical_bias="0.07999998" />
+                app:layout_constraintTop_toBottomOf="@+id/textView11"
+                app:layout_constraintVertical_bias="0.13999999" />
 
             <TextView
                 android:id="@+id/textView12"

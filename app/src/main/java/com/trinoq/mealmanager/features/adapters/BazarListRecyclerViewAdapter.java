@@ -3,6 +3,7 @@ package com.trinoq.mealmanager.features.adapters;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -50,9 +51,14 @@ public class BazarListRecyclerViewAdapter  extends RecyclerView.Adapter<BazarLis
     Retrofit retrofit;
     Api api;
     DatePickerDialog datePickerDialog;
+    SharedPreferences myPreferences;
+    int groupId,userIds;
 
     public BazarListRecyclerViewAdapter(Context context) {
         this.context = context;
+        myPreferences=context.getSharedPreferences("MyPreferences", Context.MODE_PRIVATE);
+        userIds=myPreferences.getInt("UserId",0);
+        groupId=myPreferences.getInt("GroupId",0);
     }
 
     @NonNull
@@ -189,7 +195,7 @@ public class BazarListRecyclerViewAdapter  extends RecyclerView.Adapter<BazarLis
                bazarUpdatedFab.setOnClickListener(new View.OnClickListener() {
                    @Override
                    public void onClick(View view) {
-                       Call<ResponseBody> bazarUpdated=api.setBazarUpdated(bazarId,new BazarInsertRequest("2",String.valueOf(userId),totalBazarEt.getText().toString(),bazarDate));
+                       Call<ResponseBody> bazarUpdated=api.setBazarUpdated(bazarId,new BazarInsertRequest(String.valueOf(groupId),String.valueOf(userId),totalBazarEt.getText().toString(),bazarDate));
 
                        bazarUpdated.enqueue(new Callback<ResponseBody>() {
                            @Override

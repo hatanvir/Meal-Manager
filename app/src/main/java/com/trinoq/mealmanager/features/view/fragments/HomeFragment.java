@@ -91,8 +91,8 @@ public class HomeFragment extends Fragment {
     TextView mealReatTv;
     @BindView(R.id.totalconsumedTv)
     TextView totalConsumedTv;
-    @BindView(R.id.totalDueTv)
-    TextView totalDueTv;
+   /* @BindView(R.id.totalDueTv)
+    TextView totalDueTv;*/
     @BindView(R.id.totalRemainingTv)
     TextView totalRemainingTv;
 
@@ -264,7 +264,7 @@ public class HomeFragment extends Fragment {
                     totaldue= (int) (totalConsumed-userTotalBazar);
 
                     totalConsumedTv.setText(String.format("%.2f",totalConsumed)+"/-");
-                    totalDueTv.setText(String.valueOf(totaldue)+"/-");
+                    totalRemainingTv.setText(String.valueOf(totaldue)+"/-");
 
                     totalUserMealTv.setText(String.valueOf(totalUserMeals[0]));
                     Log.d("MMMM",String.valueOf(totalmeal[0])+"  "+String.valueOf(totalUserMeals[0]));
@@ -426,7 +426,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                Call<ResponseBody> call=api.updatePayable("2",new PayablesUpdateRequest(String.valueOf(groupId),electricityEt.getText().toString(),otherEt.getText().toString(),mealEt.getText().toString(),houserentEt.getText().toString()));
+                Call<ResponseBody> call=api.updatePayable(String.valueOf(groupId),new PayablesUpdateRequest(String.valueOf(groupId),electricityEt.getText().toString(),otherEt.getText().toString(),mealEt.getText().toString(),houserentEt.getText().toString()));
 
                 call.enqueue(new Callback<ResponseBody>() {
                     @Override
@@ -458,7 +458,6 @@ public class HomeFragment extends Fragment {
     }
 
     private void showBazarList() {
-
 
         Log.d("FAFAFA",""+fromdate+"  "+todate);
         Call<BazarListRequest> call=api.getBazarList(String.valueOf(groupId),fromdate,todate);
