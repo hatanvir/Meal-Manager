@@ -83,7 +83,7 @@ public class SettingFragment extends Fragment {
        phoneNumberTv.setText(Utils.userInformations.get(0).getPhoneNumber());
 
         Log.d("IIIIMMM",Utils.userInformations.get(0).getImage());
-        Picasso.get().load(Utils.IMAGE_BASE_URL+Utils.userInformations.get(0).getImage()).resize(400,400).centerCrop().into(profileImage);
+        Picasso.get().load(Utils.IMAGE_BASE_URL +Utils.userInformations.get(0).getImage()).resize(400,400).centerCrop().into(profileImage);
 
         generalLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
