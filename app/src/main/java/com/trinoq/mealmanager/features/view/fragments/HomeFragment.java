@@ -21,6 +21,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.kaopiz.kprogresshud.KProgressHUD;
 import com.trinoq.mealmanager.R;
 import com.trinoq.mealmanager.features.model.models.BazarListInformation;
 import com.trinoq.mealmanager.features.model.models.DailyMealInputEndTime;
@@ -105,12 +107,14 @@ public class HomeFragment extends Fragment {
     BazarListInformation bazarListInformation;
     String fromdate;
     String todate;
+    KProgressHUD progressHUD;
     //private String userId,breakfastTime,lunchTime,dinnerTime;
     private int userTotalBazar=0,groupTotalBazar=0,totaldue,totalRemaining;
     double mealRate,totalConsumed;
     SharedPreferences sharedPreferences;
     SharedPreferences myPreferences;
     int groupId,userId;
+    String currentPhoneNumber;
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -127,6 +131,11 @@ public class HomeFragment extends Fragment {
         myPreferences=getActivity().getSharedPreferences("MyPreferences", Context.MODE_PRIVATE);
         userId=myPreferences.getInt("UserId",0);
         groupId=myPreferences.getInt("GroupId",0);
+        progressHUD =  KProgressHUD.create(getActivity())
+                .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
+                .setCancellable(false)
+                .setAnimationSpeed(2)
+                .setDimAmount(0.5f);
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM");
         Date current_date = new Date();
@@ -134,6 +143,7 @@ public class HomeFragment extends Fragment {
 
         fromdate=String.valueOf(dateFormat.format(current_date)+"-01");
         todate=String.valueOf(dateFormat.format(current_date)+"-31");
+        currentPhoneNumber = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
 
         getGroupAllMember();
         showBazarList();
@@ -258,7 +268,12 @@ public class HomeFragment extends Fragment {
                         }
 
                     }
-                    mealRate=Double.valueOf(groupTotalBazar)/totalmeal[0];
+                    if (totalmeal[0]>0) {
+                        mealRate = Double.valueOf(groupTotalBazar) / totalmeal[0];
+                    }
+                    else {
+                        mealRate=0;
+                    }
                     mealReatTv.setText(String.format("%.2f",mealRate)+"/-");
                     totalConsumed= mealRate*totalUserMeals[0];
                     totaldue= (int) (totalConsumed-userTotalBazar);
@@ -286,12 +301,12 @@ public class HomeFragment extends Fragment {
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 Date current_date = new Date();
                 // Call<ResponseBody> call=api.setUserMeall(new UserMealCreateRequest("2",Utils.userInformations.get(0).getUserId(),"01747477690",dateFormat.format(current_date),mealnumberTv.getText().toString(),mealNameTv.getText().toString()));
-                Call<ResponseBody> call=api.setUserMeall(new UserMealCreateRequest(String.valueOf(groupId),Utils.userInformations.get(0).getUserId(),"01747477690",dateFormat.format(current_date),Integer.parseInt(mealnumberTv.getText().toString()),mealNameTv.getText().toString()));
+                Call<ResponseBody> call=api.setUserMeall(new UserMealCreateRequest(String.valueOf(groupId),String.valueOf(userId),currentPhoneNumber,dateFormat.format(current_date),Integer.parseInt(mealnumberTv.getText().toString()),mealNameTv.getText().toString()));
 
                 call.enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        Log.d("HGGG",String.valueOf(response.code()+"  "+dateFormat.format(current_date)));
+                        Log.d("HGGG",String.valueOf(response.code()+" Group Id "+groupId+" User Id"+userId+" Phone "+currentPhoneNumber+" Date "+dateFormat.format(current_date))+" Meal "+mealnumberTv.getText().toString()+" Meal Name "+mealNameTv.getText().toString());
                         if (response.code()==200)
                         {
                             Toast.makeText(getContext(), "Success", Toast.LENGTH_SHORT).show();
@@ -365,6 +380,11 @@ public class HomeFragment extends Fragment {
                 countDownStart(dinner_Time);
                 setDailyMeal();
             }
+            else {
+                mealNameTv.setText("Dinner");
+                countDownStart(dinner_Time);
+                setDailyMeal();
+            }
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -389,6 +409,7 @@ public class HomeFragment extends Fragment {
 
                                 GroupAllMembersInformation groupAllMembersInformation=new GroupAllMembersInformation(userinfo.getId(),userinfo.getPhoneNumber(),userinfo.getFullName(),userinfo.getEmail());
                                 Utils.groupAllMembersInformations.add(groupAllMembersInformation);
+
                             }
                         }
                     }
@@ -398,6 +419,7 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onFailure(Call<GroupMemberSearchRequest> call, Throwable t) {
+
 
             }
         });
@@ -459,6 +481,7 @@ public class HomeFragment extends Fragment {
 
     private void showBazarList() {
 
+        progressHUD.show();
         Log.d("FAFAFA",""+fromdate+"  "+todate);
         Call<BazarListRequest> call=api.getBazarList(String.valueOf(groupId),fromdate,todate);
         call.enqueue(new Callback<BazarListRequest>() {
@@ -485,6 +508,7 @@ public class HomeFragment extends Fragment {
                         }
                         getUserMeal(groupTotalBazar,userTotalBazar);
                         userTotalPaidTv.setText(String.valueOf(userTotalBazar)+"/-");
+                        progressHUD.dismiss();
                     }
 
                 }
@@ -492,7 +516,7 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onFailure(Call<BazarListRequest> call, Throwable t) {
-
+                progressHUD.dismiss();
             }
         });
     }

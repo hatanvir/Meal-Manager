@@ -4,24 +4,31 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.squareup.picasso.Picasso;
 import com.trinoq.mealmanager.R;
 import com.trinoq.mealmanager.features.model.models.UserInformation;
 import com.trinoq.mealmanager.features.model.pojo.request.User;
 import com.trinoq.mealmanager.features.model.pojo.request.UserInformationRequest;
 import com.trinoq.mealmanager.features.view.Activity.AboutActivity;
 import com.trinoq.mealmanager.features.view.Activity.AccountActivity;
+import com.trinoq.mealmanager.features.view.Activity.AuthenticationActivity;
 import com.trinoq.mealmanager.features.view.Activity.GeneralActivity;
 import com.trinoq.mealmanager.features.view.Activity.NotificationActivity;
 import com.trinoq.mealmanager.network.Api;
 import com.trinoq.mealmanager.network.RetrofitClient;
 import com.trinoq.mealmanager.utils.Utils;
+
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -47,6 +54,10 @@ public class SettingFragment extends Fragment {
     LinearLayout notificationLinearLayout;
     @BindView(R.id.aboutlinearLayout)
     LinearLayout aboutLinearLayout;
+    @BindView(R.id.logoutTv)
+    TextView logoutTv;
+
+    FirebaseAuth firebaseAuth;
 
     public SettingFragment() {
         // Required empty public constructor
@@ -59,37 +70,20 @@ public class SettingFragment extends Fragment {
         View view= inflater.inflate(R.layout.fragment_setting, container, false);
         ButterKnife.bind(this,view);
 
-       /* Retrofit retrofit=RetrofitClient.getClient();
-        Api api=retrofit.create(Api.class);
-
-        Call<UserInformationRequest> call=api.UserInformation("01781998168");
-        call.enqueue(new Callback<UserInformationRequest>() {
+        firebaseAuth=FirebaseAuth.getInstance();
+        logoutTv.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onResponse(Call<UserInformationRequest> call, Response<UserInformationRequest> response) {
-                if (response.code()==200){
-                    UserInformationRequest informationRequest=response.body();
-                    if (informationRequest.getUser().size()>0) {
-                        for (User user:informationRequest.getUser()){
-
-                            userNameTv.setText(user.getFullName());
-                            phoneNumberTv.setText(user.getPhoneNumber());
-                            UserInformation userInformation=new UserInformation(user.getId().toString(),user.getPhoneNumber(),
-                                    "null",user.getFullName(),"null","null","null",
-                                    user.getCreatedAt(),user.getUpdatedAt());
-                            Utils.userInformations.add(userInformation);
-                        }
-                    }
-                }
+            public void onClick(View v) {
+                firebaseAuth.signOut();
+                startActivity(new Intent(getActivity(), AuthenticationActivity.class));
             }
-
-            @Override
-            public void onFailure(Call<UserInformationRequest> call, Throwable t) {
-
-            }
-        });*/
+        });
 
        userNameTv.setText(Utils.userInformations.get(0).getUserName());
        phoneNumberTv.setText(Utils.userInformations.get(0).getPhoneNumber());
+
+        Log.d("IIIIMMM",Utils.userInformations.get(0).getImage());
+        Picasso.get().load(Utils.IMAGE_BASE_URL+Utils.userInformations.get(0).getImage()).resize(400,400).centerCrop().into(profileImage);
 
         generalLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -121,4 +115,5 @@ public class SettingFragment extends Fragment {
 
         return view;
     }
+    
 }

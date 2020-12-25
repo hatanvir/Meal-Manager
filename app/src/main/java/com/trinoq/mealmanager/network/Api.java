@@ -28,6 +28,7 @@ import com.trinoq.mealmanager.features.model.pojo.response.groupcreate.GroupCrea
 import com.trinoq.mealmanager.features.model.pojo.response.invitation.Invitation;
 
 import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -68,7 +69,7 @@ public interface Api {
 
     @Multipart
     @POST("UpdateUser/{id}")
-    Call<ResponseBody> updatedUser(@Path("id") Integer id,@Part MultipartBody.Part file, @Part("email") ResponseBody email);
+    Call<ResponseBody> updatedUser(@Path("id") Integer id,@Part MultipartBody.Part file, @Part("email") RequestBody email);
 
     @POST("BazarInsert")
     Call<ResponseBody> setBazar(@Body BazarInsertRequest bazarInsertRequest);
