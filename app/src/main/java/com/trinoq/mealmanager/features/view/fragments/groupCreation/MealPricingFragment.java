@@ -19,6 +19,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.kaopiz.kprogresshud.KProgressHUD;
 import com.trinoq.mealmanager.R;
 import com.trinoq.mealmanager.features.model.PostMonth.PostMonthModel;
 import com.trinoq.mealmanager.features.model.PostMonth.PostMonthModelImplementation;
@@ -100,6 +101,9 @@ public class MealPricingFragment extends Fragment {
     PostMonthViewModel postMonthViewModel;
     PostMonthModel postMonthModel;
 
+    private KProgressHUD progressHUD;
+
+
     private String[] mealPricingType = {"Pree month pricing", "Post month pricing "};
     private String[] mealType = {"Full", "Half"};
     private int melTypePriceType = 0;double postMonthFirstSpData =1 ,postMonthSecondSpData = 1,postMonthThirdSpData = 1;
@@ -127,7 +131,11 @@ public class MealPricingFragment extends Fragment {
 
         String id = getArguments().getString("gpId");
 
-        Log.d("ttt", String.valueOf(mealPricingType));
+        progressHUD =  KProgressHUD.create(getActivity())
+                .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
+                .setCancellable(false)
+                .setAnimationSpeed(2)
+                .setDimAmount(0.5f);
 
         setUi();
         backBt.setOnClickListener(new View.OnClickListener() {
@@ -141,8 +149,7 @@ public class MealPricingFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if(melTypePriceType == 0){
-                    Toast.makeText(getActivity(), "Called", Toast.LENGTH_SHORT).show();
-                    Log.d("ttt",postMonthFirstSpData+" "+postMonthSecondSpData+" "+postMonthThirdSpData);
+                    progressHUD.setLabel("Saving...").show();
                     preMonthViewModel.postMostMonthRequest(new PremonthRequest(id,breakfastEt.getText().toString(),lunchEt.getText().toString(),dinnerEt.getText().toString()),preMonthModel);
                     preMonthViewModel.setPreMothSuccess.observe(getActivity(), new Observer<ResponseBody>() {
                         @Override
@@ -157,20 +164,21 @@ public class MealPricingFragment extends Fragment {
                             FragmentTransaction transaction = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
                             transaction.replace(R.id.groupCreateViewContainer, fragment)
                                     .addToBackStack("GRP_DETAILES").commit();
+                            progressHUD.dismiss();
                         }
                     });
 
                     preMonthViewModel.setPreMothFailed.observe(getActivity(), new Observer<String>() {
                         @Override
                         public void onChanged(String s) {
-                            Toast.makeText(getActivity(), "Failed", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "Failed to add meal pricing", Toast.LENGTH_SHORT).show();
+                            progressHUD.dismiss();
                         }
                     });
                 }else if(melTypePriceType == 1){
-
-                    Log.d("ttt2",postMonthFirstSpData+" "+postMonthSecondSpData+" "+postMonthThirdSpData);
                     postMonthViewModel.postMostMonthRequest(new PostMonthRequest(id,String.valueOf(postMonthFirstSpData),String.valueOf(postMonthSecondSpData),
                             String.valueOf(postMonthThirdSpData)),postMonthModel);
+
                     postMonthViewModel.setPostMothSuccess.observe(getActivity(), new Observer<ResponseBody>() {
                         @Override
                         public void onChanged(ResponseBody responseBody) {
@@ -184,13 +192,16 @@ public class MealPricingFragment extends Fragment {
                             FragmentTransaction transaction = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
                             transaction.replace(R.id.groupCreateViewContainer, fragment)
                                     .addToBackStack("GRP_DETAILES").commit();
+
+                            progressHUD.dismiss();
                         }
                     });
 
                     postMonthViewModel.setPostMothFailed.observe(getActivity(), new Observer<String>() {
                         @Override
                         public void onChanged(String s) {
-                            Toast.makeText(getActivity(), "Failed", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "Failed to add meal pricing", Toast.LENGTH_SHORT).show();
+                            progressHUD.dismiss();
                         }
                     });
 

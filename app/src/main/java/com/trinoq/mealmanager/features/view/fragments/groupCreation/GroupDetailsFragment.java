@@ -85,6 +85,7 @@ public class GroupDetailsFragment extends Fragment implements Validator.Validati
         validator.setValidationListener(this);
 
         model = new GroupCreateImplimentation(getActivity());
+        viewmodel = new ViewModelProvider(this).get(GroupDetailsViewmodel.class);
         //viewmodel = new ViewModelProvider(this).get(GroupDetailsViewmodel.class);
 
         progressHUD =  KProgressHUD.create(getActivity())
@@ -108,8 +109,14 @@ public class GroupDetailsFragment extends Fragment implements Validator.Validati
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        validator.cancelAsync();
+    }
+
+    @Override
     public void onValidationSucceeded() {
-        viewmodel = new ViewModelProvider(this).get(GroupDetailsViewmodel.class);
+
         progressHUD.setLabel("Saving...").show();
         String groupName = groupNameEt.getText().toString();
         String address = addressEt.getText().toString();
@@ -118,17 +125,21 @@ public class GroupDetailsFragment extends Fragment implements Validator.Validati
         if(breakfastCb.isChecked()) {breakFast = "1";}else {breakFast = "0";}
         if(launchCb.isChecked()) {lunch = "1";}else {lunch = "0";}
         if (dinnerCb.isChecked()) {dinner = "1";}else {dinner = "0";}
-
+        Objects.requireNonNull(getActivity()).getViewModelStore().clear();
         viewmodel.groupDetailsRequest(new GroupCreateRequest(groupName,address,cooksName,"null",breakFast+"/"+lunch+"/"+dinner,"1"),model);
 
+        viewmodel.groupDetailsRequestSuccess.removeObservers(this);
         viewmodel.groupDetailsRequestSuccess.observe(this, new Observer<GroupCreatResponse>() {
             @Override
             public void onChanged(GroupCreatResponse responseBody) {
                 Fragment fragment = new MealPricingFragment();
                 setfargment(fragment,responseBody.getGroup().getId().toString());
+                Toast.makeText(getActivity(), "Success", Toast.LENGTH_SHORT).show();
                 progressHUD.dismiss();
             }
         });
+
+        viewmodel.groupDetailsRequestFailed.removeObservers(this);
         viewmodel.groupDetailsRequestFailed.observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {

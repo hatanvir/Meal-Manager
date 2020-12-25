@@ -17,6 +17,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.kaopiz.kprogresshud.KProgressHUD;
 import com.trinoq.mealmanager.R;
 import com.trinoq.mealmanager.features.adapters.NotificationListAdapter;
 import com.trinoq.mealmanager.features.model.Payables.PayablesModel;
@@ -56,6 +57,7 @@ public class PayablesFragment extends Fragment {
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
     String gpId;
+    KProgressHUD progressHUD;
 
     public PayablesFragment() {
         // Required empty public constructor
@@ -69,6 +71,7 @@ public class PayablesFragment extends Fragment {
         ButterKnife.bind(this, v);
 
         sharedPreferences = getActivity().getSharedPreferences("GRP_INFO", Context.MODE_PRIVATE);
+
         editor = sharedPreferences.edit();
          gpId = getArguments().getString("gpId").toString();
 
@@ -77,6 +80,12 @@ public class PayablesFragment extends Fragment {
         model = new PayablesModelImplementation(getActivity());
         viewModel = new ViewModelProvider(getActivity()).get(PayablesViewModel.class);
 
+        progressHUD =  KProgressHUD.create(getActivity())
+                .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
+                .setCancellable(false)
+                .setAnimationSpeed(2)
+                .setDimAmount(0.5f);
+
         nextImage.setOnClickListener(v12 -> postPayablesOperation());
 
         backBt.setOnClickListener(v1 -> getActivity().getSupportFragmentManager().popBackStack());
@@ -84,29 +93,33 @@ public class PayablesFragment extends Fragment {
     }
 
     private void postPayablesOperation() {
+        progressHUD.setLabel("Saving..").show();
+
         viewModel.payablesRequest(new PayablesRequest("1", electricityEt.getText().toString(),
                 othersEt.getText().toString(), mealAdvanceEt.getText().toString(),
                 mealAdvanceEt.getText().toString(), houseRentEt.getText().toString()), model);
         viewModel.payablesCreateSuccess.observe(getActivity(), new Observer<ResponseBody>() {
             @Override
             public void onChanged(ResponseBody responseBody) {
-                getActivity().finish();
-                startActivity(new Intent(getActivity(), TestActivity.class));
+               // getActivity().finish();
+               // startActivity(new Intent(getActivity(), TestActivity.class));
 
                 addMemberTogroup();
                 editor.putString("gpId",gpId).apply();
+                progressHUD.dismiss();
             }
         });
         viewModel.payablesCreateFailed.observe(getActivity(), new Observer<String>() {
             @Override
             public void onChanged(String s) {
                 Toast.makeText(getActivity(), "Failed", Toast.LENGTH_SHORT).show();
+                progressHUD.dismiss();
             }
         });
     }
 
     private void addMemberTogroup() {
-
+        progressHUD.setLabel("Saving..").show();
         GroupMemberCreationRequest groupMemberCreationRequest=
                 new GroupMemberCreationRequest(gpId, FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
         Api api = RetrofitClient.getClient().create(Api.class);
@@ -117,16 +130,19 @@ public class PayablesFragment extends Fragment {
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         if(response.code() == 200) {
                             Toast.makeText(getActivity(), "Success", Toast.LENGTH_SHORT).show();
-
-
+                             getActivity().finish();
+                             startActivity(new Intent(getActivity(), TestActivity.class));
+                             progressHUD.dismiss();
                         }else {
                             Toast.makeText(getActivity(), "Failed to join group", Toast.LENGTH_SHORT).show();
+                            progressHUD.dismiss();
                         }
                     }
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
                         Toast.makeText(getActivity(), ""+t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                        progressHUD.dismiss();
                     }
                 });
     }

@@ -15,6 +15,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.kaopiz.kprogresshud.KProgressHUD;
 import com.trinoq.mealmanager.R;
 import com.trinoq.mealmanager.features.model.MealInputEndTime.MealInputEndTimeImpl;
 import com.trinoq.mealmanager.features.model.MealInputEndTime.MealInputEndTimeModel;
@@ -51,6 +52,8 @@ public class DailyMealInputEndTimeFragment extends Fragment {
     MealInputEndTimeModel model;
     DailyMealInputEndTimeViewModel viewModel;
 
+    private KProgressHUD progressHUD;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -63,6 +66,12 @@ public class DailyMealInputEndTimeFragment extends Fragment {
         model = new MealInputEndTimeImpl(getActivity());
         viewModel = new ViewModelProvider(this).get(DailyMealInputEndTimeViewModel.class);
 
+        progressHUD =  KProgressHUD.create(getActivity())
+                .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
+                .setCancellable(false)
+                .setAnimationSpeed(2)
+                .setDimAmount(0.5f);
+
         backBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,6 +82,7 @@ public class DailyMealInputEndTimeFragment extends Fragment {
         nextImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                progressHUD.setLabel("Saving..").show();
                 viewModel.dailyMealInputRequest(new DailyMealInputEndTimeRequest(gpId,breakfastEt.getText().toString(),lunchEt.getText().toString(),dinnerEt.getText().toString()),model);
                 viewModel.setDailyMealInputEndTimeSuccess.observe(getActivity(), new Observer<ResponseBody>() {
                     @Override
@@ -89,12 +99,14 @@ public class DailyMealInputEndTimeFragment extends Fragment {
                         FragmentTransaction transaction = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
                         transaction.replace(R.id.groupCreateViewContainer,fragment)
                                 .addToBackStack("GRP_DETAILES").commit();
+                        progressHUD.dismiss();
                     }
                 });
                 viewModel.setDailyMealInputEndTimeFailed.observe(getActivity(), new Observer<String>() {
                     @Override
                     public void onChanged(String s) {
                         Toast.makeText(getActivity(), "Failed", Toast.LENGTH_SHORT).show();
+                        progressHUD.dismiss();
                     }
                 });
             }

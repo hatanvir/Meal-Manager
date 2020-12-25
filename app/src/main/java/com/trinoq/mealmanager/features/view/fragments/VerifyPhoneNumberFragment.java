@@ -127,7 +127,7 @@ public class VerifyPhoneNumberFragment extends Fragment {
     private void phoneAuth(){
         viewModel.authInfo(phoneNumber, getActivity(),model);
 
-        viewModel.authInfo(phoneNumber, getActivity(),model);
+      //  viewModel.authInfo(phoneNumber, getActivity(),model);
 
         viewModel.codeSentSuccess.observe(getActivity(), new Observer() {
             @Override

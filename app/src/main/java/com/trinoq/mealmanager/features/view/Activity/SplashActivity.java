@@ -156,6 +156,7 @@ public class SplashActivity extends AppCompatActivity {
 
 
     }
+
     private void getActiveGroup(){
         Call<ActiveGroupRequest> activeGroupRequestCall=api.getActiveGroup(currentPhoneNumber);
         activeGroupRequestCall.enqueue(new Callback<ActiveGroupRequest>() {
@@ -197,6 +198,8 @@ public class SplashActivity extends AppCompatActivity {
 
                             }
                         });
+
+
                         addActivietGroup.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
