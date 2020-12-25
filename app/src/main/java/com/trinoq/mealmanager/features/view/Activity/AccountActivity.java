@@ -33,6 +33,7 @@ import android.widget.Toast;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.squareup.picasso.Picasso;
 import com.trinoq.mealmanager.R;
 import com.trinoq.mealmanager.features.model.models.UserInformation;
 import com.trinoq.mealmanager.network.Api;
@@ -115,6 +116,7 @@ public class AccountActivity extends AppCompatActivity {
         nameEt.setText(Utils.userInformations.get(0).getUserName());
         emailEt.setText(Utils.userInformations.get(0).getEmail());
         phoneNumberEt.setText(Utils.userInformations.get(0).getPhoneNumber());
+        Picasso.get().load(Utils.IMAGE_BASE_URL+Utils.userInformations.get(0).getImage()).resize(400,400).centerCrop().into(profileCircleImageView);
 
         checkPermissio();
 
@@ -220,13 +222,13 @@ public class AccountActivity extends AppCompatActivity {
         api=retrofit.create(Api.class);
 
         Log.d("ttttttt",part+" "+emailEt.getText().toString());
-        Call<ResponseBody> call=api.updatedUser(userId,part,ResponseBody.create(MultipartBody.FORM,emailEt.getText().toString()));
+        Call<ResponseBody> call=api.updatedUser(userId,part,RequestBody.create(okhttp3.MultipartBody.FORM,emailEt.getText().toString()));
 
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 
-                Log.d("DDDD",String.valueOf(response.code()+" "+response.message()));
+                Log.d("DDDD",String.valueOf(response.code()+" "+response.message()+ "  "+response.body()));
 
                 if (response.code()==200){
 
@@ -294,11 +296,11 @@ public class AccountActivity extends AppCompatActivity {
             }
         }else if(requestCode == 2){
             try{
-                Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
-                if (thumbnail!=null){
-                    filePath = saveImage(thumbnail);
+                Bitmap profileimage = (Bitmap) data.getExtras().get("data");
+                if (profileimage!=null){
+                    filePath = saveImage(profileimage);
                     if(checkImageSize(filePath)){
-                        profileCircleImageView.setImageBitmap(thumbnail);
+                        profileCircleImageView.setImageBitmap(profileimage);
                     }else {
                         maximumImageAlertDialog();
                     }
@@ -323,7 +325,7 @@ public class AccountActivity extends AppCompatActivity {
     public String saveImage(Bitmap myBitmap) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         myBitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
-        File wallpaperDirectory = new File(Environment.getExternalStorageDirectory() + "/TscPhoto");
+        File wallpaperDirectory = new File(Environment.getExternalStorageDirectory() + "/MealManagerPhoto");
         if (!wallpaperDirectory.exists()) {  // have the object build the directory structure, if needed.
             wallpaperDirectory.mkdirs();
         }

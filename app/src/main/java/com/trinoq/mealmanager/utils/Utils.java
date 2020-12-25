@@ -21,4 +21,5 @@ public class Utils {
     public static Integer count=0;
 
     public static ArrayList<DailyMealInputEndTime> dailyMealInputEndTimeinfo=new ArrayList<>();
+    public final static String IMAGE_BASE_URL = "http://mealapp.trinoq.com/Userimage/";
 }

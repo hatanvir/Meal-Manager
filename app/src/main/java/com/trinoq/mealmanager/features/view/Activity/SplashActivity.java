@@ -99,6 +99,7 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void getCurrentUserInfo() {
+        Utils.userInformations.clear();
         Call<UserInformationRequest> call=api.UserInformation(currentPhoneNumber);
         call.enqueue(new Callback<UserInformationRequest>() {
             @Override
@@ -116,7 +117,7 @@ public class SplashActivity extends AppCompatActivity {
                             }
                             else {
                                 UserInformation userInformation=new UserInformation(user.getId().toString(),user.getPhoneNumber(),
-                                        "null",user.getFullName(),String.valueOf(user.getEmail()),"null",String.valueOf(user.getActiveGroupid()),
+                                        "null",user.getFullName(),String.valueOf(user.getEmail()),String.valueOf(user.getImage()),String.valueOf(user.getActiveGroupid()),
                                         user.getCreatedAt(),user.getUpdatedAt());
                                 Utils.userInformations.add(userInformation);
                                 Utils.useridTest=user.getId().toString();
@@ -158,6 +159,7 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void getActiveGroup(){
+        Utils.activeGroupInformations.clear();
         Call<ActiveGroupRequest> activeGroupRequestCall=api.getActiveGroup(currentPhoneNumber);
         activeGroupRequestCall.enqueue(new Callback<ActiveGroupRequest>() {
             @Override
