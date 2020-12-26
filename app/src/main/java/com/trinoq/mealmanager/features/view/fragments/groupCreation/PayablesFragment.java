@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -28,6 +29,8 @@ import com.trinoq.mealmanager.features.view.Activity.TestActivity;
 import com.trinoq.mealmanager.features.viewmodel.PayablesViewModel;
 import com.trinoq.mealmanager.network.Api;
 import com.trinoq.mealmanager.network.RetrofitClient;
+
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -129,9 +132,11 @@ public class PayablesFragment extends Fragment {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         if(response.code() == 200) {
-                            Toast.makeText(getActivity(), "Success", Toast.LENGTH_SHORT).show();
                              getActivity().finish();
-                             startActivity(new Intent(getActivity(), TestActivity.class));
+                             //startActivity(new Intent(getActivity(), Add.class));
+                            FragmentTransaction transaction = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
+                            transaction.replace(R.id.groupCreateViewContainer, new CongrastFragment())
+                                    .addToBackStack("CONGRAST_FRAG").commit();
                              progressHUD.dismiss();
                         }else {
                             Toast.makeText(getActivity(), "Failed to join group", Toast.LENGTH_SHORT).show();
