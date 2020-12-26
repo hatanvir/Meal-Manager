@@ -45,6 +45,8 @@ public class GroupMemberSearchActivity extends AppCompatActivity {
     RecyclerView membersListRc;
     @BindView(R.id.clearBt)
     ImageView clearBt;
+    @BindView(R.id.emptyRecyclerViewTv)
+    TextView emptyTv;
    /* @BindView(R.id.backBt)
     ImageView backImage;*/
 
@@ -97,6 +99,10 @@ public class GroupMemberSearchActivity extends AppCompatActivity {
                 phoneNumberEt.setText(null);
             }
         });
+
+        emptyTv.setVisibility(View.VISIBLE);
+
+
        /* backImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -149,6 +155,11 @@ public class GroupMemberSearchActivity extends AppCompatActivity {
                                 Log.d("FSFS",userName.toString()+"  "+phoneNumber.toString());                            }
                                     }*/
 
+                                    if (groupRequest.getMember().size() == 0) {
+                                        emptyTv.setVisibility(View.VISIBLE);
+                                    } else {
+                                        emptyTv.setVisibility(View.GONE);
+                                    }
                                     mAdapter=new GroupMembersListRecyclerViewAdapter(GroupMemberSearchActivity.this,groupRequest.getMember());
                                     membersListRc.setAdapter(mAdapter);
                                     // Log.d("FSFS",userName.toString()+"  "+phoneNumber.toString())
