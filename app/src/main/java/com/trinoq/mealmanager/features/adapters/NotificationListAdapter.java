@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.trinoq.mealmanager.R;
 import com.trinoq.mealmanager.features.model.fcmNotification.Data;
 import com.trinoq.mealmanager.features.model.fcmNotification.NotificationSender;
@@ -29,8 +30,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
-public class NotificationListAdapter extends RecyclerView.Adapter<NotificationListAdapter.Viewholder> {
+public class
+NotificationListAdapter extends RecyclerView.Adapter<NotificationListAdapter.Viewholder> {
     Context context;
     List<Inviationdatum> inviationdata;
     String viewTypeTag;
@@ -114,13 +117,16 @@ public class NotificationListAdapter extends RecyclerView.Adapter<NotificationLi
     private void addMemberTogroup(int position,NotificationListAdapter.Viewholder holder) {
 
         GroupMemberCreationRequest groupMemberCreationRequest=
-                new GroupMemberCreationRequest(inviationdata.get(position).getGroupId().toString(),"01781998168");
+                new GroupMemberCreationRequest(inviationdata.get(position).getGroupId().toString(), FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
+
+        Log.d("ttttrrrr",inviationdata.get(position).getGroupId().toString()+" "+FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber().toString());
         Api api = RetrofitClient.getClient().create(Api.class);
 
         api.addGroupMember(groupMemberCreationRequest)
                 .enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        Log.d("ttteee",""+response.code());
                         if(response.code() == 200) {
                             Toast.makeText(context, "Successfully accepted", Toast.LENGTH_SHORT).show();
 
@@ -145,7 +151,7 @@ public class NotificationListAdapter extends RecyclerView.Adapter<NotificationLi
 
 
     private void sendNotificationToReceiver(int position) {
-        Retrofit retrofit = new Retrofit.Builder().baseUrl("https://fcm.googleapis.com/").build();
+        Retrofit retrofit = new Retrofit.Builder().baseUrl("https://fcm.googleapis.com/").addConverterFactory(GsonConverterFactory.create()).build();
 
         Data data = new Data("Invitation","Accepted your request.");
 
