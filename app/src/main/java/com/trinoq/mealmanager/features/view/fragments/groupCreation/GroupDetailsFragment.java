@@ -134,7 +134,7 @@ public class GroupDetailsFragment extends Fragment implements Validator.Validati
             public void onChanged(GroupCreatResponse responseBody) {
                 Fragment fragment = new MealPricingFragment();
                 setfargment(fragment,responseBody.getGroup().getId().toString());
-                Toast.makeText(getActivity(), "Success", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Group created successfully", Toast.LENGTH_SHORT).show();
                 progressHUD.dismiss();
             }
         });
@@ -143,7 +143,7 @@ public class GroupDetailsFragment extends Fragment implements Validator.Validati
         viewmodel.groupDetailsRequestFailed.observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
-                Toast.makeText(getActivity(), "Failed to save data.Try Again"+s, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Failed to create group.Try Again"+s, Toast.LENGTH_SHORT).show();
                 progressHUD.dismiss();
             }
         });
