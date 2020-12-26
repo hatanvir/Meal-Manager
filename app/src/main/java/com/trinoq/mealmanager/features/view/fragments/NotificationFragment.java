@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kaopiz.kprogresshud.KProgressHUD;
@@ -38,6 +39,8 @@ public class NotificationFragment extends Fragment {
 
     KProgressHUD progressHUD;
 
+    TextView emptyTv;
+
     List<Inviationdatum>notificationList;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -45,6 +48,7 @@ public class NotificationFragment extends Fragment {
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_notification, container, false);
         recyclerView = view.findViewById(R.id.notificationRv);
+        emptyTv = view.findViewById(R.id.emptyRecyclerViewTvNotification);
         notificationList = new ArrayList<>();
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -53,6 +57,8 @@ public class NotificationFragment extends Fragment {
                 .setCancellable(false)
                 .setAnimationSpeed(2)
                 .setDimAmount(0.5f);
+
+        emptyTv.setVisibility(View.VISIBLE);
         getNotificationData();
         return view;
     }
@@ -88,9 +94,15 @@ public class NotificationFragment extends Fragment {
                                 recyclerView.setAdapter(new NotificationListAdapter(getActivity(),notificationList,rvViewType));
                             }
 
+                            if(notificationList.size()==0){
+                                emptyTv.setVisibility(View.VISIBLE);
+                            }else {
+                                emptyTv.setVisibility(View.GONE);
+                            }
+
                           //  Toast.makeText(getActivity(), ""+notificationList.size(), Toast.LENGTH_SHORT).show();
                         }else {
-                            Toast.makeText(getActivity(), "Data not found", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(getActivity(), "Data not found", Toast.LENGTH_SHORT).show();
                         }
                         progressHUD.dismiss();
                     }
