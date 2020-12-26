@@ -149,8 +149,12 @@ public class MealPricingFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if(melTypePriceType == 0){
+                    String bFEt = breakfastEt.getText().toString().length() == 0?"0":breakfastEt.getText().toString();
+                    String lEt = lunchEt.getText().toString().length() == 0?"0":lunchEt.getText().toString();
+                    String dEt = dinnerEt.getText().toString().length() == 0?"0":dinnerEt.getText().toString();
+
                     progressHUD.setLabel("Saving...").show();
-                    preMonthViewModel.postMostMonthRequest(new PremonthRequest(id,breakfastEt.getText().toString(),lunchEt.getText().toString(),dinnerEt.getText().toString()),preMonthModel);
+                    preMonthViewModel.postMostMonthRequest(new PremonthRequest(id,bFEt,lEt,dEt),preMonthModel);
                     preMonthViewModel.setPreMothSuccess.observe(getActivity(), new Observer<ResponseBody>() {
                         @Override
                         public void onChanged(ResponseBody responseBody) {
@@ -192,6 +196,8 @@ public class MealPricingFragment extends Fragment {
                             FragmentTransaction transaction = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
                             transaction.replace(R.id.groupCreateViewContainer, fragment)
                                     .addToBackStack("GRP_DETAILES").commit();
+
+                            Toast.makeText(getActivity(), "Data saved successfully", Toast.LENGTH_SHORT).show();
 
                             progressHUD.dismiss();
                         }
