@@ -1,6 +1,7 @@
 package com.trinoq.mealmanager.features.model.PreMonth;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.trinoq.mealmanager.common.RequestCompleteListener;
 import com.trinoq.mealmanager.features.model.pojo.request.PremonthRequest;
@@ -24,6 +25,7 @@ public class PreMonthModelImplementation implements PreMonthModel{
         api.setPreMonth(premonthRequest).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                Log.d("tttPostMoth",""+response.code());
                 if(response.code() == 200) requestCompleteListener.OnSuccessListener(response.body());
                 else requestCompleteListener.OnFailedListener(response.message());
             }
