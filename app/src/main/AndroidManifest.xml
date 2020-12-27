@@ -16,7 +16,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".features.view.Activity.TestActivity"></activity>
+        <activity android:name=".features.view.Activity.CurrentGroupDetailsActivity"></activity>
+        <activity android:name=".features.view.Activity.TestActivity" />
         <activity android:name=".features.view.Activity.AboutActivity" />
         <activity android:name=".features.view.Activity.NotificationActivity" />
         <activity android:name=".features.view.Activity.AccountActivity" />
