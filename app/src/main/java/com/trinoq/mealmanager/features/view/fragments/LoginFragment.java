@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
@@ -65,12 +66,12 @@ public class LoginFragment extends Fragment implements Validator.ValidationListe
 
         confirmPhoneNumberDialog.setCancelable(false);
 
-        /*haveAccountTv.setOnClickListener(new View.OnClickListener() {
+        haveAccountTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            setfargment(new LoginFragment(), "loginFragment");
+            setfargment(new SignUpFragment(), "signUpFragment");
         }
-      });*/
+      });
         nextImage.setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View view) {
@@ -82,16 +83,21 @@ public class LoginFragment extends Fragment implements Validator.ValidationListe
     }
 
     private void setfargment(Fragment fragment, String tag) {
-        Bundle bundle = new Bundle();
-        bundle.putString("name","null");
-        if (tag.equals("verifyPhoneNumFrag")) {
-            bundle.putString("phoneNumber", optimizedPhoneNumber());
-            fragment.setArguments(bundle);
+        if(phoneNumberEt.getText().toString().length()<11){
+            Toast.makeText(getActivity(), "Invalid phone number", Toast.LENGTH_SHORT).show();
+        }else{
+            Bundle bundle = new Bundle();
+            bundle.putString("name","null");
+            if (tag.equals("verifyPhoneNumFrag")) {
+                bundle.putString("phoneNumber", optimizedPhoneNumber());
+                fragment.setArguments(bundle);
+            }
+
+            FragmentTransaction transaction = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.authenticationContainer, fragment)
+                    .addToBackStack(tag).commit();
         }
 
-        FragmentTransaction transaction = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.authenticationContainer, fragment)
-                .addToBackStack(tag).commit();
     }
 
     private String optimizedPhoneNumber() {

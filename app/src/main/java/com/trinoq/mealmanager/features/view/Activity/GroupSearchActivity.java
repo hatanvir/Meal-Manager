@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.trinoq.mealmanager.R;
 import com.trinoq.mealmanager.features.adapters.GroupListRecyclerViewAdapter;
 import com.trinoq.mealmanager.features.model.models.GroupInformation;
+import com.trinoq.mealmanager.features.model.pojo.request.Admin;
 import com.trinoq.mealmanager.features.model.pojo.request.GroupSearchRequest;
 import com.trinoq.mealmanager.features.model.pojo.request.Groupsearch;
 import com.trinoq.mealmanager.network.Api;
@@ -107,6 +108,7 @@ public class GroupSearchActivity extends AppCompatActivity {
                     groupMemberCall.enqueue(new Callback<GroupSearchRequest>() {
                         @Override
                         public void onResponse(Call<GroupSearchRequest> call, Response<GroupSearchRequest> response) {
+                            Log.d("OOO",String.valueOf(response.code()));
                             if (response.code()==200){
                                 //Log.d("OOO",response.body().getGroupMembe);
                                 GroupSearchRequest groupRequest=response.body();
@@ -117,18 +119,19 @@ public class GroupSearchActivity extends AppCompatActivity {
                                             Toast.makeText(textView.getContext(), "Call", Toast.LENGTH_SHORT).show();
 
                                             Log.d("FFF",String.valueOf(groupRequest.getGroupsearch().size())+"  "+groupRequest.getMessage());
-                                            Log.d("OOO",groupsearch.getGroupName());
+                                            //Log.d("OOO",groupsearch.getGroupName());
                                             /*GroupInformation groupInformation=new GroupInformation(groupsearch.getId().toString(),
                                                     groupsearch.getGroupName(),groupsearch.getCooksName().toString(),
                                                     groupsearch.getShoppingType(),groupsearch.getMealType(),
                                                     groupsearch.getIsAdmin().toString(),groupsearch.getCreatedAt(),
                                                     groupsearch.getUpdatedAt(),groupsearch.getGroupmemberCount().toString());*/
+                                            for (Admin admin:groupsearch.getAdmin()){
                                         GroupInformation groupInformation=new GroupInformation(groupsearch.getId().toString(),
                                                 groupsearch.getGroupName(),"null",
                                                 groupsearch.getShoppingType(),groupsearch.getMealType(),
                                                 "null",groupsearch.getCreatedAt(),
-                                                groupsearch.getUpdatedAt(),groupsearch.getGroupmemberCount().toString());
-                                            Utils.groupInformations.add(groupInformation);
+                                                groupsearch.getUpdatedAt(),groupsearch.getGroupmemberCount().toString(),admin.getPhoneNumber());
+                                            Utils.groupInformations.add(groupInformation);}
 
 
 

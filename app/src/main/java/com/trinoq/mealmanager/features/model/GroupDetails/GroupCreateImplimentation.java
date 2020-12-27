@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.trinoq.mealmanager.common.RequestCompleteListener;
 import com.trinoq.mealmanager.features.model.pojo.request.GroupCreateRequest;
+import com.trinoq.mealmanager.features.model.pojo.response.groupcreate.GroupCreatResponse;
 import com.trinoq.mealmanager.network.Api;
 import com.trinoq.mealmanager.network.RetrofitClient;
 
@@ -21,18 +22,18 @@ public class GroupCreateImplimentation implements GroupCreateModel {
 
     @Override
     public void groupDetailsRequest(GroupCreateRequest groupCreateRequest,
-                                    RequestCompleteListener<ResponseBody> requestCompleteListener) {
+                                    RequestCompleteListener<GroupCreatResponse> requestCompleteListener) {
         Api api = RetrofitClient.getClient().create(Api.class);
 
-        api.groupCreate(groupCreateRequest).enqueue(new Callback<ResponseBody>() {
+        api.groupCreate(groupCreateRequest).enqueue(new Callback<GroupCreatResponse>() {
             @Override
-            public void onResponse(retrofit2.Call<ResponseBody> call, Response<ResponseBody> response) {
+            public void onResponse(retrofit2.Call<GroupCreatResponse> call, Response<GroupCreatResponse> response) {
                 if(response.code() == 200) requestCompleteListener.OnSuccessListener(response.body());
                 else  requestCompleteListener.OnFailedListener(response.message());
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
+            public void onFailure(Call<GroupCreatResponse> call, Throwable t) {
                 requestCompleteListener.OnFailedListener(t.getLocalizedMessage());
             }
         });

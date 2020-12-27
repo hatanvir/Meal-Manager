@@ -2,12 +2,16 @@ package com.trinoq.mealmanager.features.view.Activity;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -29,6 +33,7 @@ import android.widget.Toast;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.squareup.picasso.Picasso;
 import com.trinoq.mealmanager.R;
 import com.trinoq.mealmanager.features.model.models.UserInformation;
 import com.trinoq.mealmanager.network.Api;
@@ -80,6 +85,7 @@ public class AccountActivity extends AppCompatActivity {
     UserInformation userInformation;
     Retrofit retrofit;
     Api api;
+    int groupId,userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +97,9 @@ public class AccountActivity extends AppCompatActivity {
         else {
             setTheme(R.style.AppTheme);
         }
+        //myPreferences=getActivity().getSharedPreferences("MyPreferences", Context.MODE_PRIVATE);
+        userId=myPreferences.getInt("UserId",0);
+        groupId=myPreferences.getInt("GroupId",0);
 
         setContentView(R.layout.activity_account);
         ButterKnife.bind(AccountActivity.this);
@@ -107,6 +116,9 @@ public class AccountActivity extends AppCompatActivity {
         nameEt.setText(Utils.userInformations.get(0).getUserName());
         emailEt.setText(Utils.userInformations.get(0).getEmail());
         phoneNumberEt.setText(Utils.userInformations.get(0).getPhoneNumber());
+        Picasso.get().load(Utils.IMAGE_BASE_URL+Utils.userInformations.get(0).getImage()).resize(400,400).centerCrop().into(profileCircleImageView);
+
+        checkPermissio();
 
         backBt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -168,10 +180,30 @@ public class AccountActivity extends AppCompatActivity {
             addImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    imagePickerTypeBottomSheet();
+                    try {
+                        if (ActivityCompat.checkSelfPermission(AccountActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                            ActivityCompat.requestPermissions(AccountActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                        } else {
+                            imagePickerTypeBottomSheet();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             });
 
+    }
+
+    private void checkPermissio() {
+        try {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+            } else {
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -190,13 +222,13 @@ public class AccountActivity extends AppCompatActivity {
         api=retrofit.create(Api.class);
 
         Log.d("ttttttt",part+" "+emailEt.getText().toString());
-        Call<ResponseBody> call=api.updatedUser(3,part,ResponseBody.create(MultipartBody.FORM,emailEt.getText().toString()));
+        Call<ResponseBody> call=api.updatedUser(userId,part,RequestBody.create(okhttp3.MultipartBody.FORM,emailEt.getText().toString()));
 
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 
-                Log.d("DDDD",String.valueOf(response.code()+" "+response.message()));
+                Log.d("DDDD",String.valueOf(response.code()+" "+response.message()+ "  "+response.body()));
 
                 if (response.code()==200){
 
@@ -264,11 +296,11 @@ public class AccountActivity extends AppCompatActivity {
             }
         }else if(requestCode == 2){
             try{
-                Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
-                if (thumbnail!=null){
-                    filePath = saveImage(thumbnail);
+                Bitmap profileimage = (Bitmap) data.getExtras().get("data");
+                if (profileimage!=null){
+                    filePath = saveImage(profileimage);
                     if(checkImageSize(filePath)){
-                        profileCircleImageView.setImageBitmap(thumbnail);
+                        profileCircleImageView.setImageBitmap(profileimage);
                     }else {
                         maximumImageAlertDialog();
                     }
@@ -293,7 +325,7 @@ public class AccountActivity extends AppCompatActivity {
     public String saveImage(Bitmap myBitmap) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         myBitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
-        File wallpaperDirectory = new File(Environment.getExternalStorageDirectory() + "/TscPhoto");
+        File wallpaperDirectory = new File(Environment.getExternalStorageDirectory() + "/MealManagerPhoto");
         if (!wallpaperDirectory.exists()) {  // have the object build the directory structure, if needed.
             wallpaperDirectory.mkdirs();
         }

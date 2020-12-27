@@ -135,26 +135,26 @@
                         />
 
                 </LinearLayout>
-            <LinearLayout
-                android:layout_width="280dp"
-                android:layout_height="45dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="100dp"
-                android:background="@drawable/edittext_border"
-                android:visibility="visible">
+                <LinearLayout
+                    android:layout_width="280dp"
+                    android:layout_height="45dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="100dp"
+                    android:background="@drawable/edittext_border"
+                    android:visibility="visible">
 
-                <EditText
-                    android:id="@+id/emailEt"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:inputType="text"
-                    android:paddingLeft="15dp"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="8dp"
-                    android:text="gdfshskue@gmail.com"
-                    android:textColor="#FFFFFF"
-                    android:fontFamily="@font/montserrat"/>
-            </LinearLayout>
+                    <EditText
+                        android:id="@+id/emailEt"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:inputType="text"
+                        android:paddingLeft="15dp"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
+                        android:text="gdfshskue@gmail.com"
+                        android:textColor="#FFFFFF"
+                        android:fontFamily="@font/montserrat"/>
+                </LinearLayout>
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/editFab"

@@ -11,14 +11,30 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
+import com.kaopiz.kprogresshud.KProgressHUD;
 import com.trinoq.mealmanager.R;
+import com.trinoq.mealmanager.features.model.PostMonth.PostMonthModel;
+import com.trinoq.mealmanager.features.model.PostMonth.PostMonthModelImplementation;
+import com.trinoq.mealmanager.features.model.PreMonth.PreMonthModel;
+import com.trinoq.mealmanager.features.model.PreMonth.PreMonthModelImplementation;
+import com.trinoq.mealmanager.features.model.pojo.request.PostMonthRequest;
+import com.trinoq.mealmanager.features.model.pojo.request.PremonthRequest;
+import com.trinoq.mealmanager.features.viewmodel.PostMonthViewModel;
+import com.trinoq.mealmanager.features.viewmodel.PreMonthViewModel;
+
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import okhttp3.ResponseBody;
 
 public class MealPricingFragment extends Fragment {
 
@@ -33,12 +49,14 @@ public class MealPricingFragment extends Fragment {
     Spinner postMonthFirstSp;
     @BindView(R.id.postMonthFirstSpLay)
     LinearLayout postMonthFirstSpLay;
+
     @BindView(R.id.postMonthSecondSp)
     Spinner postMonthSecondSp;
     @BindView(R.id.postMonthSecondSpLay)
     LinearLayout postMonthSecondSpLay;
     @BindView(R.id.postMonthThirdSp)
     Spinner postMonthThirdSp;
+
     @BindView(R.id.postMonthThirdSpLay)
     LinearLayout postMonthThirdSpLay;
 
@@ -74,8 +92,21 @@ public class MealPricingFragment extends Fragment {
     @BindView(R.id.linearLayout2)
     LinearLayout linearLayout2;
 
+
+
+
+    PreMonthModel preMonthModel;
+    PreMonthViewModel preMonthViewModel;
+
+    PostMonthViewModel postMonthViewModel;
+    PostMonthModel postMonthModel;
+
+    private KProgressHUD progressHUD;
+
+
     private String[] mealPricingType = {"Pree month pricing", "Post month pricing "};
     private String[] mealType = {"Full", "Half"};
+    private int melTypePriceType = 0;double postMonthFirstSpData =1 ,postMonthSecondSpData = 1,postMonthThirdSpData = 1;
 
     public MealPricingFragment() {
         // Required empty public constructor
@@ -88,10 +119,25 @@ public class MealPricingFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_meal_pricing, container, false);
         ButterKnife.bind(this, v);
 
+        preMonthModel = new PreMonthModelImplementation(getActivity());
+        preMonthViewModel = new ViewModelProvider(this).get(PreMonthViewModel.class);
+
+        postMonthModel = new PostMonthModelImplementation(getActivity());
+        postMonthViewModel = new ViewModelProvider(this).get(PostMonthViewModel.class);
+
         breakFast = getArguments().getString("breakFast");
         lunch = getArguments().getString("lunch");
         dinner = getArguments().getString("dinner");
 
+        String id = getArguments().getString("gpId");
+
+        progressHUD =  KProgressHUD.create(getActivity())
+                .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
+                .setCancellable(false)
+                .setAnimationSpeed(2)
+                .setDimAmount(0.5f);
+
+        setUi();
         backBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -99,11 +145,120 @@ public class MealPricingFragment extends Fragment {
             }
         });
 
-        setUi();
+        nextImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(melTypePriceType == 0){
+                    String bFEt = breakfastEt.getText().toString().length() == 0?"0":breakfastEt.getText().toString();
+                    String lEt = lunchEt.getText().toString().length() == 0?"0":lunchEt.getText().toString();
+                    String dEt = dinnerEt.getText().toString().length() == 0?"0":dinnerEt.getText().toString();
+
+                    progressHUD.setLabel("Saving...").show();
+                    preMonthViewModel.postMostMonthRequest(new PremonthRequest(id,bFEt,lEt,dEt),preMonthModel);
+                    preMonthViewModel.setPreMothSuccess.observe(getActivity(), new Observer<ResponseBody>() {
+                        @Override
+                        public void onChanged(ResponseBody responseBody) {
+                            Bundle bundle = new Bundle();
+                            bundle.putString("gpId",id);
+
+                            Fragment fragment = new DailyMealInputEndTimeFragment();
+
+                            fragment.setArguments(bundle);
+
+                            FragmentTransaction transaction = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
+                            transaction.replace(R.id.groupCreateViewContainer, fragment)
+                                    .addToBackStack("GRP_DETAILES").commit();
+                            progressHUD.dismiss();
+                        }
+                    });
+
+                    preMonthViewModel.setPreMothFailed.observe(getActivity(), new Observer<String>() {
+                        @Override
+                        public void onChanged(String s) {
+                            Toast.makeText(getActivity(), "Failed to add meal pricing", Toast.LENGTH_SHORT).show();
+                            progressHUD.dismiss();
+                        }
+                    });
+                }else if(melTypePriceType == 1){
+                    postMonthViewModel.postMostMonthRequest(new PostMonthRequest(id,String.valueOf(postMonthFirstSpData),String.valueOf(postMonthSecondSpData),
+                            String.valueOf(postMonthThirdSpData)),postMonthModel);
+
+                    postMonthViewModel.setPostMothSuccess.observe(getActivity(), new Observer<ResponseBody>() {
+                        @Override
+                        public void onChanged(ResponseBody responseBody) {
+                            Bundle bundle = new Bundle();
+                            bundle.putString("gpId",id);
+
+                            Fragment fragment = new DailyMealInputEndTimeFragment();
+
+                            fragment.setArguments(bundle);
+
+                            FragmentTransaction transaction = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
+                            transaction.replace(R.id.groupCreateViewContainer, fragment)
+                                    .addToBackStack("GRP_DETAILES").commit();
+
+                            Toast.makeText(getActivity(), "Data saved successfully", Toast.LENGTH_SHORT).show();
+
+                            progressHUD.dismiss();
+                        }
+                    });
+
+                    postMonthViewModel.setPostMothFailed.observe(getActivity(), new Observer<String>() {
+                        @Override
+                        public void onChanged(String s) {
+                            Toast.makeText(getActivity(), "Failed to add meal pricing", Toast.LENGTH_SHORT).show();
+                            progressHUD.dismiss();
+                        }
+                    });
+
+                }
+            }
+        });
+
+
         return v;
     }
 
     private void setUi() {
+
+        postMonthFirstSp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if(position == 1) postMonthFirstSpData = 1.0;
+                else  postMonthFirstSpData = 0.5;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        postMonthSecondSp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if(position == 1) postMonthSecondSpData = 1.0;
+                else  postMonthSecondSpData = 0.5;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        postMonthThirdSp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if(position == 1) postMonthThirdSpData = 1.0;
+                else  postMonthThirdSpData = 0.5;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         if (breakFast.equals("1")) {
             postMonthFirstSpLay.setVisibility(View.VISIBLE);
@@ -161,6 +316,8 @@ public class MealPricingFragment extends Fragment {
                         dinnerLay.setVisibility(View.GONE);
                     }
 
+                    melTypePriceType = position;
+
                 } else {
 
                     if (breakFast == "1") {
@@ -179,9 +336,13 @@ public class MealPricingFragment extends Fragment {
                     } else {
                         postMonthThirdSpLay.setVisibility(View.GONE);
                     }
+
+                    melTypePriceType = position;
                     lunchLay.setVisibility(View.GONE);
                     breakfastLay.setVisibility(View.GONE);
                     dinnerLay.setVisibility(View.GONE);
+
+
 
                 }
             }

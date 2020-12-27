@@ -1,6 +1,7 @@
+
 package com.trinoq.mealmanager.features.model.pojo.request1;
 
-
+import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -24,6 +25,9 @@ public class GroupMember {
     @SerializedName("updated_at")
     @Expose
     private String updatedAt;
+    @SerializedName("userinfo")
+    @Expose
+    private List<Userinfo> userinfo = null;
 
     public Integer getId() {
         return id;
@@ -71,6 +75,14 @@ public class GroupMember {
 
     public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public List<Userinfo> getUserinfo() {
+        return userinfo;
+    }
+
+    public void setUserinfo(List<Userinfo> userinfo) {
+        this.userinfo = userinfo;
     }
 
 }

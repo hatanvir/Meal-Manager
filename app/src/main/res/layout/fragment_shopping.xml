@@ -4,38 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginBottom="65dp"
     android:background="@color/appcolor"
     tools:context=".features.view.fragments.ShoppingFragment">
 
 
-    <LinearLayout
-        android:id="@+id/linearLayout16"
-        android:layout_width="280dp"
-        android:layout_height="45dp"
-        android:background="@drawable/edittext_border"
-        android:visibility="visible"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/bazarListRcv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.31"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.060000002">
-
-
-        <EditText
-            android:id="@+id/bazarEt"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fontFamily="@font/montserrat"
-            android:hint="Enter your total Bazar"
-            android:inputType="number"
-            android:paddingLeft="15dp"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            android:textColor="#FFFFFF"
-            android:textColorHint="@color/white" />
-
-    </LinearLayout>
+        app:layout_constraintVertical_bias="0.0"
+        tools:layout_editor_absoluteX="9dp" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/addBazarFab"
@@ -47,23 +29,12 @@
         app:fabSize="normal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.96"
+        app:layout_constraintHorizontal_bias="0.954"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout16"
-        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
         app:rippleColor="@color/white"
         app:srcCompat="@drawable/ic_add_black_24dp" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/bazarListRcv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout16"
-        app:layout_constraintVertical_bias="0.291"
-        tools:layout_editor_absoluteX="16dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

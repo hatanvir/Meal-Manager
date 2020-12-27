@@ -12,6 +12,8 @@ import androidx.fragment.app.Fragment;
 
 import com.trinoq.mealmanager.R;
 import com.trinoq.mealmanager.features.view.Activity.GroupCreateActivity;
+import com.trinoq.mealmanager.features.view.Activity.GroupMemberSearchActivity;
+import com.trinoq.mealmanager.features.view.Activity.GroupSearchActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,10 +40,10 @@ public class WelcomeFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_welcome, container, false);
         ButterKnife.bind(this, v);
 
-        createGroupLayout.setOnClickListener(new View.OnClickListener() {
+        groupSearchLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getActivity(), GroupCreateActivity.class));
+                startActivity(new Intent(getActivity(), GroupSearchActivity.class));
             }
         });
         createGroupTv.setOnClickListener(new View.OnClickListener() {

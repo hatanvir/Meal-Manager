@@ -17,8 +17,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.kaopiz.kprogresshud.KProgressHUD;
 import com.trinoq.mealmanager.R;
 import com.trinoq.mealmanager.features.adapters.GroupMembersListRecyclerViewAdapter;
+import com.trinoq.mealmanager.features.model.pojo.request.Admininfo;
+import com.trinoq.mealmanager.features.model.pojo.request.Member;
+import com.trinoq.mealmanager.features.model.pojo.request.MemberSearchRequest;
 import com.trinoq.mealmanager.features.model.pojo.request1.GroupMember;
 import com.trinoq.mealmanager.features.model.pojo.request1.GroupMemberSearchRequest;
 import com.trinoq.mealmanager.network.Api;
@@ -41,10 +45,18 @@ public class GroupMemberSearchActivity extends AppCompatActivity {
     RecyclerView membersListRc;
     @BindView(R.id.clearBt)
     ImageView clearBt;
+    @BindView(R.id.emptyRecyclerViewTv)
+    TextView emptyTv;
+   /* @BindView(R.id.backBt)
+    ImageView backImage;*/
 
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager layoutManagergroupname;
+
     ArrayList<String> phoneNumber=new ArrayList<>();
+    ArrayList<String> userName=new ArrayList<>();
+
+    private KProgressHUD progressHUD;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +71,14 @@ public class GroupMemberSearchActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_group_member_search);
         ButterKnife.bind(GroupMemberSearchActivity.this);
+
+
+
+        progressHUD =  KProgressHUD.create(this)
+                .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
+                .setCancellable(false)
+                .setAnimationSpeed(2)
+                .setDimAmount(0.5f);
 
         Retrofit retrofit= RetrofitClient.getClient();
         Api api=retrofit.create(Api.class);
@@ -80,6 +100,15 @@ public class GroupMemberSearchActivity extends AppCompatActivity {
             }
         });
 
+        emptyTv.setVisibility(View.VISIBLE);
+
+
+       /* backImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });*/
 
         phoneNumberEt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -87,17 +116,21 @@ public class GroupMemberSearchActivity extends AppCompatActivity {
 
                 if (i == EditorInfo.IME_ACTION_GO || i == EditorInfo.IME_ACTION_DONE||i==EditorInfo.IME_ACTION_SEARCH) {
                     phoneNumber.clear();
-                    Call<GroupMemberSearchRequest> groupMemberCall=api.GroupMember(phoneNumberEt.getText().toString().trim());
-                    groupMemberCall.enqueue(new Callback<GroupMemberSearchRequest>() {
+                    userName.clear();
+                    progressHUD.show();
+                    Call<MemberSearchRequest> memberSearchRequestCall=api.getSearchMember(phoneNumberEt.getText().toString().trim());
+                    memberSearchRequestCall.enqueue(new Callback<MemberSearchRequest>() {
                         @Override
-                        public void onResponse(Call<GroupMemberSearchRequest> call, Response<GroupMemberSearchRequest> response) {
+                        public void onResponse(Call<MemberSearchRequest> call, Response<MemberSearchRequest> response) {
+                           // Log.d("OOO",response.body().getMember().toString());
                             if (response.code()==200){
-                                //Log.d("OOO",response.body().getGroupMembe);
-                                GroupMemberSearchRequest groupRequest=response.body();
-                                if (groupRequest.getGroupMembers().size()>0){
-                                    for (GroupMember groupMember:groupRequest.getGroupMembers())
+                                Log.d("OOO",response.body().getMember().toString());
+                                MemberSearchRequest groupRequest=response.body();
+
+                                if (groupRequest.getMember().size()>0){
+                                   /* for (Member groupMember:groupRequest.getMember())
                                     {
-                                        try {
+                                       *//* try {
 
                                             phoneNumber.add(groupMember.getPhoneNumber());
                                             Log.d("GGG",groupMember.getPhoneNumber());
@@ -106,33 +139,52 @@ public class GroupMemberSearchActivity extends AppCompatActivity {
                                         }
                                         catch (Exception e){
 
-                                        }
+                                        }*//*
+
+
+                                       for (Admininfo admininfo:groupMember.getAdmininfo()){
+                                           phoneNumber.add(admininfo.getPhoneNumber());
+                                           userName.add(admininfo.getFullName());
+                                           Toast.makeText(textView.getContext(), "Call", Toast.LENGTH_SHORT).show();
+                                       }
+
                                     }
+                                }
+                               mAdapter=new GroupMembersListRecyclerViewAdapter(textView.getContext(),userName,phoneNumber);
+                                membersListRc.setAdapter(mAdapter);
+                                Log.d("FSFS",userName.toString()+"  "+phoneNumber.toString());                            }
+                                    }*/
+
+                                    if (groupRequest.getMember().size() == 0) {
+                                        emptyTv.setVisibility(View.VISIBLE);
+                                    } else {
+                                        emptyTv.setVisibility(View.GONE);
+                                    }
+                                    mAdapter=new GroupMembersListRecyclerViewAdapter(GroupMemberSearchActivity.this,groupRequest.getMember());
+                                    membersListRc.setAdapter(mAdapter);
+                                    // Log.d("FSFS",userName.toString()+"  "+phoneNumber.toString())
 
 
                                 }
-                                //Log.d("OOO",mealtype.toString());
-                                //mAdapter=new GroupListRecyclerViewAdapter(textView.getContext(),groupname,phonenumber,adminName,mealtype,cookingtype,shoppingtype,groupcreated);
-                               mAdapter=new GroupMembersListRecyclerViewAdapter(textView.getContext(),phoneNumber);
-                                membersListRc.setAdapter(mAdapter);
+                                progressHUD.dismiss();
+                            }else {
+                                Toast.makeText(GroupMemberSearchActivity.this, "Not found", Toast.LENGTH_SHORT).show();
+                                progressHUD.dismiss();
                             }
                         }
 
                         @Override
-                        public void onFailure(Call<GroupMemberSearchRequest> call, Throwable t) {
-
+                        public void onFailure(Call<MemberSearchRequest> call, Throwable t) {
+                            Toast.makeText(GroupMemberSearchActivity.this, ""+t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                            progressHUD.dismiss();
                         }
                     });
-
-
                     // hide virtual keyboard
                     InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(phoneNumberEt.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
 
                     return true;
                 }
-
-
 
                 return false;
             }

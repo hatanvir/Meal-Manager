@@ -1,6 +1,7 @@
 package com.trinoq.mealmanager.features.model.PreMonth;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.trinoq.mealmanager.common.RequestCompleteListener;
 import com.trinoq.mealmanager.features.model.pojo.request.PremonthRequest;
@@ -19,11 +20,12 @@ public class PreMonthModelImplementation implements PreMonthModel{
         this.context = context;
     }
     @Override
-    public void postMostMonthRequest(PremonthRequest premonthRequest, RequestCompleteListener<ResponseBody> requestCompleteListener) {
+    public void preeMonthRequest(PremonthRequest premonthRequest, RequestCompleteListener<ResponseBody> requestCompleteListener) {
         Api api = RetrofitClient.getClient().create(Api.class);
         api.setPreMonth(premonthRequest).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                Log.d("tttPostMoth",""+response.code());
                 if(response.code() == 200) requestCompleteListener.OnSuccessListener(response.body());
                 else requestCompleteListener.OnFailedListener(response.message());
             }

@@ -5,9 +5,13 @@ import com.google.gson.annotations.SerializedName;
 
 public class UserMealCreateRequest {
 
+
     @SerializedName("group_id")
     @Expose
     private String groupId = null;
+    @SerializedName("user_id")
+    @Expose
+    private String userId = null;
     @SerializedName("phone_number")
     @Expose
     private String phoneNumber = null;
@@ -16,21 +20,38 @@ public class UserMealCreateRequest {
     private String mealDate = null;
     @SerializedName("is_breakfast")
     @Expose
-    private String isBreakfast = null;
+    private Integer isBreakfast = 0;
     @SerializedName("is_lunch")
     @Expose
-    private String isLunch = null;
+    private Integer isLunch = 0;
     @SerializedName("is_dinner")
     @Expose
-    private String isDinner = null;
+    private Integer isDinner = 0;
 
-    public UserMealCreateRequest(String groupId, String phoneNumber, String mealDate, String isBreakfast, String isLunch, String isDinner) {
+    public UserMealCreateRequest(String groupId, String userId, String phoneNumber, String mealDate, Integer isBreakfast, Integer isLunch, Integer isDinner) {
         this.groupId = groupId;
+        this.userId = userId;
         this.phoneNumber = phoneNumber;
         this.mealDate = mealDate;
         this.isBreakfast = isBreakfast;
         this.isLunch = isLunch;
         this.isDinner = isDinner;
+    }
+
+    public UserMealCreateRequest(String groupId, String userId, String phoneNumber, String mealDate, Integer mealNumber, String mealName) {
+        this.groupId = groupId;
+        this.userId = userId;
+        this.phoneNumber = phoneNumber;
+        this.mealDate = mealDate;
+        if (mealName.equals("Breakfast")){
+            this.isDinner = mealNumber;
+        }
+        else if (mealName.equals("Lunch")){
+            this.isLunch = mealNumber;
+        }
+        else if (mealName.equals("Dinner")){
+            this.isDinner = mealNumber;
+        }
     }
 
     public String getGroupId() {
@@ -57,27 +78,35 @@ public class UserMealCreateRequest {
         this.mealDate = mealDate;
     }
 
-    public String getIsBreakfast() {
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public Integer getIsBreakfast() {
         return isBreakfast;
     }
 
-    public void setIsBreakfast(String isBreakfast) {
+    public void setIsBreakfast(Integer isBreakfast) {
         this.isBreakfast = isBreakfast;
     }
 
-    public String getIsLunch() {
+    public Integer getIsLunch() {
         return isLunch;
     }
 
-    public void setIsLunch(String isLunch) {
+    public void setIsLunch(Integer isLunch) {
         this.isLunch = isLunch;
     }
 
-    public String getIsDinner() {
+    public Integer getIsDinner() {
         return isDinner;
     }
 
-    public void setIsDinner(String isDinner) {
+    public void setIsDinner(Integer isDinner) {
         this.isDinner = isDinner;
     }
 }

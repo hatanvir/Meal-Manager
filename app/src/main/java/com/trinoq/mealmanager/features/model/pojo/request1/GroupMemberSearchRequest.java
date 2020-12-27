@@ -1,5 +1,5 @@
-package com.trinoq.mealmanager.features.model.pojo.request1;
 
+package com.trinoq.mealmanager.features.model.pojo.request1;
 
 import java.util.List;
 import com.google.gson.annotations.Expose;

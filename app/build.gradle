@@ -32,6 +32,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'com.squareup.picasso:picasso:2.71828'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.3.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
@@ -40,6 +41,14 @@ dependencies {
     implementation 'com.android.support:recyclerview-v7:30.0.0'
     implementation 'com.android.support:cardview-v7:30.0.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
+
+    // Import the BoM for the Firebase platform
+    implementation platform('com.google.firebase:firebase-bom:26.1.0')
+
+    // Declare the dependencies for the Firebase Cloud Messaging and Analytics libraries
+    // When using the BoM, you don't specify versions in Firebase library dependencies
+    implementation 'com.google.firebase:firebase-messaging'
+    implementation 'com.google.firebase:firebase-analytics'
 
     //butterknife
     implementation 'com.jakewharton:butterknife:10.0.0'
@@ -50,7 +59,7 @@ dependencies {
 
     //firebase
     implementation 'com.google.firebase:firebase-analytics:17.5.0'
-    implementation 'com.google.firebase:firebase-auth:19.4.0'
+    implementation 'com.google.firebase:firebase-auth'
 
     //saripaar validation
     implementation 'com.mobsandgeeks:android-saripaar:2.0.3'
@@ -72,4 +81,6 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
 
     implementation 'androidx.multidex:multidex:2.0.1'
+
+    implementation 'androidx.browser:browser:1.2.0'
 }

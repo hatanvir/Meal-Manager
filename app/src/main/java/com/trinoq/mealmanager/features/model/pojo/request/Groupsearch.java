@@ -1,6 +1,7 @@
 
 package com.trinoq.mealmanager.features.model.pojo.request;
 
+import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -36,6 +37,9 @@ public class Groupsearch {
     @SerializedName("groupmember_count")
     @Expose
     private Integer groupmemberCount;
+    @SerializedName("admin")
+    @Expose
+    private List<Admin> admin = null;
 
     public Integer getId() {
         return id;
@@ -115,6 +119,14 @@ public class Groupsearch {
 
     public void setGroupmemberCount(Integer groupmemberCount) {
         this.groupmemberCount = groupmemberCount;
+    }
+
+    public List<Admin> getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(List<Admin> admin) {
+        this.admin = admin;
     }
 
 }

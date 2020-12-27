@@ -3,9 +3,9 @@ package com.trinoq.mealmanager.features.model.models;
 public class GroupInformation {
     //private String groupName,phoneNumber,adminName,totalmembers,mealpricing,mealtype,cookingtype,shoppingtype,groupcreateddate;
 
-    private String gorupId,groupName,cooksName,shoppingType,mealType,adminName,groupCreatedDate,upDate_at,totalMembers;
+    private String gorupId,groupName,cooksName,shoppingType,mealType,adminName,groupCreatedDate,upDate_at,totalMembers,adminPhoneNo;
 
-    public GroupInformation(String gorupId, String groupName, String cooksName, String shoppingType, String mealType, String adminName, String groupCreatedDate, String upDate_at, String totalMembers) {
+    public GroupInformation(String gorupId, String groupName, String cooksName, String shoppingType, String mealType, String adminName, String groupCreatedDate, String upDate_at, String totalMembers,String adminPhoneNo) {
         this.gorupId = gorupId;
         this.groupName = groupName;
         this.cooksName = cooksName;
@@ -15,6 +15,15 @@ public class GroupInformation {
         this.groupCreatedDate = groupCreatedDate;
         this.upDate_at = upDate_at;
         this.totalMembers = totalMembers;
+        this.adminPhoneNo=adminPhoneNo;
+    }
+
+    public String getAdminPhoneNo() {
+        return adminPhoneNo;
+    }
+
+    public void setAdminPhoneNo(String adminPhoneNo) {
+        this.adminPhoneNo = adminPhoneNo;
     }
 
     public String getGorupId() {

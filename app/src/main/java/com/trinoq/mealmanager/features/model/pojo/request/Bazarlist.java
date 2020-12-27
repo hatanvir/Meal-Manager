@@ -18,9 +18,9 @@ public class Bazarlist {
     @SerializedName("total_amount")
     @Expose
     private Integer totalAmount;
-    @SerializedName("extra_bazar")
+    @SerializedName("date")
     @Expose
-    private Object extraBazar;
+    private String date;
     @SerializedName("created_at")
     @Expose
     private String createdAt;
@@ -60,12 +60,12 @@ public class Bazarlist {
         this.totalAmount = totalAmount;
     }
 
-    public Object getExtraBazar() {
-        return extraBazar;
+    public String getDate() {
+        return date;
     }
 
-    public void setExtraBazar(Object extraBazar) {
-        this.extraBazar = extraBazar;
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public String getCreatedAt() {

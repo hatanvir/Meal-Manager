@@ -19,22 +19,22 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.3" />
+        app:layout_constraintVertical_bias="0.19999999" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/montserrat"
         android:text="Verify"
         android:textColor="#FFFFFF"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:fontFamily="@font/montserrat"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.47000003" />
+        app:layout_constraintVertical_bias="0.32" />
 
     <com.chaos.view.PinView
         android:id="@+id/pinView"
@@ -46,6 +46,7 @@
         app:itemHeight="40dp"
         app:itemSpacing="15dp"
         app:itemWidth="30dp"
+        android:inputType="number"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/textView"
         app:layout_constraintStart_toStartOf="@+id/textView"
@@ -83,29 +84,30 @@
         app:viewType="line" />-->
 
     <TextView
+        android:id="@+id/phnVerificationMsgTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="A verification code will be sent to \n(+880 1234 5678) this number."
+        android:fontFamily="@font/montserrat"
+        android:gravity="center"
         android:textColor="#7FE3AE"
         android:textSize="16dp"
-        android:gravity="center"
-        android:fontFamily="@font/montserrat"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/pinView"
         app:layout_constraintStart_toStartOf="@+id/pinView"
         app:layout_constraintTop_toBottomOf="@+id/pinView"
-        app:layout_constraintVertical_bias="0.19999999" />
+        app:layout_constraintVertical_bias="0.100000024" />
+
     <ImageView
-        android:foreground="?android:attr/selectableItemBackground"
         android:id="@+id/nextImage"
         android:layout_width="45dp"
         android:layout_height="45dp"
         android:background="@android:color/transparent"
+        android:foreground="?android:attr/selectableItemBackground"
         android:src="@drawable/next"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.87" />
+        app:layout_constraintVertical_bias="0.59000003" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
